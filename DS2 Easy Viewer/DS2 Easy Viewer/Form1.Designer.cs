@@ -28,12 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Text = "Form1";
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(909, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(246, 560);
+            this.panel1.TabIndex = 0;
+            // 
+            // Form1
+            // 
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            this.ClientSize = new System.Drawing.Size(1166, 583);
+            this.Controls.Add(this.panel1);
+            this.Name = "Form1";
+            this.Text = "DS2 Easy View";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        public System.Windows.Forms.Panel panel1;
     }
 }
 
