@@ -3,35 +3,65 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Management;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace DS2_Easy_Viewer
 {
     public partial class Form1 : Form
     {
-        List<imageBox> imageBoxList = new List<imageBox>();
+        public static List<imageBox> imageBoxList = new List<imageBox>();
+        public static int boiteSelectionnee; 
 
         public Form1()
         {
             InitializeComponent();
-            imageBox box = new imageBox(this, 1);
-            imageBoxList.Add(box);
+            for (int i = 0; i < 10; i++)
+            {
+                imageBox box = new imageBox(this, i);
+                imageBoxList.Add(box);
+            }
+            imageBoxList[boiteSelectionnee].panneauParametres.Visible = true;
         }
+        private void Select_Multi_btn_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff*,.tga...";
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                int increment = 0;
+                foreach (string files in openFileDialog1.FileNames)
+                {
+                    imageBoxList[increment].loadImage(files);
+                    increment += 1;
+                }
+
+
+            }
+        }
+
     }
-
-
-
-
+    
 
     public class imageBox
     {
-        public string image_Path;
+
+        public static bool DEBUG = true;
+
+        public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox(); 
         PictureBox box = new PictureBox();
         Button envoyer_btn = new Button(); RadioButton Allsky_btn = new RadioButton(); RadioButton Panorama_btn = new RadioButton(); RadioButton Image_btn = new RadioButton();
-        Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
+        CheckBox ratio_btn = new CheckBox();
+        Panel panneau = new Panel(); // Panneau de l'image
+        public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
         Panel panneauImage = new Panel();
         TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar(); TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
@@ -44,11 +74,11 @@ namespace DS2_Easy_Viewer
 
         public imageBox(Form Form1, int index)
         {
-            initializationLayout(Form1, index);
-            slider_Rotation_txt.Text = "0"; slider_Azimuth_txt.Text = "90"; slider_Azimuth_txt.Text = "0"; slider_Azimuth_txt.Text = "180"; slider_Azimuth_txt.Text = "180";
+            initializationLayoutParameters(Form1, index);
+            initializationImageBox(Form1, index);
+            slider_Rotation_txt.Text = "0"; slider_Azimuth_txt.Text = "90"; slider_Elevation_txt.Text = "0"; slider_Width_txt.Text = "180"; slider_Height_txt.Text = "180";
         }
-
-        public void initializationLayout(Form Form1, int index)
+        public void initializationLayoutParameters(Form Form1, int index)
         {
             // AJOUT DU PANNEAU DE PARAMETRES //
             panneauParametres.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Params_Outline_2;
@@ -58,7 +88,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.TabIndex = 0;
 
             // AJOUT DES BOUTONS  ALLSKY 
-            Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_btn_3;
+            Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_btn_4;
             Allsky_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Allsky_btn.Location = new System.Drawing.Point(8, 8);
             Allsky_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -71,7 +101,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.Controls.Add(Allsky_btn);
 
             // AJOUT DES BOUTONS  IMAGE
-            Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_btn_3;
+            Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_btn_4;
             Image_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Image_btn.Location = new System.Drawing.Point(85, 8);
             Image_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -84,7 +114,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.Controls.Add(Image_btn);
 
             // AJOUT DES BOUTONS  PANO
-            Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_3;
+            Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_4;
             Panorama_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Panorama_btn.Location = new System.Drawing.Point(162, 8);
             Panorama_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -177,16 +207,281 @@ namespace DS2_Easy_Viewer
             slider_Azimuth_txt.TabIndex = 2;
             panneauAzimuth.Controls.Add(slider_Azimuth_txt);
 
-            
+            // AJOUT DU PANNEAU DE Elevation //
+            panneauElevation.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
+            panneauElevation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            panneauElevation.Location = new System.Drawing.Point(8, 158);
+            panneauElevation.Size = new System.Drawing.Size(230, 56);
+            panneauElevation.TabIndex = 0;
+
+            // AJOUT SLIDER Elevation //
+            // 
+            Slider_Elevation.Location = new System.Drawing.Point(3, 6);
+            Slider_Elevation.Maximum = 90;
+            Slider_Elevation.Minimum = -90;
+            Slider_Elevation.Size = new System.Drawing.Size(224, 45);
+            Slider_Elevation.TabIndex = 0;
+            Slider_Elevation.TickFrequency = 0;
+            Slider_Elevation.TickStyle = System.Windows.Forms.TickStyle.None;
+            panneauElevation.Controls.Add(Slider_Elevation);
+
+            //  AJOUT NOM Elevation SLIDER   //
+            slider_Elevation_lbl.AutoSize = true;
+            slider_Elevation_lbl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Elevation_lbl.ForeColor = System.Drawing.Color.White;
+            slider_Elevation_lbl.Location = new System.Drawing.Point(13, 35);
+            slider_Elevation_lbl.Size = new System.Drawing.Size(46, 13);
+            slider_Elevation_lbl.TabIndex = 3;
+            slider_Elevation_lbl.Text = "Elevation";
+            panneauElevation.Controls.Add(slider_Elevation_lbl);
+
+            // AJOUT TEXTBOX VALEUR DE Elevation
+
+            slider_Elevation_txt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            slider_Elevation_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            slider_Elevation_txt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Elevation_txt.ForeColor = System.Drawing.Color.White;
+            slider_Elevation_txt.Location = new System.Drawing.Point(198, 34);
+            slider_Elevation_txt.Size = new System.Drawing.Size(20, 14);
+            slider_Elevation_txt.TabIndex = 2;
+            panneauElevation.Controls.Add(slider_Elevation_txt);
+
+            // AJOUT DU PANNEAU DE Width //
+            panneauWidth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
+            panneauWidth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            panneauWidth.Location = new System.Drawing.Point(8, 220);
+            panneauWidth.Size = new System.Drawing.Size(230, 56);
+            panneauWidth.TabIndex = 0;
+
+            // AJOUT SLIDER Width //
+            // 
+            Slider_Width.Location = new System.Drawing.Point(3, 6);
+            Slider_Width.Maximum = 90;
+            Slider_Width.Minimum = -90;
+            Slider_Width.Size = new System.Drawing.Size(224, 45);
+            Slider_Width.TabIndex = 0;
+            Slider_Width.TickFrequency = 0;
+            Slider_Width.TickStyle = System.Windows.Forms.TickStyle.None;
+            panneauWidth.Controls.Add(Slider_Width);
+
+            //  AJOUT NOM Width SLIDER   //
+            slider_Width_lbl.AutoSize = true;
+            slider_Width_lbl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Width_lbl.ForeColor = System.Drawing.Color.White;
+            slider_Width_lbl.Location = new System.Drawing.Point(13, 35);
+            slider_Width_lbl.Size = new System.Drawing.Size(46, 13);
+            slider_Width_lbl.TabIndex = 3;
+            slider_Width_lbl.Text = "Width";
+            panneauWidth.Controls.Add(slider_Width_lbl);
+
+            // AJOUT TEXTBOX VALEUR DE Width
+
+            slider_Width_txt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            slider_Width_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            slider_Width_txt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Width_txt.ForeColor = System.Drawing.Color.White;
+            slider_Width_txt.Location = new System.Drawing.Point(198, 34);
+            slider_Width_txt.Size = new System.Drawing.Size(20, 14);
+            slider_Width_txt.TabIndex = 2;
+            panneauWidth.Controls.Add(slider_Width_txt);
+
+            // AJOUT DU PANNEAU DE Height //
+            panneauHeight.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
+            panneauHeight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            panneauHeight.Location = new System.Drawing.Point(8, 282);
+            panneauHeight.Size = new System.Drawing.Size(230, 56);
+            panneauHeight.TabIndex = 0;
+
+            // AJOUT SLIDER Height //
+            // 
+            Slider_Height.Location = new System.Drawing.Point(3, 6);
+            Slider_Height.Maximum = 90;
+            Slider_Height.Minimum = -90;
+            Slider_Height.Size = new System.Drawing.Size(224, 45);
+            Slider_Height.TabIndex = 0;
+            Slider_Height.TickFrequency = 0;
+            Slider_Height.TickStyle = System.Windows.Forms.TickStyle.None;
+            panneauHeight.Controls.Add(Slider_Height);
+
+            //  AJOUT NOM Height SLIDER   //
+            slider_Height_lbl.AutoSize = true;
+            slider_Height_lbl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Height_lbl.ForeColor = System.Drawing.Color.White;
+            slider_Height_lbl.Location = new System.Drawing.Point(13, 35);
+            slider_Height_lbl.Size = new System.Drawing.Size(46, 13);
+            slider_Height_lbl.TabIndex = 3;
+            slider_Height_lbl.Text = "Height";
+            panneauHeight.Controls.Add(slider_Height_lbl);
+
+            // AJOUT TEXTBOX VALEUR DE Height
+
+            slider_Height_txt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            slider_Height_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            slider_Height_txt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            slider_Height_txt.ForeColor = System.Drawing.Color.White;
+            slider_Height_txt.Location = new System.Drawing.Point(198, 34);
+            slider_Height_txt.Size = new System.Drawing.Size(20, 14);
+            slider_Height_txt.TabIndex = 2;
+            panneauHeight.Controls.Add(slider_Height_txt);
+
+            // AJOUT DU BOUTON GARDER RATIO
+            ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_2;
+            ratio_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            ratio_btn.Location = new System.Drawing.Point(8, 340);
+            ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            ratio_btn.Size = new System.Drawing.Size(230, 20);
+            ratio_btn.TabIndex = 0;
+            ratio_btn.UseVisualStyleBackColor = true;
+            ratio_btn.TabStop = false;
+            ratio_btn.Text = "                       ";
+            ratio_btn.Checked = false;
+            panneauParametres.Controls.Add(ratio_btn);
+
+
+            panneauParametres.Controls.Add(panneauHeight);
+            panneauParametres.Controls.Add(panneauWidth);
+            panneauParametres.Controls.Add(panneauElevation);
             panneauParametres.Controls.Add(panneauRotation);
             panneauParametres.Controls.Add(panneauAzimuth);
             Slider_Azimuth.SendToBack();
             Slider_Rotation.SendToBack();
-
-
+            Slider_Elevation.SendToBack();
+            Slider_Width.SendToBack();
+            Slider_Height.SendToBack();
             Form1.Controls.Add(panneauParametres);
+            panneauParametres.Visible = false;
+        }
+        public void initializationImageBox(Form Form1, int index)
+        {
+            panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
+            panneau.Size = new Size(166, 218);
+            if (index < 5)
+            {
+                panneau.Location = new Point(50 + (index * 170), 12);
+            }
+            else
+            {
+                panneau.Location = new Point(50 + ((index - 5) * 170), 250);
+            }
+            boxIndex = index;
+            panneau.Controls.Add(box);
+            box.Click += new EventHandler(imageBox_Click);
+            box.DoubleClick += new System.EventHandler(imageBox_DoubleClick);
+            box.Location = new Point(13, 40);
+            box.Size = new Size(140, 140);
+            box.BorderStyle = BorderStyle.FixedSingle;
+            envoyer_btn.Size = new Size(140, 22);
+            envoyer_btn.Location = new Point(13, 185);
+            envoyer_btn.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Envoyer_btn;
+            envoyer_btn.Text = "";
+            envoyer_btn.FlatStyle = FlatStyle.Popup;
+            envoyer_btn.Click += new EventHandler(envoyer_Click);
+            chemin.Text = "";
+            chemin.Size = new Size(140, 22);
+            chemin.BackColor = Color.FromArgb(40, 40, 40);
+            chemin.ForeColor = Color.White;
+            chemin.BorderStyle = BorderStyle.None;
+            chemin.Location = new Point(13, 10);
+            chemin.Font = new Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            panneau.Controls.Add(chemin);
+            panneau.Controls.Add(envoyer_btn);
+            Form1.Controls.Add(panneau);
+        }
+        private void imageBox_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show(boxIndex.ToString());
+            if (imageRenommee != null)
+            {
+                foreach (imageBox boite in DS2_Easy_Viewer.Form1.imageBoxList)
+                {
+                    boite.panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
+                }
+                panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_On_2;
+                DS2_Easy_Viewer.Form1.boiteSelectionnee = boxIndex;
+
+                foreach (imageBox boite in Form1.imageBoxList)
+                {
+                    boite.panneauParametres.Visible = false;
+                }
+                panneauParametres.Visible = true;
+
+
+                //DS2_Easy_Viewer.Form1.imageBoxList[boxIndex].Slider_Azimuth.Value = textLocateParameters[1];
+                //Slider_Elevation.Value = textLocateParameters[2];
+                //Slider_Rotation.Value = textLocateParameters[3];
+                //Slider_Width.Value = textLocateParameters[4];
+                //Slider_Height.Value = textLocateParameters[5];
+
+            }
 
         }
+        private void imageBox_DoubleClick(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.tif;*.tiff*,.tga...";
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                image_Path = openFileDialog1.FileName;
+                loadImage(openFileDialog1.FileName);
+            }
+        }
+        public void loadImage(string filename)
+        {
+            string drivePrefix = filename.Substring(0, 1);
+            if (DEBUG == true)
+            {
+                imageRenommee = filename;
+            }
+            else
+            {
+                imageRenommee = "\\\\Ds-Master\\" + drivePrefix + filename.Remove(0, 2);
+            }
+            
+            chemin.Text = imageRenommee;
+            try
+            {
+                box.Image = Image.FromFile(imageRenommee);
+                box.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            catch (Exception) { }
+        }
+        private void envoyer_Click(object sender, EventArgs e)
+        {
+            Byte[] commande;
+            //fadeOutToutLeMonde();
+            commande = Ds2Command("Text Add \"AllSky_" + boxIndex + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
+            envoyerCommande(commande);
+            Thread.Sleep(100);
+            commande = Ds2Command("Text Locate \"AllSky_" + boxIndex + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+            envoyerCommande(commande);
+            Thread.Sleep(50);
+            commande = Ds2Command("Text View \"AllSky_" + boxIndex + "\" 0 100 100 100 100");
+            envoyerCommande(commande);
+            Thread.Sleep(50);
+        }
+        private Byte[] Ds2Command(string command)
+        {
+            Byte[] sendBytes = Encoding.ASCII.GetBytes("\x02" + "DSTA00000000" + "\x07" + "DIRECT" + "\x07" + command + "\x03");
+            return sendBytes;
+        }
+        private void envoyerCommande(Byte[] commande)
+        {
+            try
+            {
+                UdpClient udpClient = new UdpClient();
+                //udpClient.Send(commande, commande.Length, "192.168.0.100", 2209);
+                udpClient.Send(commande, commande.Length, "127.0.0.1", 2209);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+
+
+
     }
 
 
