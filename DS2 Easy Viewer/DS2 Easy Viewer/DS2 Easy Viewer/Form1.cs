@@ -64,21 +64,31 @@ namespace DS2_Easy_Viewer
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
         Panel panneauImage = new Panel();
-        TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar(); TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
-        Label slider_Rotation_lbl = new Label(); Label slider_Azimuth_lbl = new Label(); Label slider_Elevation_lbl = new Label(); Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
+        TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
+        Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
         TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
-        public int boxIndex;
-        public List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
-        public List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
+        public static int boxIndex;
+        public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
+        public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
+        private  List<TrackBar> listDeSliders = new List<TrackBar>();
+        private  List<TextBox> listDeTextBox = new List<TextBox>();
+        public static List<string> listeValeurDefautText = new List<string> { "0","0", "90", "0", "180", "180" };
+        int count = 0;
+
 
         public imageBox(Form Form1, int index)
         {
+            count += 1;
             initializationLayoutParameters(Form1, index);
             initializationImageBox(Form1, index);
-            slider_Rotation_txt.Text = "0"; slider_Azimuth_txt.Text = "90"; slider_Elevation_txt.Text = "0"; slider_Width_txt.Text = "180"; slider_Height_txt.Text = "180";
+         
+            listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
+            listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
+            setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
+            //MessageBox.Show(count.ToString());
         }
-        public void initializationLayoutParameters(Form Form1, int index)
+        private void initializationLayoutParameters(Form Form1, int index)
         {
             // AJOUT DU PANNEAU DE PARAMETRES //
             panneauParametres.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Params_Outline_2;
@@ -142,6 +152,7 @@ namespace DS2_Easy_Viewer
             Slider_Rotation.TabIndex = 0;
             Slider_Rotation.TickFrequency = 0;
             Slider_Rotation.TickStyle = System.Windows.Forms.TickStyle.None;
+            Slider_Rotation.Scroll += new System.EventHandler(Slider_Rotation_Scroll);
             panneauRotation.Controls.Add(Slider_Rotation);
 
             //  AJOUT NOM Rotation SLIDER   //
@@ -184,6 +195,7 @@ namespace DS2_Easy_Viewer
             Slider_Azimuth.TabIndex = 0;
             Slider_Azimuth.TickFrequency = 0;
             Slider_Azimuth.TickStyle = System.Windows.Forms.TickStyle.None;
+            Slider_Azimuth.Scroll += new System.EventHandler(slider_Azimuth_Scroll);
             panneauAzimuth.Controls.Add(Slider_Azimuth);
 
             //  AJOUT NOM AZIMUTH SLIDER   //
@@ -351,7 +363,7 @@ namespace DS2_Easy_Viewer
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
         }
-        public void initializationImageBox(Form Form1, int index)
+        private void initializationImageBox(Form Form1, int index)
         {
             panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
             panneau.Size = new Size(166, 218);
@@ -424,7 +436,26 @@ namespace DS2_Easy_Viewer
             {
                 image_Path = openFileDialog1.FileName;
                 loadImage(openFileDialog1.FileName);
+                setInitialParameterValues();
             }
+        }
+        private void setInitialParameterValues()
+        {
+            textLocateParameters.Clear();
+            textAddParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
+            foreach (TrackBar slider in listDeSliders )
+            {
+                slider.Value = textAddParameters[3];
+            }
+            int a = 0;
+            foreach (TextBox text in listDeTextBox)
+            {
+                //MessageBox.Show(text.Name + "  " + a);
+                text.Text = listeValeurDefautText[a];
+                a += 1;
+            }
+            //MessageBox.Show("ListDeTextBox Count = " + listDeTextBox.Count() + "\na = " + a );
+
         }
         public void loadImage(string filename)
         {
@@ -480,7 +511,33 @@ namespace DS2_Easy_Viewer
         }
 
 
+        public void Slider_Rotation_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[3] = Slider_Rotation.Value;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Rotation_txt.Text = Slider_Rotation.Value.ToString();
+                MessageBox.Show(Slider_Rotation.Value.ToString());
+            }
+            catch (Exception) { }
+        }
 
+        public void slider_Azimuth_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[1] = Slider_Azimuth.Value;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+            }
+            catch (Exception) { }
+
+        }
 
     }
 
