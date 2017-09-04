@@ -73,6 +73,26 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AllSky_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("AllSky_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AllSky_btn_3 {
+            get {
+                object obj = ResourceManager.GetObject("AllSky_btn_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Envoyer_btn {
             get {
                 object obj = ResourceManager.GetObject("Envoyer_btn", resourceCulture);
@@ -86,6 +106,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Image_btn {
             get {
                 object obj = ResourceManager.GetObject("Image_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Image_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Image_btn_3 {
+            get {
+                object obj = ResourceManager.GetObject("Image_btn_3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -126,6 +166,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Pano_btn {
             get {
                 object obj = ResourceManager.GetObject("Pano_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pano_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Pano_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pano_btn_3 {
+            get {
+                object obj = ResourceManager.GetObject("Pano_btn_3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
