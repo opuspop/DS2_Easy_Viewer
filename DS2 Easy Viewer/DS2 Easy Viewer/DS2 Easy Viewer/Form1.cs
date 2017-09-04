@@ -435,14 +435,16 @@ namespace DS2_Easy_Viewer
         {
             textLocateParameters.Clear();
             textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
+            int a = 1;
             foreach (TrackBar slider in listDeSliders )
             {
-                slider.Value = textAddParameters[4];
+                slider.Value = textLocateParameters[a];
+                a += 1;
             }
-            int a = 0;
+            int b = 0;
             foreach (TextBox text in listDeTextBox)
             {
-                text.Text = listeValeurDefautText[a];
+                text.Text = listeValeurDefautText[b];
                 a += 1;
             }
             //MessageBox.Show("ListDeTextBox Count = " + listDeTextBox.Count() + "\na = " + a );
