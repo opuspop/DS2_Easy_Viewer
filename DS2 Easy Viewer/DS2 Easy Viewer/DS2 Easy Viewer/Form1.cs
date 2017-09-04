@@ -16,7 +16,7 @@ namespace DS2_Easy_Viewer
     public partial class Form1 : Form
     {
         public static List<imageBox> imageBoxList = new List<imageBox>();
-        public static int boiteSelectionnee; 
+        public static int boiteSelectionnee;
 
         public Form1()
         {
@@ -50,7 +50,7 @@ namespace DS2_Easy_Viewer
     }
     
 
-    public class imageBox
+    public partial class imageBox
     {
 
         public static bool DEBUG = true;
@@ -64,10 +64,10 @@ namespace DS2_Easy_Viewer
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
         Panel panneauImage = new Panel();
-        TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
+        public TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
         Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
-        TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
-        public static int boxIndex;
+        public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
+        private static int boxIndex;
         public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
@@ -176,8 +176,6 @@ namespace DS2_Easy_Viewer
             slider_Rotation_txt.TabIndex = 2;
             panneauRotation.Controls.Add(slider_Rotation_txt);
 
-            
-            
 
             // AJOUT DU PANNEAU DE AZIMUTH //
             panneauAzimuth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
@@ -235,6 +233,7 @@ namespace DS2_Easy_Viewer
             Slider_Elevation.TabIndex = 0;
             Slider_Elevation.TickFrequency = 0;
             Slider_Elevation.TickStyle = System.Windows.Forms.TickStyle.None;
+            Slider_Elevation.Scroll += new System.EventHandler(slider_Elevation_Scroll);
             panneauElevation.Controls.Add(Slider_Elevation);
 
             //  AJOUT NOM Elevation SLIDER   //
@@ -268,8 +267,8 @@ namespace DS2_Easy_Viewer
             // AJOUT SLIDER Width //
             // 
             Slider_Width.Location = new System.Drawing.Point(3, 6);
-            Slider_Width.Maximum = 90;
-            Slider_Width.Minimum = -90;
+            Slider_Width.Maximum = 360;
+            Slider_Width.Minimum = 0;
             Slider_Width.Size = new System.Drawing.Size(224, 45);
             Slider_Width.TabIndex = 0;
             Slider_Width.TickFrequency = 0;
@@ -284,6 +283,7 @@ namespace DS2_Easy_Viewer
             slider_Width_lbl.Size = new System.Drawing.Size(46, 13);
             slider_Width_lbl.TabIndex = 3;
             slider_Width_lbl.Text = "Width";
+            Slider_Width.Scroll += new System.EventHandler(slider_Width_Scroll);
             panneauWidth.Controls.Add(slider_Width_lbl);
 
             // AJOUT TEXTBOX VALEUR DE Width
@@ -307,12 +307,13 @@ namespace DS2_Easy_Viewer
             // AJOUT SLIDER Height //
             // 
             Slider_Height.Location = new System.Drawing.Point(3, 6);
-            Slider_Height.Maximum = 90;
-            Slider_Height.Minimum = -90;
+            Slider_Height.Maximum = 360;
+            Slider_Height.Minimum = 0;
             Slider_Height.Size = new System.Drawing.Size(224, 45);
             Slider_Height.TabIndex = 0;
             Slider_Height.TickFrequency = 0;
             Slider_Height.TickStyle = System.Windows.Forms.TickStyle.None;
+            Slider_Height.Scroll += new System.EventHandler(slider_Height_Scroll);
             panneauHeight.Controls.Add(Slider_Height);
 
             //  AJOUT NOM Height SLIDER   //
@@ -401,7 +402,6 @@ namespace DS2_Easy_Viewer
         }
         private void imageBox_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show(boxIndex.ToString());
             if (imageRenommee != null)
             {
                 foreach (imageBox boite in DS2_Easy_Viewer.Form1.imageBoxList)
@@ -416,14 +416,6 @@ namespace DS2_Easy_Viewer
                     boite.panneauParametres.Visible = false;
                 }
                 panneauParametres.Visible = true;
-
-
-                //DS2_Easy_Viewer.Form1.imageBoxList[boxIndex].Slider_Azimuth.Value = textLocateParameters[1];
-                //Slider_Elevation.Value = textLocateParameters[2];
-                //Slider_Rotation.Value = textLocateParameters[3];
-                //Slider_Width.Value = textLocateParameters[4];
-                //Slider_Height.Value = textLocateParameters[5];
-
             }
 
         }
@@ -442,15 +434,14 @@ namespace DS2_Easy_Viewer
         private void setInitialParameterValues()
         {
             textLocateParameters.Clear();
-            textAddParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
+            textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
             foreach (TrackBar slider in listDeSliders )
             {
-                slider.Value = textAddParameters[3];
+                slider.Value = textAddParameters[4];
             }
             int a = 0;
             foreach (TextBox text in listDeTextBox)
             {
-                //MessageBox.Show(text.Name + "  " + a);
                 text.Text = listeValeurDefautText[a];
                 a += 1;
             }
@@ -509,9 +500,7 @@ namespace DS2_Easy_Viewer
 
             }
         }
-
-
-        public void Slider_Rotation_Scroll(object sender, EventArgs e)
+        private void Slider_Rotation_Scroll(object sender, EventArgs e)
         {
             try
             {
@@ -520,12 +509,10 @@ namespace DS2_Easy_Viewer
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Rotation_txt.Text = Slider_Rotation.Value.ToString();
-                MessageBox.Show(Slider_Rotation.Value.ToString());
             }
-            catch (Exception) { }
+            catch (Exception) {MessageBox.Show("la connexion avec Ds-master est impossible");}
         }
-
-        public void slider_Azimuth_Scroll(object sender, EventArgs e)
+        private void slider_Azimuth_Scroll(object sender, EventArgs e)
         {
             try
             {
@@ -535,8 +522,43 @@ namespace DS2_Easy_Viewer
                 envoyerCommande(commande);
                 slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
             }
-            catch (Exception) { }
-
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void slider_Elevation_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[2] = Slider_Elevation.Value;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void slider_Width_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[4] = Slider_Width.Value;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void slider_Height_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[5] = Slider_Height.Value;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
 
     }
