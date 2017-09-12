@@ -69,7 +69,7 @@ namespace DS2_Easy_Viewer
         public TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
         Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
         public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
-        Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_Btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
+        Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         private static int boxIndex;
         public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
@@ -87,8 +87,8 @@ namespace DS2_Easy_Viewer
             initializationLayoutParameters(Form1, index);
             initializationImageBox(Form1, index);
          
-            listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
-            listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
+            listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
+            listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
             //MessageBox.Show(count.ToString());
         }
@@ -192,6 +192,7 @@ namespace DS2_Easy_Viewer
             slider_Rotation_txt.Location = new System.Drawing.Point(198, 34);
             slider_Rotation_txt.Size = new System.Drawing.Size(20, 14);
             slider_Rotation_txt.TabIndex = 2;
+            slider_Rotation_txt.Text = "0";
             panneauRotation.Controls.Add(slider_Rotation_txt);
 
             // AJOUT RESET ROTATION
@@ -200,6 +201,7 @@ namespace DS2_Easy_Viewer
             resetRotation_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
             resetRotation_btn.FlatStyle = FlatStyle.Flat;
             resetRotation_btn.FlatAppearance.BorderSize = 0;
+            resetRotation_btn.Click += new EventHandler(resetRotation_Click);
             panneauRotation.Controls.Add(resetRotation_btn);
 
             // AJOUT DU PANNEAU DE AZIMUTH //
@@ -240,7 +242,17 @@ namespace DS2_Easy_Viewer
             slider_Azimuth_txt.Location = new System.Drawing.Point(198, 34);
             slider_Azimuth_txt.Size = new System.Drawing.Size(20, 14);
             slider_Azimuth_txt.TabIndex = 2;
+            slider_Azimuth_txt.Text = "0";
             panneauAzimuth.Controls.Add(slider_Azimuth_txt);
+
+            // AJOUT RESET AZIMUTH
+            resetAzimuth_btn.Size = new Size(20, 20);
+            resetAzimuth_btn.Location = new Point(105, 32);
+            resetAzimuth_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
+            resetAzimuth_btn.FlatStyle = FlatStyle.Flat;
+            resetAzimuth_btn.FlatAppearance.BorderSize = 0;
+            resetAzimuth_btn.Click += new EventHandler(resetAzimuth_Click);
+            panneauAzimuth.Controls.Add(resetAzimuth_btn);
 
             // AJOUT DU PANNEAU DE Elevation //
             panneauElevation.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
@@ -254,6 +266,7 @@ namespace DS2_Easy_Viewer
             Slider_Elevation.Location = new System.Drawing.Point(3, 6);
             Slider_Elevation.Maximum = 90;
             Slider_Elevation.Minimum = -90;
+            Slider_Elevation.Value = 90;
             Slider_Elevation.Size = new System.Drawing.Size(224, 45);
             Slider_Elevation.TabIndex = 0;
             Slider_Elevation.TickFrequency = 0;
@@ -280,7 +293,17 @@ namespace DS2_Easy_Viewer
             slider_Elevation_txt.Location = new System.Drawing.Point(198, 34);
             slider_Elevation_txt.Size = new System.Drawing.Size(20, 14);
             slider_Elevation_txt.TabIndex = 2;
+            slider_Elevation_txt.Text = "90";
             panneauElevation.Controls.Add(slider_Elevation_txt);
+
+            // AJOUT RESET ELEVATION    
+            resetElevation_btn.Size = new Size(20, 20);
+            resetElevation_btn.Location = new Point(105, 32);
+            resetElevation_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
+            resetElevation_btn.FlatStyle = FlatStyle.Flat;
+            resetElevation_btn.FlatAppearance.BorderSize = 0;
+            resetElevation_btn.Click += new EventHandler(resetElevation_Click);
+            panneauElevation.Controls.Add(resetElevation_btn);
 
             // AJOUT DU PANNEAU DE Width //
             panneauWidth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
@@ -320,7 +343,17 @@ namespace DS2_Easy_Viewer
             slider_Width_txt.Location = new System.Drawing.Point(174, 34);
             slider_Width_txt.Size = new System.Drawing.Size(20, 14);
             slider_Width_txt.TabIndex = 2;
+            slider_Width_txt.Text = "180";
             panneauWidth.Controls.Add(slider_Width_txt);
+
+            // AJOUT RESET WIDTH   
+            resetWidth_btn.Size = new Size(20, 20);
+            resetWidth_btn.Location = new Point(93, 32);
+            resetWidth_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
+            resetWidth_btn.FlatStyle = FlatStyle.Flat;
+            resetWidth_btn.FlatAppearance.BorderSize = 0;
+            resetWidth_btn.Click += new EventHandler(resetWidth_Click);
+            panneauWidth.Controls.Add(resetWidth_btn);
 
             // AJOUT DU PANNEAU DE Height //
             panneauHeight.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
@@ -360,7 +393,17 @@ namespace DS2_Easy_Viewer
             slider_Height_txt.Location = new System.Drawing.Point(174, 34);
             slider_Height_txt.Size = new System.Drawing.Size(20, 14);
             slider_Height_txt.TabIndex = 2;
+            slider_Height_txt.Text = "180";
             panneauHeight.Controls.Add(slider_Height_txt);
+
+            // AJOUT RESET HEIGHT   
+            resetHeight_btn.Size = new Size(20, 20);
+            resetHeight_btn.Location = new Point(93, 32);
+            resetHeight_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
+            resetHeight_btn.FlatStyle = FlatStyle.Flat;
+            resetHeight_btn.FlatAppearance.BorderSize = 0;
+            resetHeight_btn.Click += new EventHandler(resetHeight_Click);
+            panneauHeight.Controls.Add(resetHeight_btn);
 
             // AJOUT DU BOUTON GARDER RATIO
             ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_On;
@@ -472,11 +515,11 @@ namespace DS2_Easy_Viewer
                 slider.Value = textLocateParameters[a];
                 a += 1;
             }
-            int b = 0;
+            int b = 1;
             foreach (TextBox text in listDeTextBox)
             {
-                text.Text = listeValeurDefautText[b];
-                a += 1;
+                text.Text = textLocateParameters[b].ToString();
+                b += 1;
             }
             //MessageBox.Show("ListDeTextBox Count = " + listDeTextBox.Count() + "\na = " + a );
 
@@ -617,16 +660,83 @@ namespace DS2_Easy_Viewer
         {
             if (ratioOn == true)
             {
-                ratio_btn.BackgroundImage = Properties.Resources.Ratio_Off;
                 ratioOn = false;
+                ratio_btn.BackgroundImage = Properties.Resources.Ratio_Off;
+                //MessageBox.Show("On");
             }
-            if (ratioOn == false)
+            else
             {
-                ratio_btn.BackgroundImage = Properties.Resources.Ratio_On;
                 ratioOn = true;
+                ratio_btn.BackgroundImage = Properties.Resources.Ratio_On;
+               
             }
+        }
+        private void resetRotation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[3] = 0;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Rotation_txt.Text = textLocateParameters[3].ToString();
+                Slider_Rotation.Value = textLocateParameters[3];
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void resetAzimuth_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[1] = 0;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Azimuth_txt.Text = textLocateParameters[1].ToString();
+                Slider_Azimuth.Value = textLocateParameters[1];
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void resetElevation_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[2] = 90;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Elevation_txt.Text = textLocateParameters[2].ToString();
+                Slider_Elevation.Value = textLocateParameters[2];
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void resetWidth_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[4] = 180;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Width_txt.Text = textLocateParameters[4].ToString();
+                Slider_Width.Value = textLocateParameters[4];
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+        }
+        private void resetHeight_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Byte[] commande;
+                textLocateParameters[5] = 180;
+                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                envoyerCommande(commande);
+                slider_Height_txt.Text = textLocateParameters[5].ToString();
+                Slider_Height.Value = textLocateParameters[5];
+            }
+            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
     }
 
-
+    
 }
