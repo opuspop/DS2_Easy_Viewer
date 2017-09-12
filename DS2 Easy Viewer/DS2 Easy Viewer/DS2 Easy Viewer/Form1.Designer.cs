@@ -33,12 +33,12 @@
             // 
             // Select_Multi_btn
             // 
-            this.Select_Multi_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Multiple_Select_2;
+            this.Select_Multi_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Multiple_Select_1;
             this.Select_Multi_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.Select_Multi_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.Select_Multi_btn.Location = new System.Drawing.Point(6, 12);
+            this.Select_Multi_btn.Location = new System.Drawing.Point(9, 12);
             this.Select_Multi_btn.Name = "Select_Multi_btn";
-            this.Select_Multi_btn.Size = new System.Drawing.Size(30, 456);
+            this.Select_Multi_btn.Size = new System.Drawing.Size(24, 691);
             this.Select_Multi_btn.TabIndex = 10;
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
