@@ -21,7 +21,7 @@ namespace DS2_Easy_Viewer
         public Form1()
         {
             InitializeComponent();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 15; i++)
             {
                 imageBox box = new imageBox(this, i);
                 imageBoxList.Add(box);
@@ -58,6 +58,8 @@ namespace DS2_Easy_Viewer
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox(); 
         PictureBox box = new PictureBox();
+        PictureBox imgSelect = new PictureBox();
+        Label imgSelectLbl = new Label();
         Button envoyer_btn = new Button(); RadioButton Allsky_btn = new RadioButton(); RadioButton Panorama_btn = new RadioButton(); RadioButton Image_btn = new RadioButton();
         CheckBox ratio_btn = new CheckBox();
         Panel panneau = new Panel(); // Panneau de l'image
@@ -92,15 +94,32 @@ namespace DS2_Easy_Viewer
         {
             // AJOUT DU PANNEAU DE PARAMETRES //
             panneauParametres.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Params_Outline_2;
-            panneauParametres.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            panneauParametres.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             panneauParametres.Location = new System.Drawing.Point(910, 12);
-            panneauParametres.Size = new System.Drawing.Size(246, 560);
+            panneauParametres.Size = new System.Drawing.Size(246, 692);
             panneauParametres.TabIndex = 0;
+
+            // AJOUT DU PICTUREBOX DE L'IMAGE SELECTIONNEE
+            imgSelect.Location = new Point(8, 8);
+            imgSelect.Size = new Size(115, 115);
+            imgSelect.BorderStyle = BorderStyle.FixedSingle;
+            panneauParametres.Controls.Add(imgSelect);
+
+            // AJOUT DU NOM DE L'IMAGE SELECTIONNEE
+            imgSelectLbl.AutoSize = true;
+            imgSelectLbl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            imgSelectLbl.ForeColor = System.Drawing.Color.White;
+            imgSelectLbl.Location = new System.Drawing.Point(131, 12);
+            imgSelectLbl.Size = new System.Drawing.Size(46, 13);
+            imgSelectLbl.TabIndex = 3;
+            imgSelectLbl.Text = "testPano1.jpg";
+            panneauParametres.Controls.Add(imgSelectLbl);
+
 
             // AJOUT DES BOUTONS  ALLSKY 
             Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_btn_4;
             Allsky_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            Allsky_btn.Location = new System.Drawing.Point(8, 8);
+            Allsky_btn.Location = new System.Drawing.Point(131, 48);
             Allsky_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             Allsky_btn.Size = new System.Drawing.Size(75, 20);
             Allsky_btn.TabIndex = 0;
@@ -113,7 +132,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DES BOUTONS  IMAGE
             Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_btn_4;
             Image_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            Image_btn.Location = new System.Drawing.Point(85, 8);
+            Image_btn.Location = new System.Drawing.Point(131, 76);
             Image_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             Image_btn.Size = new System.Drawing.Size(75, 20);
             Image_btn.TabIndex = 0;
@@ -126,7 +145,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DES BOUTONS  PANO
             Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_4;
             Panorama_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            Panorama_btn.Location = new System.Drawing.Point(162, 8);
+            Panorama_btn.Location = new System.Drawing.Point(131, 104);
             Panorama_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             Panorama_btn.Size = new System.Drawing.Size(75, 20);
             Panorama_btn.TabIndex = 0;
@@ -139,7 +158,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU PANNEAU DE ROTATION //
             panneauRotation.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
             panneauRotation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            panneauRotation.Location = new System.Drawing.Point(8, 34);
+            panneauRotation.Location = new System.Drawing.Point(8, 131);
             panneauRotation.Size = new System.Drawing.Size(230, 56);
             panneauRotation.TabIndex = 0;
 
@@ -180,7 +199,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU PANNEAU DE AZIMUTH //
             panneauAzimuth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
             panneauAzimuth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            panneauAzimuth.Location = new System.Drawing.Point(8, 96);
+            panneauAzimuth.Location = new System.Drawing.Point(8, 195);
             panneauAzimuth.Size = new System.Drawing.Size(230, 56);
             panneauAzimuth.TabIndex = 0;
 
@@ -220,7 +239,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU PANNEAU DE Elevation //
             panneauElevation.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
             panneauElevation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            panneauElevation.Location = new System.Drawing.Point(8, 158);
+            panneauElevation.Location = new System.Drawing.Point(8, 259);
             panneauElevation.Size = new System.Drawing.Size(230, 56);
             panneauElevation.TabIndex = 0;
 
@@ -260,7 +279,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU PANNEAU DE Width //
             panneauWidth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
             panneauWidth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            panneauWidth.Location = new System.Drawing.Point(8, 220);
+            panneauWidth.Location = new System.Drawing.Point(8, 323);
             panneauWidth.Size = new System.Drawing.Size(230, 56);
             panneauWidth.TabIndex = 0;
 
@@ -300,7 +319,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU PANNEAU DE Height //
             panneauHeight.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
             panneauHeight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            panneauHeight.Location = new System.Drawing.Point(8, 282);
+            panneauHeight.Location = new System.Drawing.Point(8, 387);
             panneauHeight.Size = new System.Drawing.Size(230, 56);
             panneauHeight.TabIndex = 0;
 
@@ -340,7 +359,7 @@ namespace DS2_Easy_Viewer
             // AJOUT DU BOUTON GARDER RATIO
             ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_2;
             ratio_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            ratio_btn.Location = new System.Drawing.Point(8, 340);
+            ratio_btn.Location = new System.Drawing.Point(8, 451);
             ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             ratio_btn.Size = new System.Drawing.Size(230, 20);
             ratio_btn.TabIndex = 0;
@@ -372,9 +391,13 @@ namespace DS2_Easy_Viewer
             {
                 panneau.Location = new Point(50 + (index * 170), 12);
             }
-            else
+            else if (index >= 5 & index < 10)
             {
                 panneau.Location = new Point(50 + ((index - 5) * 170), 250);
+            }
+            else if (index >= 10 & index < 15)
+            {
+                panneau.Location = new Point(50 + ((index - 10) * 170), 488);
             }
             boxIndex = index;
             panneau.Controls.Add(box);
@@ -383,6 +406,7 @@ namespace DS2_Easy_Viewer
             box.Location = new Point(13, 40);
             box.Size = new Size(140, 140);
             box.BorderStyle = BorderStyle.FixedSingle;
+            box.BackgroundImage = Properties.Resources.Double_Click;
             envoyer_btn.Size = new Size(140, 22);
             envoyer_btn.Location = new Point(13, 185);
             envoyer_btn.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Envoyer_btn;
@@ -390,7 +414,7 @@ namespace DS2_Easy_Viewer
             envoyer_btn.FlatStyle = FlatStyle.Popup;
             envoyer_btn.Click += new EventHandler(envoyer_Click);
             chemin.Text = "";
-            chemin.Size = new Size(140, 22);
+            chemin.Size = new Size(140, 40);
             chemin.BackColor = Color.FromArgb(40, 40, 40);
             chemin.ForeColor = Color.White;
             chemin.BorderStyle = BorderStyle.None;
