@@ -73,17 +73,17 @@ namespace DS2_Easy_Viewer
         Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
         private static int boxIndex;
-        public  List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
+        public  List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1};  // crée une liste de listes des paramètres de text add 
         public  List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
         private  List<TrackBar> listDeSliders = new List<TrackBar>();
         private  List<TextBox> listDeTextBox = new List<TextBox>();
         public static List<string> listeValeurDefautText = new List<string> { "0","0", "90", "0", "180", "180" };
         int count = 0;
+        int mode = 0; // mode 0 = Allsky - mode 1 = Image - mode 2 = Panorama
+
         public static string nomImage = "";
         public static bool ratioOn = true;
-
-
         public imageBox(Form Form1, int index)
         {
             count += 1;
@@ -132,6 +132,7 @@ namespace DS2_Easy_Viewer
             Allsky_btn.UseVisualStyleBackColor = true;
             Allsky_btn.TabStop = false;
             Allsky_btn.Text = "";
+            Allsky_btn.Click += new EventHandler(Allsky_btn_Click);
             panneauParametres.Controls.Add(Allsky_btn);
 
             // AJOUT DES BOUTONS  IMAGE
@@ -144,8 +145,9 @@ namespace DS2_Easy_Viewer
             Image_btn.UseVisualStyleBackColor = true;
             Image_btn.TabStop = false;
             Image_btn.Text = "  ";
+            Image_btn.Click += new EventHandler(Image_btn_Click);
             panneauParametres.Controls.Add(Image_btn);
-
+            
             // AJOUT DES BOUTONS  PANO
             Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_Off;
             Panorama_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -155,7 +157,8 @@ namespace DS2_Easy_Viewer
             Panorama_btn.TabIndex = 0;
             Panorama_btn.UseVisualStyleBackColor = true;
             Panorama_btn.TabStop = false;
-            Panorama_btn.Text = "";   
+            Panorama_btn.Text = "";
+            Panorama_btn.Click += new EventHandler(Panorama_btn_Click);
             panneauParametres.Controls.Add(Panorama_btn);
 
             // AJOUT DU PANNEAU DE ROTATION //
@@ -217,8 +220,8 @@ namespace DS2_Easy_Viewer
             // AJOUT SLIDER AZIMUTH //
             // 
             Slider_Azimuth.Location = new System.Drawing.Point(3, 6);
-            Slider_Azimuth.Maximum = 90;
-            Slider_Azimuth.Minimum = -90;
+            Slider_Azimuth.Maximum = 180;
+            Slider_Azimuth.Minimum = -180;
             Slider_Azimuth.Size = new System.Drawing.Size(224, 45);
             Slider_Azimuth.TabIndex = 0;
             Slider_Azimuth.TickFrequency = 0;
@@ -441,6 +444,8 @@ namespace DS2_Easy_Viewer
             scriptOutput_txtBox.ForeColor = System.Drawing.Color.White;
             scriptOutput_txtBox.BorderStyle = BorderStyle.FixedSingle;
             scriptOutput_txtBox.HorizontalScrollbar = true;
+            scriptOutput_txtBox.SelectionMode = SelectionMode.MultiExtended;
+            scriptOutput_txtBox.DoubleClick += new EventHandler(scriptOutput_DoubleClick);
             panneauParametres.Controls.Add(scriptOutput_txtBox);
 
 
@@ -457,7 +462,6 @@ namespace DS2_Easy_Viewer
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
         }
-        
         private void initializationImageBox(Form Form1, int index)
         {
             panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
@@ -549,7 +553,42 @@ namespace DS2_Easy_Viewer
                 text.Text = textLocateParameters[b].ToString();
                 b += 1;
             }
-            //MessageBox.Show("ListDeTextBox Count = " + listDeTextBox.Count() + "\na = " + a );
+
+        }
+        private void changeModeImageSliderUpdate(int mode)
+        {
+
+            textLocateParameters.Clear();
+            textAddParameters.Clear();
+            if (mode == 0) // Allsky
+            {
+                textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
+                textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1};
+            }
+            if (mode == 1) // Image
+            {
+                textLocateParameters = new List<int> { 0, 0, 30, 0, 60, 45 };
+                textAddParameters = new List<int> { 0, 0, 0, 30, 0, 0, 0, 0};
+            }
+            if (mode == 2) // Panorama
+            {
+                textLocateParameters = new List<int> { 0, 0, 0, 0, 180, 15 };
+                textAddParameters = new List<int> { 0, 0, 0, 30, 0, 1, 0, 0 };
+            }
+            
+            int a = 1;
+            foreach (TrackBar slider in listDeSliders)
+            {
+                slider.Value = textLocateParameters[a];
+                a += 1;
+            }
+            int b = 1;
+            foreach (TextBox text in listDeTextBox)
+            {
+                text.Text = textLocateParameters[b].ToString();
+                b += 1;
+            }
+            setScript();
 
         }
         public void loadImage(string filename)
@@ -787,8 +826,47 @@ namespace DS2_Easy_Viewer
             scriptOutput_txtBox.Items.Add("+ .1");
             scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\"  1 100 100 100 100");
         }
-
-
+        private void scriptOutput_DoubleClick(object sender, EventArgs e)
+        {
+            string tmpStr = "";
+            if (scriptOutput_txtBox.SelectedItems.Count == 0)
+            {
+                for (int i = 0; i < scriptOutput_txtBox.Items.Count; i++)
+                {
+                    scriptOutput_txtBox.SetSelected(i, true);
+                }
+            }
+            foreach (var item in scriptOutput_txtBox.SelectedItems)
+            {
+                tmpStr += scriptOutput_txtBox.GetItemText(item) + "\n";
+            }
+            Clipboard.SetText(tmpStr);
+            scriptOutput_txtBox.ClearSelected();
+        }
+        private void Allsky_btn_Click(object sender, EventArgs e)
+        {
+            Allsky_btn.BackgroundImage = Properties.Resources.AllSky_btn_On;
+            Image_btn.BackgroundImage = Properties.Resources.Image_btn_Off;
+            Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_Off;
+            changeModeImageSliderUpdate(0);
+            envoyer_Click(this, EventArgs.Empty);
+        }
+        private void Image_btn_Click(object sender, EventArgs e)
+        {
+            Allsky_btn.BackgroundImage = Properties.Resources.AllSky_btn_Off;
+            Image_btn.BackgroundImage = Properties.Resources.Image_btn_On;
+            Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_Off;
+            changeModeImageSliderUpdate(1);
+            envoyer_Click(this, EventArgs.Empty);
+        }
+        private void Panorama_btn_Click(object sender, EventArgs e)
+        {
+            Allsky_btn.BackgroundImage = Properties.Resources.AllSky_btn_Off;
+            Image_btn.BackgroundImage = Properties.Resources.Image_btn_Off;
+            Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_On;
+            changeModeImageSliderUpdate(2);
+            envoyer_Click(this, EventArgs.Empty);
+        }
     }
 
     
