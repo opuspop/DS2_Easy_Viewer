@@ -73,8 +73,8 @@ namespace DS2_Easy_Viewer
         Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
         private static int boxIndex;
-        public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
-        public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
+        public  List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
+        public  List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
         private  List<TrackBar> listDeSliders = new List<TrackBar>();
         private  List<TextBox> listDeTextBox = new List<TextBox>();
@@ -517,6 +517,7 @@ namespace DS2_Easy_Viewer
                 }
                 panneauParametres.Visible = true;
             }
+            nomImage = nomImage_txtBox.Text;
 
         }
         private void imageBox_DoubleClick(object sender, EventArgs e)
@@ -576,24 +577,27 @@ namespace DS2_Easy_Viewer
         }
         private void envoyer_Click(object sender, EventArgs e)
         {
+            
+            foreach (imageBox boite in Form1.imageBoxList)
+            {
+                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
+            }
+            envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
+
             Byte[] commande;
             //fadeOutToutLeMonde();
-            commande = Ds2Command("Text Add \"" + nomImage + "\"" + boxIndex + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
+            commande = Ds2Command("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
             envoyerCommande(commande);
             Thread.Sleep(100);
-            commande = Ds2Command("Text Locate \"AllSky_" + boxIndex + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+            commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
             envoyerCommande(commande);
             Thread.Sleep(50);
-            commande = Ds2Command("Text View \"AllSky_" + boxIndex + "\" 0 100 100 100 100");
+            commande = Ds2Command("Text View \"" + nomImage + "\"  0 100 100 100 100");
             envoyerCommande(commande);
             Thread.Sleep(50);
 
             
-            foreach (imageBox boite in Form1.imageBoxList)
-            {
-                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn; 
-            }
-            envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
+            
         }
         private Byte[] Ds2Command(string command)
         {
@@ -619,7 +623,7 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[3] = Slider_Rotation.Value;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Rotation_txt.Text = Slider_Rotation.Value.ToString();
                 setScript();
@@ -632,7 +636,7 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[1] = Slider_Azimuth.Value;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
                 setScript();
@@ -645,9 +649,10 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[2] = Slider_Elevation.Value;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Elevation_txt.Text = Slider_Elevation.Value.ToString();
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -664,8 +669,9 @@ namespace DS2_Easy_Viewer
                     Slider_Height.Value = Slider_Width.Value;
                     slider_Height_txt.Text = Slider_Width.Value.ToString();
                 }
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -681,8 +687,9 @@ namespace DS2_Easy_Viewer
                     Slider_Width.Value = Slider_Height.Value;
                     slider_Width_txt.Text = Slider_Height.Value.ToString();
                 }
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -707,10 +714,11 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[3] = 0;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Rotation_txt.Text = textLocateParameters[3].ToString();
                 Slider_Rotation.Value = textLocateParameters[3];
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -720,10 +728,11 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[1] = 0;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Azimuth_txt.Text = textLocateParameters[1].ToString();
                 Slider_Azimuth.Value = textLocateParameters[1];
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -733,10 +742,11 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[2] = 90;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Elevation_txt.Text = textLocateParameters[2].ToString();
                 Slider_Elevation.Value = textLocateParameters[2];
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -746,10 +756,11 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[4] = 180;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Width_txt.Text = textLocateParameters[4].ToString();
                 Slider_Width.Value = textLocateParameters[4];
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -759,21 +770,22 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[5] = 180;
-                commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
+                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Height_txt.Text = textLocateParameters[5].ToString();
                 Slider_Height.Value = textLocateParameters[5];
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
         private void setScript()
         {
             scriptOutput_txtBox.Items.Clear();
-            scriptOutput_txtBox.Items.Add("Text Add \"" + nomImage + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()));
+            scriptOutput_txtBox.Items.Add("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
             scriptOutput_txtBox.Items.Add("+ .1");
-            scriptOutput_txtBox.Items.Add("Text Locate \"" + nomImage + "\" " + string.Join(" ", textLocateParameters.ToArray()));
+            scriptOutput_txtBox.Items.Add("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
             scriptOutput_txtBox.Items.Add("+ .1");
-            scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\" \" 1 100 100 100 100");
+            scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\"  1 100 100 100 100");
         }
 
 
