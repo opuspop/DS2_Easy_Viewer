@@ -47,8 +47,9 @@ namespace DS2_Easy_Viewer
             }
         }
 
+       
     }
-    
+
 
     public partial class imageBox
     {
@@ -70,6 +71,7 @@ namespace DS2_Easy_Viewer
         Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
         public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
         Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
+        TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
         private static int boxIndex;
         public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
@@ -78,6 +80,7 @@ namespace DS2_Easy_Viewer
         private  List<TextBox> listDeTextBox = new List<TextBox>();
         public static List<string> listeValeurDefautText = new List<string> { "0","0", "90", "0", "180", "180" };
         int count = 0;
+        public static string nomImage = "";
         public static bool ratioOn = true;
 
 
@@ -417,6 +420,25 @@ namespace DS2_Easy_Viewer
             ratio_btn.Text = " ";
             ratio_btn.Click += new System.EventHandler(ratio_btn_Click);
             panneauParametres.Controls.Add(ratio_btn);
+
+            // AJOUT DU TEXTBOX POUR LE NOM DES IMAGES
+            nomImage_txtBox.Size = new Size(230, 20);
+            nomImage_txtBox.Location = new Point(8, 451);
+            nomImage_txtBox.BackColor =  Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            nomImage_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            nomImage_txtBox.ForeColor = System.Drawing.Color.White;
+
+            panneauParametres.Controls.Add(nomImage_txtBox);
+
+            // AJOUT DU TEXTBOX POUR LE SCRIPT
+            scriptOutput_txtBox.Size = new Size(230, 200);
+            scriptOutput_txtBox.Location = new Point(8, 479);
+            scriptOutput_txtBox.BackColor = Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            scriptOutput_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            scriptOutput_txtBox.ForeColor = System.Drawing.Color.White;
+            scriptOutput_txtBox.BorderStyle = BorderStyle.FixedSingle;
+            panneauParametres.Controls.Add(scriptOutput_txtBox);
+
 
 
             panneauParametres.Controls.Add(panneauHeight);
