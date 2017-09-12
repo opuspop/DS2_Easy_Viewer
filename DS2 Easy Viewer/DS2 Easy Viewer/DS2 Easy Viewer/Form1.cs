@@ -93,7 +93,7 @@ namespace DS2_Easy_Viewer
             listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
             listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
-            //MessageBox.Show(count.ToString());
+            
         }
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -427,7 +427,10 @@ namespace DS2_Easy_Viewer
             nomImage_txtBox.BackColor =  Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             nomImage_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             nomImage_txtBox.ForeColor = System.Drawing.Color.White;
-
+            nomImage_txtBox.BorderStyle = BorderStyle.FixedSingle;
+            nomImage = "MonImage_" + (index + 1); // set la variable nomImage 
+            setScript();
+            nomImage_txtBox.Text = nomImage;
             panneauParametres.Controls.Add(nomImage_txtBox);
 
             // AJOUT DU TEXTBOX POUR LE SCRIPT
@@ -437,8 +440,8 @@ namespace DS2_Easy_Viewer
             scriptOutput_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             scriptOutput_txtBox.ForeColor = System.Drawing.Color.White;
             scriptOutput_txtBox.BorderStyle = BorderStyle.FixedSingle;
+            scriptOutput_txtBox.HorizontalScrollbar = true;
             panneauParametres.Controls.Add(scriptOutput_txtBox);
-
 
 
             panneauParametres.Controls.Add(panneauHeight);
@@ -454,6 +457,7 @@ namespace DS2_Easy_Viewer
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
         }
+        
         private void initializationImageBox(Form Form1, int index)
         {
             panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
@@ -525,6 +529,7 @@ namespace DS2_Easy_Viewer
                 image_Path = openFileDialog1.FileName;
                 loadImage(openFileDialog1.FileName);
                 setInitialParameterValues();
+                setScript();
             }
         }
         private void setInitialParameterValues()
@@ -565,6 +570,7 @@ namespace DS2_Easy_Viewer
                 imgSelect.Image = Image.FromFile(imageRenommee);
                 imgSelect.SizeMode = PictureBoxSizeMode.Zoom;
                 imgSelectLbl.Text = Path.GetFileName(filename);
+                setScript();
             }
             catch (Exception) { }
         }
@@ -572,7 +578,7 @@ namespace DS2_Easy_Viewer
         {
             Byte[] commande;
             //fadeOutToutLeMonde();
-            commande = Ds2Command("Text Add \"AllSky_" + boxIndex + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
+            commande = Ds2Command("Text Add \"" + nomImage + "\"" + boxIndex + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
             envoyerCommande(commande);
             Thread.Sleep(100);
             commande = Ds2Command("Text Locate \"AllSky_" + boxIndex + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
@@ -616,6 +622,7 @@ namespace DS2_Easy_Viewer
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Rotation_txt.Text = Slider_Rotation.Value.ToString();
+                setScript();
             }
             catch (Exception) {MessageBox.Show("la connexion avec Ds-master est impossible");}
         }
@@ -628,6 +635,7 @@ namespace DS2_Easy_Viewer
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
                 slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+                setScript();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -758,6 +766,17 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
+        private void setScript()
+        {
+            scriptOutput_txtBox.Items.Clear();
+            scriptOutput_txtBox.Items.Add("Text Add \"" + nomImage + "\" \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()));
+            scriptOutput_txtBox.Items.Add("+ .1");
+            scriptOutput_txtBox.Items.Add("Text Locate \"" + nomImage + "\" " + string.Join(" ", textLocateParameters.ToArray()));
+            scriptOutput_txtBox.Items.Add("+ .1");
+            scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\" \" 1 100 100 100 100");
+        }
+
+
     }
 
     
