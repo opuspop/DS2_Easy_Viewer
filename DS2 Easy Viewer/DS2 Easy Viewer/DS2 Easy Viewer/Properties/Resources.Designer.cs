@@ -73,26 +73,6 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AllSky_btn__Off {
-            get {
-                object obj = ResourceManager.GetObject("AllSky_btn _Off", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap AllSky_btn__On {
-            get {
-                object obj = ResourceManager.GetObject("AllSky_btn _On", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap AllSky_btn_2 {
             get {
                 object obj = ResourceManager.GetObject("AllSky_btn_2", resourceCulture);
@@ -116,6 +96,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap AllSky_btn_4 {
             get {
                 object obj = ResourceManager.GetObject("AllSky_btn_4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AllSky_btn_Off {
+            get {
+                object obj = ResourceManager.GetObject("AllSky_btn_Off", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AllSky_btn_On {
+            get {
+                object obj = ResourceManager.GetObject("AllSky_btn_On", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -376,6 +376,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Ratio_On {
             get {
                 object obj = ResourceManager.GetObject("Ratio_On", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_btn {
+            get {
+                object obj = ResourceManager.GetObject("Reset_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Reset_btn_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

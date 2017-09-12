@@ -69,6 +69,7 @@ namespace DS2_Easy_Viewer
         public TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
         Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
         public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
+        Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_Btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         private static int boxIndex;
         public static List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public static List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
@@ -77,6 +78,7 @@ namespace DS2_Easy_Viewer
         private  List<TextBox> listDeTextBox = new List<TextBox>();
         public static List<string> listeValeurDefautText = new List<string> { "0","0", "90", "0", "180", "180" };
         int count = 0;
+        public static bool ratioOn = true;
 
 
         public imageBox(Form Form1, int index)
@@ -118,7 +120,7 @@ namespace DS2_Easy_Viewer
 
 
             // AJOUT DES BOUTONS  ALLSKY 
-            Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_On;
+            Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_btn_On;
             Allsky_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Allsky_btn.Location = new System.Drawing.Point(129, 48);
             Allsky_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -130,7 +132,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.Controls.Add(Allsky_btn);
 
             // AJOUT DES BOUTONS  IMAGE
-            Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_Off;
+            Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_btn_Off;
             Image_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Image_btn.Location = new System.Drawing.Point(129, 76);
             Image_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -142,7 +144,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.Controls.Add(Image_btn);
 
             // AJOUT DES BOUTONS  PANO
-            Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_Off;
+            Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_Off;
             Panorama_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Panorama_btn.Location = new System.Drawing.Point(129, 104);
             Panorama_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -183,7 +185,6 @@ namespace DS2_Easy_Viewer
             panneauRotation.Controls.Add(slider_Rotation_lbl);
 
             // AJOUT TEXTBOX VALEUR DE ROTATION
-
             slider_Rotation_txt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             slider_Rotation_txt.BorderStyle = System.Windows.Forms.BorderStyle.None;
             slider_Rotation_txt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -193,6 +194,13 @@ namespace DS2_Easy_Viewer
             slider_Rotation_txt.TabIndex = 2;
             panneauRotation.Controls.Add(slider_Rotation_txt);
 
+            // AJOUT RESET ROTATION
+            resetRotation_btn.Size = new Size(20, 20);
+            resetRotation_btn.Location = new Point(105, 32);
+            resetRotation_btn.BackgroundImage = Properties.Resources.Reset_btn_2;
+            resetRotation_btn.FlatStyle = FlatStyle.Flat;
+            resetRotation_btn.FlatAppearance.BorderSize = 0;
+            panneauRotation.Controls.Add(resetRotation_btn);
 
             // AJOUT DU PANNEAU DE AZIMUTH //
             panneauAzimuth.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.sliderBox_2;
@@ -357,13 +365,14 @@ namespace DS2_Easy_Viewer
             // AJOUT DU BOUTON GARDER RATIO
             ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_On;
             ratio_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            ratio_btn.Location = new System.Drawing.Point(216, 323);
+            ratio_btn.Location = new System.Drawing.Point(218, 323);
             ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             ratio_btn.Size = new System.Drawing.Size(20, 120);
             ratio_btn.TabIndex = 0;
             ratio_btn.UseVisualStyleBackColor = true;
             ratio_btn.TabStop = false;
             ratio_btn.Text = " ";
+            ratio_btn.Click += new System.EventHandler(ratio_btn_Click);
             panneauParametres.Controls.Add(ratio_btn);
 
 
@@ -507,6 +516,13 @@ namespace DS2_Easy_Viewer
             commande = Ds2Command("Text View \"AllSky_" + boxIndex + "\" 0 100 100 100 100");
             envoyerCommande(commande);
             Thread.Sleep(50);
+
+            
+            foreach (imageBox boite in Form1.imageBoxList)
+            {
+                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn; 
+            }
+            envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
         }
         private Byte[] Ds2Command(string command)
         {
@@ -558,7 +574,7 @@ namespace DS2_Easy_Viewer
                 textLocateParameters[2] = Slider_Elevation.Value;
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
-                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
+                slider_Elevation_txt.Text = Slider_Elevation.Value.ToString();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -568,9 +584,15 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[4] = Slider_Width.Value;
+                slider_Width_txt.Text = Slider_Width.Value.ToString();
+                if (ratioOn)
+                {
+                    textLocateParameters[5] = Slider_Width.Value;
+                    Slider_Height.Value = Slider_Width.Value;
+                    slider_Height_txt.Text = Slider_Width.Value.ToString();
+                }
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
-                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
@@ -580,13 +602,30 @@ namespace DS2_Easy_Viewer
             {
                 Byte[] commande;
                 textLocateParameters[5] = Slider_Height.Value;
+                slider_Height_txt.Text = Slider_Height.Value.ToString();
+                if (ratioOn) {
+                    textLocateParameters[4] = Slider_Height.Value;
+                    Slider_Width.Value = Slider_Height.Value;
+                    slider_Width_txt.Text = Slider_Height.Value.ToString();
+                }
                 commande = Ds2Command("Text Locate \"AllSky_" + (boxIndex) + "\" " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
-                slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
-
+        private void ratio_btn_Click(object sender, EventArgs e)
+        {
+            if (ratioOn == true)
+            {
+                ratio_btn.BackgroundImage = Properties.Resources.Ratio_Off;
+                ratioOn = false;
+            }
+            if (ratioOn == false)
+            {
+                ratio_btn.BackgroundImage = Properties.Resources.Ratio_On;
+                ratioOn = true;
+            }
+        }
     }
 
 

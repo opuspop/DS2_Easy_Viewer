@@ -50,6 +50,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1171, 715);
             this.Controls.Add(this.Select_Multi_btn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
