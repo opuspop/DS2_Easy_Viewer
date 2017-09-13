@@ -202,6 +202,8 @@ namespace DS2_Easy_Viewer
             slider_Rotation_txt.Size = new System.Drawing.Size(20, 14);
             slider_Rotation_txt.TabIndex = 2;
             slider_Rotation_txt.Text = "0";
+            slider_Rotation_txt.KeyDown += new KeyEventHandler(enterRotationValue);
+            // slider_Rotation_txt.KeyDown += enterRotationValue;
             panneauRotation.Controls.Add(slider_Rotation_txt);
 
             // AJOUT RESET ROTATION
@@ -252,6 +254,7 @@ namespace DS2_Easy_Viewer
             slider_Azimuth_txt.Size = new System.Drawing.Size(20, 14);
             slider_Azimuth_txt.TabIndex = 2;
             slider_Azimuth_txt.Text = "0";
+            slider_Azimuth_txt.KeyDown += new KeyEventHandler(enterAzimuthValue);
             panneauAzimuth.Controls.Add(slider_Azimuth_txt);
 
             // AJOUT RESET AZIMUTH
@@ -303,6 +306,7 @@ namespace DS2_Easy_Viewer
             slider_Elevation_txt.Size = new System.Drawing.Size(20, 14);
             slider_Elevation_txt.TabIndex = 2;
             slider_Elevation_txt.Text = "90";
+            slider_Elevation_txt.KeyDown += new KeyEventHandler(enterElevationValue);
             panneauElevation.Controls.Add(slider_Elevation_txt);
 
             // AJOUT RESET ELEVATION    
@@ -353,6 +357,7 @@ namespace DS2_Easy_Viewer
             slider_Width_txt.Size = new System.Drawing.Size(20, 14);
             slider_Width_txt.TabIndex = 2;
             slider_Width_txt.Text = "180";
+            slider_Width_txt.KeyDown += new KeyEventHandler(enterWidthValue);
             panneauWidth.Controls.Add(slider_Width_txt);
 
             // AJOUT RESET WIDTH   
@@ -403,6 +408,7 @@ namespace DS2_Easy_Viewer
             slider_Height_txt.Size = new System.Drawing.Size(20, 14);
             slider_Height_txt.TabIndex = 2;
             slider_Height_txt.Text = "180";
+            slider_Height_txt.KeyDown += new KeyEventHandler(enterHeightValue);
             panneauHeight.Controls.Add(slider_Height_txt);
 
             // AJOUT RESET HEIGHT   
@@ -560,44 +566,48 @@ namespace DS2_Easy_Viewer
         }
         private void changeModeImageSliderUpdate(int mode)
         {
+            if (imageRenommee != "")
+            {
+                textLocateParameters.Clear();
+                textAddParameters.Clear();
+                Image img = Image.FromFile(imageRenommee);
 
-            textLocateParameters.Clear();
-            textAddParameters.Clear();
-            Image img = Image.FromFile(imageRenommee);
+                if (mode == 0) // Allsky
+                {
+                    textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
+                    textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1 };
+                    ratio = 1;
+                }
+                if (mode == 1) // Image
+                {
+                    ratio = (double)img.Height / img.Width;
+                    int width = (int)(64 * ratio);
+                    textLocateParameters = new List<int> { 0, 0, 30, 0, 64, width };
+                    textAddParameters = new List<int> { 0, 0, 0, 30, 0, 0, 0, 0 };
+                    //MessageBox.Show(ratio + "   " + string.Join(",",textLocateParameters));
+                }
+                if (mode == 2) // Panorama
+                {
+                    textLocateParameters = new List<int> { 0, 0, 0, 0, 180, 15 };
+                    textAddParameters = new List<int> { 0, 0, 0, 30, 0, 1, 0, 0 };
+                }
+
+                int a = 1;
+                foreach (TrackBar slider in listDeSliders)
+                {
+                    slider.Value = textLocateParameters[a];
+                    a += 1;
+                }
+                int b = 1;
+                foreach (TextBox text in listDeTextBox)
+                {
+                    text.Text = textLocateParameters[b].ToString();
+                    b += 1;
+                }
+                setScript();
+            }
+           
             
-            if (mode == 0) // Allsky
-            {
-                textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
-                textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1};
-                ratio = 1;
-            }
-            if (mode == 1) // Image
-            {
-                ratio = (double)img.Height / img.Width;
-                int width = (int)(64 * ratio);
-                textLocateParameters = new List<int> { 0, 0, 30, 0, 64, width };
-                textAddParameters = new List<int> { 0, 0, 0, 30, 0, 0, 0, 0};
-                MessageBox.Show(ratio + "   " + string.Join(",",textLocateParameters));
-            }
-            if (mode == 2) // Panorama
-            {
-                textLocateParameters = new List<int> { 0, 0, 0, 0, 180, 15 };
-                textAddParameters = new List<int> { 0, 0, 0, 30, 0, 1, 0, 0 };
-            }
-            
-            int a = 1;
-            foreach (TrackBar slider in listDeSliders)
-            {
-                slider.Value = textLocateParameters[a];
-                a += 1;
-            }
-            int b = 1;
-            foreach (TextBox text in listDeTextBox)
-            {
-                text.Text = textLocateParameters[b].ToString();
-                b += 1;
-            }
-            setScript();
 
         }
         public void loadImage(string filename)
@@ -876,6 +886,71 @@ namespace DS2_Easy_Viewer
             Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_On;
             changeModeImageSliderUpdate(2);
             envoyer_Click(this, EventArgs.Empty);
+        }
+        private void enterRotationValue(object sender, KeyEventArgs e)
+        {
+            int integer;
+            bool resultat = Int32.TryParse(slider_Rotation_txt.Text, out integer);
+            if (e.KeyCode == Keys.Enter & slider_Rotation_txt.Text != "" & resultat )
+            {
+                if (integer >= -180 & integer <= 180)
+                {
+                    Slider_Rotation.Value = integer;
+                    Slider_Rotation_Scroll(this, EventArgs.Empty);
+                }
+            }
+        }
+        private void enterAzimuthValue(object sender, KeyEventArgs e)
+        {
+            int integer;
+            bool resultat = Int32.TryParse(slider_Azimuth_txt.Text, out integer);
+            if (e.KeyCode == Keys.Enter & slider_Azimuth_txt.Text != "" & resultat)
+            {
+                if (integer >= -180 & integer <= 180)
+                {
+                    Slider_Azimuth.Value = integer;
+                    slider_Azimuth_Scroll(this, EventArgs.Empty);
+                }
+            }
+        }
+        private void enterElevationValue(object sender, KeyEventArgs e)
+        {
+            int integer;
+            bool resultat = Int32.TryParse(slider_Elevation_txt.Text, out integer);
+            if (e.KeyCode == Keys.Enter & slider_Elevation_txt.Text != "" & resultat)
+            {
+                if (integer >= -90 & integer <= 90)
+                {
+                    Slider_Azimuth.Value = integer;
+                    slider_Elevation_Scroll(this, EventArgs.Empty);
+                }
+            }
+        }
+        private void enterWidthValue(object sender, KeyEventArgs e)
+        {
+            int integer;
+            bool resultat = Int32.TryParse(slider_Width_txt.Text, out integer);
+            if (e.KeyCode == Keys.Enter & slider_Width_txt.Text != "" & resultat)
+            {
+                if (integer >= 0 & integer <= 360)
+                {
+                    Slider_Azimuth.Value = integer;
+                    slider_Width_Scroll(this, EventArgs.Empty);
+                }
+            }
+        }
+        private void enterHeightValue(object sender, KeyEventArgs e)
+        {
+            int integer;
+            bool resultat = Int32.TryParse(slider_Height_txt.Text, out integer);
+            if (e.KeyCode == Keys.Enter & slider_Height_txt.Text != "" & resultat)
+            {
+                if (integer >= 0 & integer <= 360)
+                {
+                    Slider_Azimuth.Value = integer;
+                    slider_Height_Scroll(this, EventArgs.Empty);
+                }
+            }
         }
 
     }
