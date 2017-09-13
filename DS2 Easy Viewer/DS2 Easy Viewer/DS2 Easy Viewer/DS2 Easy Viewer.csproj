@@ -182,7 +182,9 @@
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Clear All.png" />
     <Content Include="Resources\Remove-icon.png" />
+    <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />
     <None Include="Resources\Reset_Reset_All.png" />
     <None Include="Resources\Remove_btn_3.png" />

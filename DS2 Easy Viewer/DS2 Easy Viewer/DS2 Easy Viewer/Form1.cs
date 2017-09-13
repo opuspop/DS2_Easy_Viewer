@@ -54,6 +54,21 @@ namespace DS2_Easy_Viewer
         {
             imageBoxList[0].resetAll();
         }
+
+        private void ClearAll_btn_Click(object sender, EventArgs e)
+        {
+            
+            try
+            {
+                foreach(imageBox imgBox in imageBoxList)
+                {
+                    imgBox.remove_Click(this, EventArgs.Empty);
+                    
+                }
+
+            }
+            catch (Exception) { }
+        }
     }
 
 
@@ -650,15 +665,9 @@ namespace DS2_Easy_Viewer
                 imgSelect.SizeMode = PictureBoxSizeMode.Zoom;
                 imgSelectLbl.Text = Path.GetFileName(filename);
                 setScript();
+                setInitialParameterValues();
                 //MessageBox.Show("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
-                Byte[] commande;
-                commande = Ds2Command("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
-                envoyerCommande(commande);
-                Thread.Sleep(100);
-                //MessageBox.Show("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
-                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
-                envoyerCommande(commande);
-                Thread.Sleep(50);
+                textAddLocate();
             }
             catch (Exception) { }
         }
@@ -666,29 +675,22 @@ namespace DS2_Easy_Viewer
         {
             if (surDome == false)
             {
-                MessageBox.Show("surDome = false");
+                /*
                 foreach (imageBox boite in Form1.imageBoxList)
                 {
                     boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
                     boite.surDome = false;
                 }
+                */
+                eteindreReste();
                 envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
                 Byte[] commande;
-                /*
-                commande = Ds2Command("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"" + string.Join(" ", textAddParameters.ToArray()) + " \"");
-                envoyerCommande(commande);
-                Thread.Sleep(100);
-                commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
-                envoyerCommande(commande);
-                Thread.Sleep(50);
-                */
                 commande = Ds2Command("Text View \"" + nomImage + "\"  0 100 100 100 100");
                 envoyerCommande(commande);
                 surDome = true;
             }
             else if ( surDome == true)
             {
-                MessageBox.Show("surDome = true");
                 envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
                 Byte[] commande;
                 commande = Ds2Command("Text View \"" + nomImage + "\"  0 0 100 100 100");
@@ -906,13 +908,43 @@ namespace DS2_Easy_Viewer
             Clipboard.SetText(tmpStr);
             scriptOutput_txtBox.ClearSelected();
         }
+        private void eteindreReste()
+        {
+            foreach (imageBox boite in Form1.imageBoxList)
+            {
+                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
+                boite.surDome = false;
+                Byte[] commandeBoites;
+                commandeBoites = Ds2Command("Text View \"" + boite.nomImage + "\"  0 0 100 100 100");  // Fermer éteindre les images des autres renderers
+                envoyerCommande(commandeBoites);
+            }
+            envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
+        }
+        private void textAddLocate()
+        {
+            Byte[] commande;
+            commande = Ds2Command("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
+            envoyerCommande(commande);
+            Thread.Sleep(100);
+            commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
+            envoyerCommande(commande);
+            Thread.Sleep(50);
+        }
+        private void textView()
+        {
+            Byte[] commande;
+            commande = Ds2Command("Text View \"" + nomImage + "\"  0 100 100 100 100");
+            envoyerCommande(commande);
+        }
         private void Allsky_btn_Click(object sender, EventArgs e)
         {
             Allsky_btn.BackgroundImage = Properties.Resources.AllSky_btn_On;
             Image_btn.BackgroundImage = Properties.Resources.Image_btn_Off;
             Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_Off;
             changeModeImageSliderUpdate(0);
-            envoyer_Click(this, EventArgs.Empty);
+            eteindreReste();
+            textAddLocate();
+            textView();
         }
         private void Image_btn_Click(object sender, EventArgs e)
         {
@@ -920,7 +952,9 @@ namespace DS2_Easy_Viewer
             Image_btn.BackgroundImage = Properties.Resources.Image_btn_On;
             Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_Off;
             changeModeImageSliderUpdate(1);
-            envoyer_Click(this, EventArgs.Empty);
+            eteindreReste();
+            textAddLocate();
+            textView();
         }
         private void Panorama_btn_Click(object sender, EventArgs e)
         {
@@ -928,7 +962,9 @@ namespace DS2_Easy_Viewer
             Image_btn.BackgroundImage = Properties.Resources.Image_btn_Off;
             Panorama_btn.BackgroundImage = Properties.Resources.Pano_btn_On;
             changeModeImageSliderUpdate(2);
-            envoyer_Click(this, EventArgs.Empty);
+            eteindreReste();
+            textAddLocate();
+            textView();
         }
         private void enterRotationValue(object sender, KeyEventArgs e)
         {
@@ -964,7 +1000,7 @@ namespace DS2_Easy_Viewer
             {
                 if (integer >= -90 & integer <= 90)
                 {
-                    Slider_Azimuth.Value = integer;
+                    Slider_Elevation.Value = integer;
                     slider_Elevation_Scroll(this, EventArgs.Empty);
                 }
             }
@@ -977,7 +1013,7 @@ namespace DS2_Easy_Viewer
             {
                 if (integer >= 0 & integer <= 360)
                 {
-                    Slider_Azimuth.Value = integer;
+                    Slider_Width.Value = integer;
                     slider_Width_Scroll(this, EventArgs.Empty);
                 }
             }
@@ -990,7 +1026,7 @@ namespace DS2_Easy_Viewer
             {
                 if (integer >= 0 & integer <= 360)
                 {
-                    Slider_Azimuth.Value = integer;
+                    Slider_Height.Value = integer;
                     slider_Height_Scroll(this, EventArgs.Empty);
                 }
             }
@@ -1022,7 +1058,7 @@ namespace DS2_Easy_Viewer
             }
             
         }
-        private void remove_Click(object sender, EventArgs e)
+        public void remove_Click(object sender, EventArgs e)
         {
             envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
             Byte[] commande;
