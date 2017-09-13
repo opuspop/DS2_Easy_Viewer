@@ -37,13 +37,16 @@ namespace DS2_Easy_Viewer
             if (result == DialogResult.OK) // Test result.
             {
                 int increment = 0;
-                foreach (string files in openFileDialog1.FileNames)
+                try
                 {
-                    imageBoxList[increment].loadImage(files);
-                    increment += 1;
+                    foreach (string files in openFileDialog1.FileNames)
+                    {
+                        imageBoxList[increment].loadImage(files);
+                        increment += 1;
+                    }
+
                 }
-
-
+                catch (Exception) { }
             }
         }
 
