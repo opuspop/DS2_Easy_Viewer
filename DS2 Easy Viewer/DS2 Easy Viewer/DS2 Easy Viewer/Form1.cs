@@ -80,7 +80,7 @@ namespace DS2_Easy_Viewer
         private  List<TextBox> listDeTextBox = new List<TextBox>();
         public static List<string> listeValeurDefautText = new List<string> { "0","0", "90", "0", "180", "180" };
         int count = 0;
-        int mode = 0; // mode 0 = Allsky - mode 1 = Image - mode 2 = Panorama
+        double ratio = 1;
 
         public static string nomImage = "";
         public static bool ratioOn = true;
@@ -560,15 +560,21 @@ namespace DS2_Easy_Viewer
 
             textLocateParameters.Clear();
             textAddParameters.Clear();
+            Image img = Image.FromFile(imageRenommee);
+            
             if (mode == 0) // Allsky
             {
                 textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };
                 textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1};
+                ratio = 1;
             }
             if (mode == 1) // Image
             {
-                textLocateParameters = new List<int> { 0, 0, 30, 0, 60, 45 };
+                ratio = (double)img.Height / img.Width;
+                int width = (int)(64 * ratio);
+                textLocateParameters = new List<int> { 0, 0, 30, 0, 64, width };
                 textAddParameters = new List<int> { 0, 0, 0, 30, 0, 0, 0, 0};
+                MessageBox.Show(ratio + "   " + string.Join(",",textLocateParameters));
             }
             if (mode == 2) // Panorama
             {
@@ -704,9 +710,9 @@ namespace DS2_Easy_Viewer
                 slider_Width_txt.Text = Slider_Width.Value.ToString();
                 if (ratioOn)
                 {
+                    Slider_Height.Value = (int)Math.Round(Slider_Width.Value * ratio);
                     textLocateParameters[5] = Slider_Width.Value;
-                    Slider_Height.Value = Slider_Width.Value;
-                    slider_Height_txt.Text = Slider_Width.Value.ToString();
+                    slider_Height_txt.Text = Slider_Height.Value.ToString();
                 }
                 commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
@@ -722,9 +728,9 @@ namespace DS2_Easy_Viewer
                 textLocateParameters[5] = Slider_Height.Value;
                 slider_Height_txt.Text = Slider_Height.Value.ToString();
                 if (ratioOn) {
+                    Slider_Width.Value = (int)Math.Round(Slider_Height.Value / ratio);
                     textLocateParameters[4] = Slider_Height.Value;
-                    Slider_Width.Value = Slider_Height.Value;
-                    slider_Width_txt.Text = Slider_Height.Value.ToString();
+                    slider_Width_txt.Text = Slider_Width.Value.ToString();
                 }
                 commande = Ds2Command("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()) + " \"");
                 envoyerCommande(commande);
@@ -744,7 +750,8 @@ namespace DS2_Easy_Viewer
             {
                 ratioOn = true;
                 ratio_btn.BackgroundImage = Properties.Resources.Ratio_On;
-               
+                ratio = (double)Slider_Height.Value/Slider_Width.Value;
+
             }
         }
         private void resetRotation_Click(object sender, EventArgs e)
@@ -867,6 +874,7 @@ namespace DS2_Easy_Viewer
             changeModeImageSliderUpdate(2);
             envoyer_Click(this, EventArgs.Empty);
         }
+
     }
 
     
