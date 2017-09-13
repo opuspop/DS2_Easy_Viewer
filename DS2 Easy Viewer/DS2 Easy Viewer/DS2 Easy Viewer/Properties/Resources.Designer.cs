@@ -143,6 +143,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CopieClipboard {
+            get {
+                object obj = ResourceManager.GetObject("CopieClipboard", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Double_Click {
             get {
                 object obj = ResourceManager.GetObject("Double Click", resourceCulture);

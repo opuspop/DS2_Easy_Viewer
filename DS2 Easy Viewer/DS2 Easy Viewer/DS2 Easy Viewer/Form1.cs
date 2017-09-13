@@ -13,6 +13,7 @@ namespace DS2_Easy_Viewer
     {
         public static List<imageBox> imageBoxList = new List<imageBox>();
         public static int boiteSelectionnee;
+        
 
         public Form1()
         {
@@ -46,7 +47,6 @@ namespace DS2_Easy_Viewer
                 catch (Exception) { }
             }
         }
-       
         private void ClearAll_btn_Click(object sender, EventArgs e)
         {
             
@@ -62,13 +62,25 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
+
+        private void GoToVideoTab_btn_Click(object sender, EventArgs e)
+        {
+            if (VideoTab.Instance == null)//Check if Form2 has already been created
+            {
+                //if not: go create a new one !
+                VideoTab.Instance = new VideoTab();
+            }
+            //Instance of Form2 is already created => open that one            
+            VideoTab.Instance.Show();
+            this.Hide();
+
+        }
+            public static Form1 Instance { get; set; } //Create an Instance Object of this Window
+
     }
-
-    
-
     public partial class imageBox
     {
-        public static bool DEBUG = false;
+        public static bool DEBUG = true;
 
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox(); 
@@ -81,7 +93,7 @@ namespace DS2_Easy_Viewer
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
         Panel panneauImage = new Panel();
-        Button remove = new Button();
+        Button remove = new Button(); Button copieScript_btn = new Button();
         public TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar();  TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
         Label slider_Rotation_lbl = new Label();  Label slider_Azimuth_lbl = new Label();  Label slider_Elevation_lbl = new Label();  Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
         public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
@@ -141,7 +153,7 @@ namespace DS2_Easy_Viewer
             Allsky_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.AllSky_btn_On;
             Allsky_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Allsky_btn.Location = new System.Drawing.Point(129, 48);
-            Allsky_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            Allsky_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             Allsky_btn.Size = new System.Drawing.Size(110, 20);
             Allsky_btn.TabIndex = 0;
             Allsky_btn.UseVisualStyleBackColor = true;
@@ -154,7 +166,7 @@ namespace DS2_Easy_Viewer
             Image_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Image_btn_Off;
             Image_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Image_btn.Location = new System.Drawing.Point(129, 76);
-            Image_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            Image_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             Image_btn.Size = new System.Drawing.Size(110, 20);
             Image_btn.TabIndex = 0;
             Image_btn.UseVisualStyleBackColor = true;
@@ -167,7 +179,7 @@ namespace DS2_Easy_Viewer
             Panorama_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Pano_btn_Off;
             Panorama_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             Panorama_btn.Location = new System.Drawing.Point(129, 104);
-            Panorama_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            Panorama_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             Panorama_btn.Size = new System.Drawing.Size(110, 20);
             Panorama_btn.TabIndex = 0;
             Panorama_btn.UseVisualStyleBackColor = true;
@@ -436,9 +448,7 @@ namespace DS2_Easy_Viewer
             ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_On;
             ratio_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             ratio_btn.Location = new System.Drawing.Point(218, 323);
-            ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            ratio_btn.Size = new System.Drawing.Size(20, 120);
-            ratio_btn.TabIndex = 0;
+            ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             ratio_btn.UseVisualStyleBackColor = true;
             ratio_btn.TabStop = false;
             ratio_btn.Text = " ";
@@ -460,7 +470,7 @@ namespace DS2_Easy_Viewer
             panneauParametres.Controls.Add(nomImage_txtBox);
 
             // AJOUT DU TEXTBOX POUR LE SCRIPT
-            scriptOutput_txtBox.Size = new Size(230, 200);
+            scriptOutput_txtBox.Size = new Size(230, 172);
             scriptOutput_txtBox.Location = new Point(8, 479);
             scriptOutput_txtBox.BackColor = Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             scriptOutput_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -471,6 +481,15 @@ namespace DS2_Easy_Viewer
             scriptOutput_txtBox.DoubleClick += new EventHandler(scriptOutput_DoubleClick);
             panneauParametres.Controls.Add(scriptOutput_txtBox);
 
+            // AJOUT BOUTON COPIER
+            copieScript_btn.Size = new Size(230,22);
+            copieScript_btn.Location = new Point(8, 659);
+            copieScript_btn.Click += new EventHandler(copieScript);
+            copieScript_btn.BackgroundImage = Properties.Resources.CopieClipboard;
+            copieScript_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            copieScript_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            panneauParametres.Controls.Add(copieScript_btn);
+            
 
             panneauParametres.Controls.Add(panneauHeight);
             panneauParametres.Controls.Add(panneauWidth);
@@ -485,6 +504,7 @@ namespace DS2_Easy_Viewer
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
         }
+       
         private void initializationImageBox(Form Form1, int index)
         {
             panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
@@ -541,7 +561,7 @@ namespace DS2_Easy_Viewer
             toolTipView.SetToolTip(envoyer_btn, "Text View ...");
             panneau.Controls.Add(remove);
             Form1.Controls.Add(panneau);
-        }
+    }
         public void imageBox_Click(object sender, EventArgs e)
         {
             if (imageRenommee != null)
@@ -720,7 +740,7 @@ namespace DS2_Easy_Viewer
                 slider_Rotation_txt.Text = Slider_Rotation.Value.ToString();
                 setScript();
             }
-            catch (Exception) {MessageBox.Show("la connexion avec Ds-master est impossible");}
+            catch (Exception) {MessageBox.Show("la valeur excède le maximum permis pour cet attribut");}
         }
         private void slider_Azimuth_Scroll(object sender, EventArgs e)
         {
@@ -733,7 +753,7 @@ namespace DS2_Easy_Viewer
                 slider_Azimuth_txt.Text = Slider_Azimuth.Value.ToString();
                 setScript();
             }
-            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+            catch (Exception) { MessageBox.Show("la valeur excède le maximum permis pour cet attribut"); }
         }
         private void slider_Elevation_Scroll(object sender, EventArgs e)
         {
@@ -746,7 +766,7 @@ namespace DS2_Easy_Viewer
                 slider_Elevation_txt.Text = Slider_Elevation.Value.ToString();
                 setScript();
             }
-            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+            catch (Exception) { MessageBox.Show("la valeur excède le maximum permis pour cet attribut"); }
         }
         private void slider_Width_Scroll(object sender, EventArgs e)
         {
@@ -765,7 +785,7 @@ namespace DS2_Easy_Viewer
                 envoyerCommande(commande);
                 setScript();
             }
-            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+            catch (Exception) { MessageBox.Show("la valeur excède le maximum permis pour cet attribut"); }
         }
         private void slider_Height_Scroll(object sender, EventArgs e)
         {
@@ -783,7 +803,7 @@ namespace DS2_Easy_Viewer
                 envoyerCommande(commande);
                 setScript();
             }
-            catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
+            catch (Exception) { MessageBox.Show("la valeur excède le maximum permis pour cet attribut"); }
         }
         private void ratio_btn_Click(object sender, EventArgs e)
         {
@@ -886,20 +906,34 @@ namespace DS2_Easy_Viewer
         }
         private void scriptOutput_DoubleClick(object sender, EventArgs e)
         {
-            string tmpStr = "";
-            if (scriptOutput_txtBox.SelectedItems.Count == 0)
-            {
-                for (int i = 0; i < scriptOutput_txtBox.Items.Count; i++)
+          
+        }
+        private void copieScript(object sender, EventArgs e)
+        {
+            if (scriptOutput_txtBox.Items.Count >0)
                 {
-                    scriptOutput_txtBox.SetSelected(i, true);
+                try
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (object row in scriptOutput_txtBox.SelectedItems)
+                    {
+                        sb.Append(row.ToString());
+                        sb.AppendLine();
+                    }
+                    sb.Remove(sb.Length - 1, 1); // Just to avoid copying last empty row
+                    Clipboard.SetData(System.Windows.Forms.DataFormats.Text, sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
                 }
             }
-            foreach (var item in scriptOutput_txtBox.SelectedItems)
+            else
             {
-                tmpStr += scriptOutput_txtBox.GetItemText(item) + "\n";
+                MessageBox.Show("Sélectionnez au moins une ligne de code");
             }
-            Clipboard.SetText(tmpStr);
-            scriptOutput_txtBox.ClearSelected();
+
+           
         }
         private void eteindreReste()
         {
@@ -1071,4 +1105,7 @@ namespace DS2_Easy_Viewer
             envoyerCommande(commande);
         }
     }
+
+    
+
 }
