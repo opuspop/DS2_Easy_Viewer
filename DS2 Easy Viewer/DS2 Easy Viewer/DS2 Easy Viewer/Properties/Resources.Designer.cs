@@ -133,6 +133,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ClearResetAll {
+            get {
+                object obj = ResourceManager.GetObject("ClearResetAll", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Double_Click {
             get {
                 object obj = ResourceManager.GetObject("Double Click", resourceCulture);
@@ -353,6 +363,26 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Photo_tab_btn {
+            get {
+                object obj = ResourceManager.GetObject("Photo_tab_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Photo_tab_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Photo_tab_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Ratio_1 {
             get {
                 object obj = ResourceManager.GetObject("Ratio_1", resourceCulture);
@@ -476,6 +506,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap sliderBox_2 {
             get {
                 object obj = ResourceManager.GetObject("sliderBox_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Video_tab_btn {
+            get {
+                object obj = ResourceManager.GetObject("Video_tab_btn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Video_tab_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Video_tab_btn_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

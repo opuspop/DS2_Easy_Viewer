@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Management;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -50,34 +46,29 @@ namespace DS2_Easy_Viewer
                 catch (Exception) { }
             }
         }
-
-        private void ResetAll_btn_Click(object sender, EventArgs e)
-        {
-            imageBoxList[0].resetAll();
-        }
-
+       
         private void ClearAll_btn_Click(object sender, EventArgs e)
         {
             
             try
             {
-                foreach(imageBox imgBox in imageBoxList)
+                imageBoxList[0].resetAll(); // demande à Ds-01 de faire un Reset Reset All de Ds2
+                foreach (imageBox imgBox in imageBoxList)
                 {
                     imgBox.remove_Click(this, EventArgs.Empty);
                     
                 }
                 imageBoxList[0].imageBox_Click(this, EventArgs.Empty);
-                ResetAll_btn_Click(this, EventArgs.Empty);
             }
             catch (Exception) { }
         }
     }
 
+    
 
     public partial class imageBox
     {
-
-        public static bool DEBUG = true;
+        public static bool DEBUG = false;
 
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox(); 
@@ -1080,6 +1071,4 @@ namespace DS2_Easy_Viewer
             envoyerCommande(commande);
         }
     }
-
-    
 }
