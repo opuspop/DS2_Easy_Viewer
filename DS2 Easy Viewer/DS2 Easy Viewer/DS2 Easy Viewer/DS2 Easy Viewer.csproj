@@ -181,6 +181,13 @@
   <ItemGroup>
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Remove-icon.png" />
+    <None Include="Resources\Reset_Reset_All_2.png" />
+    <None Include="Resources\Reset_Reset_All.png" />
+    <None Include="Resources\Remove_btn_3.png" />
+    <None Include="Resources\Remove_btn_2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

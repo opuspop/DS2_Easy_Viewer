@@ -383,6 +383,36 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Remove {
+            get {
+                object obj = ResourceManager.GetObject("Remove", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Remove_btn_2 {
+            get {
+                object obj = ResourceManager.GetObject("Remove_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Remove_btn_3 {
+            get {
+                object obj = ResourceManager.GetObject("Remove_btn_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Reset_btn {
             get {
                 object obj = ResourceManager.GetObject("Reset_btn", resourceCulture);
@@ -396,6 +426,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Reset_btn_2 {
             get {
                 object obj = ResourceManager.GetObject("Reset_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_Reset_All {
+            get {
+                object obj = ResourceManager.GetObject("Reset_Reset_All", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Reset_Reset_All_2 {
+            get {
+                object obj = ResourceManager.GetObject("Reset_Reset_All_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

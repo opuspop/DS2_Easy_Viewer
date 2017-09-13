@@ -124,9 +124,6 @@
   <data name="Reset_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reset_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Pano_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pano_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Image_btn_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -142,14 +139,20 @@
   <data name="Pano_btn_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pano_btn_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AllSky_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Remove_btn_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Remove_btn_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Reset_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Reset_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_btn_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ratio_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ratio_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AllSky_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AllSky_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Multiple Select_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Multiple Select_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -165,6 +168,9 @@
   </data>
   <data name="Ratio_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ratio_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Panel_Off_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Panel_Off_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Envoyer_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Envoyer_btn.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,11 +205,14 @@
   <data name="Double Click_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Double Click_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Remove_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Remove_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Image_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Panel_Off_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Panel_Off_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Pano_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pano_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Double Click" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Double Click.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -211,8 +220,14 @@
   <data name="Envoyer_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Envoyer_on.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Reset_Reset_All" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Reset_Reset_All.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Pano_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pano_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Remove-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AllSky_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AllSky_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,7 +235,7 @@
   <data name="sliderBox_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sliderBox_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Reset_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Reset_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Reset_Reset_All_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Reset_Reset_All_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
