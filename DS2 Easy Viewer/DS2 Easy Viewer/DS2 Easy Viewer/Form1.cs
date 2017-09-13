@@ -27,6 +27,7 @@ namespace DS2_Easy_Viewer
                 imageBoxList.Add(box);
             }
             imageBoxList[boiteSelectionnee].panneauParametres.Visible = true;
+            imageBoxList[0].imageBox_Click(this, EventArgs.Empty);
         }
         private void Select_Multi_btn_Click(object sender, EventArgs e)
         {
@@ -65,7 +66,8 @@ namespace DS2_Easy_Viewer
                     imgBox.remove_Click(this, EventArgs.Empty);
                     
                 }
-
+                imageBoxList[0].imageBox_Click(this, EventArgs.Empty);
+                ResetAll_btn_Click(this, EventArgs.Empty);
             }
             catch (Exception) { }
         }
@@ -549,7 +551,7 @@ namespace DS2_Easy_Viewer
             panneau.Controls.Add(remove);
             Form1.Controls.Add(panneau);
         }
-        private void imageBox_Click(object sender, EventArgs e)
+        public void imageBox_Click(object sender, EventArgs e)
         {
             if (imageRenommee != null)
             {
@@ -1067,9 +1069,9 @@ namespace DS2_Easy_Viewer
             surDome = false;
             box.Image = null;
             imgSelect.Image = null;
-            nomImage = "";
-            chemin.Text = Path.GetFileName("");
-            imgSelectLbl.Text = Path.GetFileName("");
+            nomImage = nomImage_txtBox.Text;
+            chemin.Text = "";
+            imgSelectLbl.Text = "";            
         }
         public void resetAll()
         {

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.ClearAll_btn = new System.Windows.Forms.Button();
             this.ResetAll_btn = new System.Windows.Forms.Button();
@@ -83,8 +84,9 @@
             this.Controls.Add(this.ResetAll_btn);
             this.Controls.Add(this.Select_Multi_btn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "DS2 Easy Viewer";
             this.ResumeLayout(false);
 
         }
