@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using WMPLib;
 
 namespace DS2_Easy_Viewer
 {
@@ -13,7 +14,7 @@ namespace DS2_Easy_Viewer
     {
         public static List<imageBox> imageBoxList = new List<imageBox>();
         public static int boiteSelectionnee;
-        
+        public string videoPath = "";
 
         public Form1()
         {
@@ -63,13 +64,23 @@ namespace DS2_Easy_Viewer
             catch (Exception) { }
         }
         
-        private void GoToVideoTab_btn_Click(object sender, EventArgs e)
+        private void videoFileLoad_btn_Click(object sender, EventArgs e)
         {
-           
-
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Video File|*.mp4;*.mov;*.avi;*.wmv;*.m4v;";
+            DialogResult result = openFileDialog1.ShowDialog();
+            if (result == DialogResult.OK) // Test result.
+            {
+                videoPath = openFileDialog1.FileName;
+                VideoPlayer.URL = videoPath;
+                VideoPlayer.uiMode = "none";
+            }
         }
-           
-            
+
+        private void videoPlay_btn_Click(object sender, EventArgs e)
+        {
+            VideoPlayer.Ctlcontrols.play();
+        }
     }
     public partial class imageBox
     {

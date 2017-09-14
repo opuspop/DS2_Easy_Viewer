@@ -34,6 +34,10 @@
             this.GoToVideoTab_btn = new System.Windows.Forms.Button();
             this.ClearAll_btn = new System.Windows.Forms.Button();
             this.Select_Multi_btn = new System.Windows.Forms.Button();
+            this.VideoPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+            this.videoFileLoad_btn = new System.Windows.Forms.Button();
+            this.videoPlay_btn = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.VideoPlayer)).BeginInit();
             this.SuspendLayout();
             // 
             // GoToVideoTab_btn
@@ -47,7 +51,6 @@
             this.GoToVideoTab_btn.Size = new System.Drawing.Size(899, 22);
             this.GoToVideoTab_btn.TabIndex = 13;
             this.GoToVideoTab_btn.UseVisualStyleBackColor = true;
-            this.GoToVideoTab_btn.Click += new System.EventHandler(this.GoToVideoTab_btn_Click);
             // 
             // ClearAll_btn
             // 
@@ -74,12 +77,43 @@
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
             // 
+            // VideoPlayer
+            // 
+            this.VideoPlayer.CausesValidation = false;
+            this.VideoPlayer.Enabled = true;
+            this.VideoPlayer.Location = new System.Drawing.Point(47, 747);
+            this.VideoPlayer.Name = "VideoPlayer";
+            this.VideoPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("VideoPlayer.OcxState")));
+            this.VideoPlayer.Size = new System.Drawing.Size(209, 126);
+            this.VideoPlayer.TabIndex = 14;
+            // 
+            // videoFileLoad_btn
+            // 
+            this.videoFileLoad_btn.Location = new System.Drawing.Point(9, 738);
+            this.videoFileLoad_btn.Name = "videoFileLoad_btn";
+            this.videoFileLoad_btn.Size = new System.Drawing.Size(24, 147);
+            this.videoFileLoad_btn.TabIndex = 15;
+            this.videoFileLoad_btn.UseVisualStyleBackColor = true;
+            this.videoFileLoad_btn.Click += new System.EventHandler(this.videoFileLoad_btn_Click);
+            // 
+            // videoPlay_btn
+            // 
+            this.videoPlay_btn.Location = new System.Drawing.Point(276, 747);
+            this.videoPlay_btn.Name = "videoPlay_btn";
+            this.videoPlay_btn.Size = new System.Drawing.Size(95, 22);
+            this.videoPlay_btn.TabIndex = 16;
+            this.videoPlay_btn.UseVisualStyleBackColor = true;
+            this.videoPlay_btn.Click += new System.EventHandler(this.videoPlay_btn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.ClientSize = new System.Drawing.Size(1159, 738);
+            this.ClientSize = new System.Drawing.Size(1162, 915);
+            this.Controls.Add(this.videoPlay_btn);
+            this.Controls.Add(this.videoFileLoad_btn);
+            this.Controls.Add(this.VideoPlayer);
             this.Controls.Add(this.GoToVideoTab_btn);
             this.Controls.Add(this.ClearAll_btn);
             this.Controls.Add(this.Select_Multi_btn);
@@ -88,6 +122,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DS2 Easy Viewer";
+            ((System.ComponentModel.ISupportInitialize)(this.VideoPlayer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -98,6 +133,9 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button ClearAll_btn;
         private System.Windows.Forms.Button GoToVideoTab_btn;
+        private System.Windows.Forms.Button videoFileLoad_btn;
+        private System.Windows.Forms.Button videoPlay_btn;
+        public AxWMPLib.AxWindowsMediaPlayer VideoPlayer;
     }
 }
 
