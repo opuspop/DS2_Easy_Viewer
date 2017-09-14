@@ -19,6 +19,7 @@ namespace DS2_Easy_Viewer
         public Form1()
         {
             InitializeComponent();
+            VideoPlayer.uiMode = "none";
             for (int i = 0; i < 15; i++)
             {
                 imageBox box = new imageBox(this, i);
@@ -72,14 +73,23 @@ namespace DS2_Easy_Viewer
             if (result == DialogResult.OK) // Test result.
             {
                 videoPath = openFileDialog1.FileName;
+                VideoPlayer.settings.autoStart = false;
+                VideoPlayer.Ctlcontrols.currentPosition = 20;
                 VideoPlayer.URL = videoPath;
-                VideoPlayer.uiMode = "none";
+                
             }
         }
 
         private void videoPlay_btn_Click(object sender, EventArgs e)
         {
+            videoTrackBar.Maximum = (int)VideoPlayer.currentMedia.duration;
             VideoPlayer.Ctlcontrols.play();
+        }
+
+        private void videoTrackBar_Scroll(object sender, EventArgs e)
+        {
+
+            VideoPlayer.Ctlcontrols.currentPosition = videoTrackBar.Value;
         }
     }
     public partial class imageBox
