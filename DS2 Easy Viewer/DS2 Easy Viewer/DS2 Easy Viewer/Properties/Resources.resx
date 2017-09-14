@@ -121,6 +121,9 @@
   <data name="AllSky_btn_On" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AllSky_btn_On.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="AllSky_btn_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\AllSky_btn_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Reset_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reset_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,9 +163,6 @@
   <data name="Ratio_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ratio_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AllSky_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Photo_tab_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Photo_tab_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -171,9 +171,6 @@
   </data>
   <data name="Params_Outline_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Params_Outline_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AllSky_btn_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,17 +187,11 @@
   <data name="Reset_Reset_All_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Reset_Reset_All_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AllSky_btn_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Multiple Select_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Multiple Select_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Panel_On_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Panel_On_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AllSky_btn_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Image_btn_On" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn_On.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -249,9 +240,6 @@
   </data>
   <data name="Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Remove-icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="AllSky_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\AllSky_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Video_tab_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Video_tab_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
