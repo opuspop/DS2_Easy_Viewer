@@ -20,14 +20,8 @@ namespace DS2_Easy_Viewer
 
         private void GotToPhotoTab_btn_Click(object sender, EventArgs e)
         {
-            if (Form1.Instance == null)//Check if Form1 has already been created
-            {
-                //if not: go create a new one !
-                Form1.Instance = new Form1();
-            }
-            //Instance of Form1 is already created => open that one            
-            Form1.Instance.Show();
-            this.Hide();
+          
+            
         }
     }
 }

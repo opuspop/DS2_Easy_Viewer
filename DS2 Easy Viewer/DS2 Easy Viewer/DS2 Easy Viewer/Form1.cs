@@ -62,21 +62,14 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
-
+        
         private void GoToVideoTab_btn_Click(object sender, EventArgs e)
         {
-            if (VideoTab.Instance == null)//Check if Form2 has already been created
-            {
-                //if not: go create a new one !
-                VideoTab.Instance = new VideoTab();
-            }
-            //Instance of Form2 is already created => open that one            
-            VideoTab.Instance.Show();
-            this.Hide();
+           
 
         }
-            public static Form1 Instance { get; set; } //Create an Instance Object of this Window
-
+           
+            
     }
     public partial class imageBox
     {
@@ -110,7 +103,6 @@ namespace DS2_Easy_Viewer
         double ratio = 1;
         public string nomImage = "";
         public static bool ratioOn = true; public bool surDome = false;
-
         public imageBox(Form Form1, int index)
         {
             count += 1;
@@ -448,6 +440,7 @@ namespace DS2_Easy_Viewer
             ratio_btn.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Ratio_On;
             ratio_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             ratio_btn.Location = new System.Drawing.Point(218, 323);
+            ratio_btn.Size = new Size(20, 120);
             ratio_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             ratio_btn.UseVisualStyleBackColor = true;
             ratio_btn.TabStop = false;
@@ -1106,6 +1099,12 @@ namespace DS2_Easy_Viewer
         }
     }
 
-    
+    public partial class videoBox
+    {
+        public videoBox()
+        {
+            
+        }
+    }
 
 }
