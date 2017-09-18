@@ -34,14 +34,7 @@
             this.GoToVideoTab_btn = new System.Windows.Forms.Button();
             this.ClearAll_btn = new System.Windows.Forms.Button();
             this.Select_Multi_btn = new System.Windows.Forms.Button();
-            this.VideoPlayer = new AxWMPLib.AxWindowsMediaPlayer();
             this.videoFileLoad_btn = new System.Windows.Forms.Button();
-            this.videoPlay_btn = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.videoTrackBar = new System.Windows.Forms.TrackBar();
-            ((System.ComponentModel.ISupportInitialize)(this.VideoPlayer)).BeginInit();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.videoTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // GoToVideoTab_btn
@@ -82,16 +75,6 @@
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
             // 
-            // VideoPlayer
-            // 
-            this.VideoPlayer.CausesValidation = false;
-            this.VideoPlayer.Enabled = true;
-            this.VideoPlayer.Location = new System.Drawing.Point(13, 40);
-            this.VideoPlayer.Name = "VideoPlayer";
-            this.VideoPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("VideoPlayer.OcxState")));
-            this.VideoPlayer.Size = new System.Drawing.Size(140, 140);
-            this.VideoPlayer.TabIndex = 14;
-            // 
             // videoFileLoad_btn
             // 
             this.videoFileLoad_btn.Location = new System.Drawing.Point(9, 747);
@@ -99,36 +82,6 @@
             this.videoFileLoad_btn.Size = new System.Drawing.Size(24, 218);
             this.videoFileLoad_btn.TabIndex = 15;
             this.videoFileLoad_btn.UseVisualStyleBackColor = true;
-            this.videoFileLoad_btn.Click += new System.EventHandler(this.videoFileLoad_btn_Click);
-            // 
-            // videoPlay_btn
-            // 
-            this.videoPlay_btn.Location = new System.Drawing.Point(255, 747);
-            this.videoPlay_btn.Name = "videoPlay_btn";
-            this.videoPlay_btn.Size = new System.Drawing.Size(95, 22);
-            this.videoPlay_btn.TabIndex = 16;
-            this.videoPlay_btn.UseVisualStyleBackColor = true;
-            this.videoPlay_btn.Click += new System.EventHandler(this.videoPlay_btn_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
-            this.panel1.Controls.Add(this.VideoPlayer);
-            this.panel1.Location = new System.Drawing.Point(50, 747);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(166, 218);
-            this.panel1.TabIndex = 17;
-            // 
-            // videoTrackBar
-            // 
-            this.videoTrackBar.Cursor = System.Windows.Forms.Cursors.Default;
-            this.videoTrackBar.LargeChange = 1;
-            this.videoTrackBar.Location = new System.Drawing.Point(255, 831);
-            this.videoTrackBar.Maximum = 1;
-            this.videoTrackBar.Name = "videoTrackBar";
-            this.videoTrackBar.Size = new System.Drawing.Size(823, 45);
-            this.videoTrackBar.TabIndex = 1;
-            this.videoTrackBar.Scroll += new System.EventHandler(this.videoTrackBar_Scroll);
             // 
             // Form1
             // 
@@ -136,9 +89,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1162, 980);
-            this.Controls.Add(this.videoTrackBar);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.videoPlay_btn);
             this.Controls.Add(this.videoFileLoad_btn);
             this.Controls.Add(this.GoToVideoTab_btn);
             this.Controls.Add(this.ClearAll_btn);
@@ -148,11 +98,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DS2 Easy Viewer";
-            ((System.ComponentModel.ISupportInitialize)(this.VideoPlayer)).EndInit();
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.videoTrackBar)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -163,10 +109,6 @@
         private System.Windows.Forms.Button ClearAll_btn;
         private System.Windows.Forms.Button GoToVideoTab_btn;
         private System.Windows.Forms.Button videoFileLoad_btn;
-        private System.Windows.Forms.Button videoPlay_btn;
-        public AxWMPLib.AxWindowsMediaPlayer VideoPlayer;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TrackBar videoTrackBar;
     }
 }
 
