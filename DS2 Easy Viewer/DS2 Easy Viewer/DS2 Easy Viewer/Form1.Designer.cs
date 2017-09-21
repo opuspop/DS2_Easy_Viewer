@@ -34,7 +34,6 @@
             this.GoToVideoTab_btn = new System.Windows.Forms.Button();
             this.ClearAll_btn = new System.Windows.Forms.Button();
             this.Select_Multi_btn = new System.Windows.Forms.Button();
-            this.videoFileLoad_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // GoToVideoTab_btn
@@ -75,21 +74,12 @@
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
             // 
-            // videoFileLoad_btn
-            // 
-            this.videoFileLoad_btn.Location = new System.Drawing.Point(9, 747);
-            this.videoFileLoad_btn.Name = "videoFileLoad_btn";
-            this.videoFileLoad_btn.Size = new System.Drawing.Size(24, 218);
-            this.videoFileLoad_btn.TabIndex = 15;
-            this.videoFileLoad_btn.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1162, 980);
-            this.Controls.Add(this.videoFileLoad_btn);
             this.Controls.Add(this.GoToVideoTab_btn);
             this.Controls.Add(this.ClearAll_btn);
             this.Controls.Add(this.Select_Multi_btn);
@@ -108,7 +98,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button ClearAll_btn;
         private System.Windows.Forms.Button GoToVideoTab_btn;
-        private System.Windows.Forms.Button videoFileLoad_btn;
     }
 }
 

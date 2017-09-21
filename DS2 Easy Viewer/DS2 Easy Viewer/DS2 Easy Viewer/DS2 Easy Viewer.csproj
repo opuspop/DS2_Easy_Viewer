@@ -177,6 +177,10 @@
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Timeline_OverLay_2.png" />
+    <None Include="Resources\Timeline_OverLay.png" />
+    <None Include="Resources\Timeline_Front.png" />
+    <None Include="Resources\Timeline_Back.png" />
     <None Include="Resources\Video_tab_btn_2.png" />
     <None Include="Resources\Video_tab_btn.png" />
     <None Include="Resources\Clear All.png" />

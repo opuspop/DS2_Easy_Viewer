@@ -1101,7 +1101,7 @@ namespace DS2_Easy_Viewer
     }
     public partial class videoBox
     {
-        AxWMPLib.AxWindowsMediaPlayer videoPlayer;
+        AxWindowsMediaPlayer videoPlayer;
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox();
         PictureBox box = new PictureBox();
@@ -1112,7 +1112,7 @@ namespace DS2_Easy_Viewer
         Panel panneau = new Panel(); // Panneau de l'image
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
-        Panel panneauImage = new Panel();
+        Panel panneauImage = new Panel(); 
         Button remove = new Button(); Button copieScript_btn = new Button();
         public TrackBar Slider_Rotation = new TrackBar(); TrackBar Slider_Azimuth = new TrackBar(); TrackBar Slider_Elevation = new TrackBar(); TrackBar Slider_Width = new TrackBar(); TrackBar Slider_Height = new TrackBar();
         Label slider_Rotation_lbl = new Label(); Label slider_Azimuth_lbl = new Label(); Label slider_Elevation_lbl = new Label(); Label slider_Width_lbl = new Label(); Label slider_Height_lbl = new Label();
@@ -1121,6 +1121,7 @@ namespace DS2_Easy_Viewer
         TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
         private static int boxIndex;
         Button videoPlay_btn = new Button();
+        Panel timeLine = new Panel();
         public List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
@@ -1132,7 +1133,8 @@ namespace DS2_Easy_Viewer
         public string nomImage = "";
         public static bool ratioOn = true; public bool surDome = false;
         public string videoPath = "";
-        AxWMPLib.AxWindowsMediaPlayer wmPlayer = new AxWMPLib.AxWindowsMediaPlayer();
+        AxWindowsMediaPlayer wmPlayer = new AxWindowsMediaPlayer();
+        int x; int y;
 
         public videoBox(Form Form1, int index)
         {
@@ -1588,8 +1590,13 @@ namespace DS2_Easy_Viewer
             videoPlay_btn.Size = new Size(30, 22);
             videoPlay_btn.Location = new Point(200, 747);
             videoPlay_btn.Click += new EventHandler(videoPlay_btn_Click);
-
-
+            timeLine.BackgroundImage = Properties.Resources.Timeline_Back;
+            timeLine.Size = new Size(900, 24);
+            timeLine.Location = new Point(234, 821);
+            timeLine.MouseClick += new MouseEventHandler(timeline_Click);
+            timeLine.Paint += new PaintEventHandler(timeLinePaintCursor);
+            timeLine.MouseMove += new MouseEventHandler(timeline_Move);
+            Form1.Controls.Add(timeLine);
             ((System.ComponentModel.ISupportInitialize)(wmPlayer)).BeginInit();
             wmPlayer.Name = "wmPlayer";
             wmPlayer.Enabled = true;
@@ -1598,7 +1605,6 @@ namespace DS2_Easy_Viewer
             // After initialization you can customize the Media Player
             wmPlayer.Size = new Size(140, 140);
             wmPlayer.Location = new Point(13, 40);
-            //wmPlayer.uiMode = "none";
             panneau.Controls.Add(wmPlayer);
             Form1.Controls.Add(panneau);
         }
@@ -1640,13 +1646,41 @@ namespace DS2_Easy_Viewer
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
+                wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
                 this.wmPlayer.URL = videoPath;
+                wmPlayer.uiMode = "none";
                 wmPlayer.BringToFront();
 
             }
         }
-      
+        private Point MouseDownLocation;
+        private void timeline_Click(object sender, MouseEventArgs e)
+        {
+            x = e.X;
+            y = e.Y;
+            MouseDownLocation = e.Location;
+            timeLine.Invalidate();
+
+        }
+        private void timeLinePaintCursor(object sender, PaintEventArgs e)
+        {
+            Graphics g = timeLine.CreateGraphics();
+            Pen p = new Pen(Color.Black);
+            TextureBrush tb = new TextureBrush(Properties.Resources.Timeline_Front);
+            TextureBrush tb2 = new TextureBrush(Properties.Resources.Timeline_Back);
+            g.FillRectangle(tb, 0, 0, x, 26);
+            g.FillRectangle(tb2, x, 0, 900 - x, 26);
+            g.DrawRectangle(p, x, 0, 3, 26);
+        }
+        private void timeline_Move(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                x = e.X;
+                timeLine.Invalidate();
+            }
+        }
         private void setInitialParameterValues()
         {
             textLocateParameters.Clear();
