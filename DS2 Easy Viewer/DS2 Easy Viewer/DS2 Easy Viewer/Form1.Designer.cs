@@ -34,7 +34,6 @@
             this.GoToVideoTab_btn = new System.Windows.Forms.Button();
             this.ClearAll_btn = new System.Windows.Forms.Button();
             this.Select_Multi_btn = new System.Windows.Forms.Button();
-            this.currentTime = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // GoToVideoTab_btn
@@ -75,24 +74,12 @@
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
             // 
-            // currentTime
-            // 
-            this.currentTime.AutoSize = true;
-            this.currentTime.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentTime.ForeColor = System.Drawing.Color.White;
-            this.currentTime.Location = new System.Drawing.Point(360, 749);
-            this.currentTime.Name = "currentTime";
-            this.currentTime.Size = new System.Drawing.Size(74, 29);
-            this.currentTime.TabIndex = 14;
-            this.currentTime.Text = "label1";
-            // 
             // video
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.ClientSize = new System.Drawing.Size(1162, 980);
-            this.Controls.Add(this.currentTime);
             this.Controls.Add(this.GoToVideoTab_btn);
             this.Controls.Add(this.ClearAll_btn);
             this.Controls.Add(this.Select_Multi_btn);
@@ -102,7 +89,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DS2 Easy Viewer";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -112,7 +98,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Button ClearAll_btn;
         private System.Windows.Forms.Button GoToVideoTab_btn;
-        private System.Windows.Forms.Label currentTime;
     }
 }
 
