@@ -353,6 +353,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Play_1 {
+            get {
+                object obj = ResourceManager.GetObject("Play_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Ratio_1 {
             get {
                 object obj = ResourceManager.GetObject("Ratio_1", resourceCulture);
@@ -516,6 +526,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Timeline_OverLay_2 {
             get {
                 object obj = ResourceManager.GetObject("Timeline_OverLay_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Timeline_Progress {
+            get {
+                object obj = ResourceManager.GetObject("Timeline_Progress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

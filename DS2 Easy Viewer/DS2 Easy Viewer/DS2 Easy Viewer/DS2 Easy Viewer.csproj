@@ -177,6 +177,7 @@
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Timeline_Progress.png" />
     <None Include="Resources\Timeline_OverLay_2.png" />
     <None Include="Resources\Timeline_OverLay.png" />
     <None Include="Resources\Timeline_Front.png" />
@@ -189,6 +190,7 @@
     <None Include="Resources\Photo_tab_btn_2.png" />
     <None Include="Resources\ClearResetAll.png" />
     <None Include="Resources\CopieClipboard.png" />
+    <None Include="Resources\Play_1.png" />
     <Content Include="Resources\Remove-icon.png" />
     <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />
@@ -224,6 +226,15 @@
     </COMReference>
     <COMReference Include="QTOLibrary">
       <Guid>{29866AED-1E14-417D-BA0F-1A2BE6F5A19E}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Shell32">
+      <Guid>{50A7E9B0-70EF-11D1-B75A-00A0C90564FE}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>

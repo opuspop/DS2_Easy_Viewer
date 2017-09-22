@@ -1,23 +1,26 @@
 ﻿using AxWMPLib;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using WMPLib;
+using Shell32;
 
 namespace DS2_Easy_Viewer
 {
-    public partial class Form1 : Form
+    public partial class video : Form
     {
         public static List<imageBox> imageBoxList = new List<imageBox>();
         public static List<videoBox> videoBoxList = new List<videoBox>();
         public static int boiteSelectionnee;
         public static bool DEBUG = true;
 
-        public Form1()
+        public video()
         {
             InitializeComponent();
 
@@ -31,8 +34,17 @@ namespace DS2_Easy_Viewer
 
             videoBox videoB = new videoBox(this, 0);
             videoBoxList.Add(videoB);
-        }
+            videoBoxList[0].wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(playChange_event);
 
+
+        }
+        void playChange_event(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+        {
+           if (e.newState == 3)
+            {
+                currentTime.Text = videoBoxList[0].wmPlayer.Ctlcontrols.currentPositionString;
+            }
+        }
         private void Select_Multi_btn_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -47,6 +59,7 @@ namespace DS2_Easy_Viewer
                     foreach (string files in openFileDialog1.FileNames)
                     {
                         imageBoxList[increment].loadImage(files);
+                        //imageBoxList[increment].bw_loadImage.RunWorkerAsync(openFileDialog1.FileName);
                         increment += 1;
                     }
 
@@ -69,11 +82,12 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
-       
+        
+
     }
     public partial class imageBox
     {
-        bool DEBUG = Form1.DEBUG;
+        bool DEBUG = video.DEBUG;
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox(); 
         PictureBox box = new PictureBox();
@@ -102,7 +116,7 @@ namespace DS2_Easy_Viewer
         double ratio = 1;
         public string nomImage = "";
         public static bool ratioOn = true; public bool surDome = false;
-
+        public BackgroundWorker bw_loadImage = new BackgroundWorker();
 
         public imageBox(Form Form1, int index)
         {
@@ -113,7 +127,11 @@ namespace DS2_Easy_Viewer
             listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
             listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
-            //ratio_btn_Click(this, EventArgs.Empty);
+            bw_loadImage.WorkerSupportsCancellation = false;
+            bw_loadImage.WorkerReportsProgress = false;
+            bw_loadImage.DoWork += new DoWorkEventHandler(backgroundWorker_loadImage);
+
+           
         }
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -560,14 +578,14 @@ namespace DS2_Easy_Viewer
         {
             if (imageRenommee != null)
             {
-                foreach (imageBox boite in DS2_Easy_Viewer.Form1.imageBoxList)
+                foreach (imageBox boite in DS2_Easy_Viewer.video.imageBoxList)
                 {
                     boite.panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
                 }
                 panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_On_2;
-                DS2_Easy_Viewer.Form1.boiteSelectionnee = boxIndex;
+                DS2_Easy_Viewer.video.boiteSelectionnee = boxIndex;
 
-                foreach (imageBox boite in Form1.imageBoxList)
+                foreach (imageBox boite in video.imageBoxList)
                 {
                     boite.panneauParametres.Visible = false;
                 }
@@ -584,6 +602,7 @@ namespace DS2_Easy_Viewer
             if (result == DialogResult.OK) // Test result.
             {
                 image_Path = openFileDialog1.FileName;
+                //bw_loadImage.RunWorkerAsync(openFileDialog1.FileName);
                 loadImage(openFileDialog1.FileName);
                 setInitialParameterValues();
                 setScript();
@@ -651,6 +670,35 @@ namespace DS2_Easy_Viewer
            
             
 
+        }
+
+        private void backgroundWorker_loadImage(object sender, DoWorkEventArgs e)
+        {
+            string nomImage = (string)e.Argument;
+            BackgroundWorker worker = sender as BackgroundWorker;
+            string drivePrefix = nomImage.Substring(0, 1);
+            if (DEBUG == true)
+            {
+                imageRenommee = nomImage;
+            }
+            else
+            {
+                imageRenommee = "\\\\Ds-Master\\" + drivePrefix + nomImage.Remove(0, 2);
+            }
+            try
+            {
+                chemin.Text = Path.GetFileName(nomImage);
+                box.Image = Image.FromFile(imageRenommee);
+                box.SizeMode = PictureBoxSizeMode.Zoom;
+                imgSelect.Image = Image.FromFile(imageRenommee);
+                imgSelect.SizeMode = PictureBoxSizeMode.Zoom;
+                imgSelectLbl.Text = Path.GetFileName(nomImage);
+                setScript();
+                setInitialParameterValues();
+                //MessageBox.Show("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
+                textAddLocate();
+            }
+            catch (Exception) { }
         }
         public void loadImage(string filename)
         {
@@ -931,7 +979,7 @@ namespace DS2_Easy_Viewer
         }
         private void eteindreReste()
         {
-            foreach (imageBox boite in Form1.imageBoxList)
+            foreach (imageBox boite in video.imageBoxList)
             {
                 boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
                 boite.surDome = false;
@@ -1106,7 +1154,7 @@ namespace DS2_Easy_Viewer
         TextBox chemin = new TextBox();
         PictureBox box = new PictureBox();
         PictureBox imgSelect = new PictureBox();
-        Label imgSelectLbl = new Label();
+        Label imgSelectLbl = new Label(); Label videoDureeTotale = new Label();
         Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
         Button ratio_btn = new Button();
         Panel panneau = new Panel(); // Panneau de l'image
@@ -1120,6 +1168,7 @@ namespace DS2_Easy_Viewer
         Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
         private static int boxIndex;
+        TextBox currentTimelineTime = new TextBox();
         Button videoPlay_btn = new Button();
         Panel timeLine = new Panel();
         public List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1 };  // crée une liste de listes des paramètres de text add 
@@ -1133,8 +1182,10 @@ namespace DS2_Easy_Viewer
         public string nomImage = "";
         public static bool ratioOn = true; public bool surDome = false;
         public string videoPath = "";
-        AxWindowsMediaPlayer wmPlayer = new AxWindowsMediaPlayer();
+        public AxWindowsMediaPlayer wmPlayer = new AxWindowsMediaPlayer();
         int x; int y;
+        public double videoDuration;
+        public int videoState = 0;
 
         public videoBox(Form Form1, int index)
         {
@@ -1146,7 +1197,12 @@ namespace DS2_Easy_Viewer
             listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
             listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
-            
+        }
+        public void videoInfoUpdate()
+        {
+            {
+                    //videoLength.Text = wmPlayer.Ctlcontrols.currentPosition.ToString();
+            }
         }
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -1587,50 +1643,86 @@ namespace DS2_Easy_Viewer
             toolTipView.ShowAlways = true;
             toolTipView.SetToolTip(envoyer_btn, "Text View ...");
             panneau.Controls.Add(remove);
-            videoPlay_btn.Size = new Size(30, 22);
-            videoPlay_btn.Location = new Point(200, 747);
+            videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
+            videoPlay_btn.Size = new Size(37,26);
+            videoPlay_btn.FlatStyle = FlatStyle.Flat;
+            videoPlay_btn.FlatAppearance.BorderSize = 0;
+            videoPlay_btn.Location = new Point(650, 870);
             videoPlay_btn.Click += new EventHandler(videoPlay_btn_Click);
-            timeLine.BackgroundImage = Properties.Resources.Timeline_Back;
+            Form1.Controls.Add(videoPlay_btn);
+            timeLine.BackgroundImage = Properties.Resources.Timeline_Progress;
             timeLine.Size = new Size(900, 24);
             timeLine.Location = new Point(234, 821);
             timeLine.MouseClick += new MouseEventHandler(timeline_Click);
             timeLine.Paint += new PaintEventHandler(timeLinePaintCursor);
             timeLine.MouseMove += new MouseEventHandler(timeline_Move);
+            currentTimelineTime.Size = new Size(90, 20);
+            currentTimelineTime.Location = new Point(234, 748);
+            currentTimelineTime.Text = "00:00:00";
+            currentTimelineTime.BorderStyle = BorderStyle.FixedSingle;
+            currentTimelineTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            currentTimelineTime.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            currentTimelineTime.ForeColor = System.Drawing.Color.White;
+            Form1.Controls.Add(currentTimelineTime);
             Form1.Controls.Add(timeLine);
             ((System.ComponentModel.ISupportInitialize)(wmPlayer)).BeginInit();
             wmPlayer.Name = "wmPlayer";
             wmPlayer.Enabled = true;
-            //wmPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
             ((System.ComponentModel.ISupportInitialize)(wmPlayer)).EndInit();
+            wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(wmp_PlayStateChange);
+            wmPlayer.OpenStateChange += new AxWMPLib._WMPOCXEvents_OpenStateChangeEventHandler(wmPlayer_OpenStateChange);
             // After initialization you can customize the Media Player
             wmPlayer.Size = new Size(140, 140);
             wmPlayer.Location = new Point(13, 40);
+            videoDureeTotale.Location = new Point(1034, 848);
+            videoDureeTotale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            videoDureeTotale.ForeColor = System.Drawing.Color.White;
+            videoDureeTotale.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            videoDureeTotale.Text = "";
+            videoDureeTotale.TextAlign = ContentAlignment.MiddleRight;
+            Form1.Controls.Add(videoDureeTotale);
             panneau.Controls.Add(wmPlayer);
             Form1.Controls.Add(panneau);
+        }
+
+        void wmPlayer_OpenStateChange (object sender, _WMPOCXEvents_OpenStateChangeEvent e)
+        {
+            //MessageBox.Show(e.newState.ToString());
+            if (e.newState == 13)
+            {
+                currentTimelineTime.Text = wmPlayer.currentMedia.durationString;
+                videoDuration = wmPlayer.currentMedia.duration;
+                wmPlayer.Ctlcontrols.currentPosition = videoDuration/2;
+                wmPlayer.Ctlcontrols.stop();
+            }
+            //wmPlayer.Ctlcontrols.play();
+        }
+        void wmp_PlayStateChange(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
+        {
+            videoState = e.newState;
+            
         }
         private void videoPlay_btn_Click(object sender, EventArgs e)
         {
             if (videoPath != "")
             {
+                wmPlayer.Ctlcontrols.play();
+                
             }
         }
-        private void videoTrackBar_Scroll(object sender, EventArgs e)
-        {
 
-            //VideoPlayer.Ctlcontrols.currentPosition = videoTrackBar.Value;
-        }
         public void videoBox_Click(object sender, EventArgs e)
         {
             if (imageRenommee != null)
             {
-                foreach (videoBox boite in DS2_Easy_Viewer.Form1.videoBoxList)
+                foreach (videoBox boite in DS2_Easy_Viewer.video.videoBoxList)
                 {
                     boite.panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
                 }
                 panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_On_2;
-                DS2_Easy_Viewer.Form1.boiteSelectionnee = boxIndex;
+                DS2_Easy_Viewer.video.boiteSelectionnee = boxIndex;
 
-                foreach (videoBox boite in Form1.videoBoxList)
+                foreach (videoBox boite in video.videoBoxList)
                 {
                     boite.panneauParametres.Visible = false;
                 }
@@ -1646,28 +1738,34 @@ namespace DS2_Easy_Viewer
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                wmPlayer.settings.autoStart = false;
+                wmPlayer.settings.autoStart = true;
                 videoPath = openFileDialog1.FileName;
                 this.wmPlayer.URL = videoPath;
                 wmPlayer.uiMode = "none";
                 wmPlayer.BringToFront();
-
+                Shell shell = new Shell();
+                Folder rFolder = shell.NameSpace(Path.GetDirectoryName(videoPath));
+                FolderItem rFiles = rFolder.ParseName(System.IO.Path.GetFileName(Path.GetFileName(videoPath)));
+                string videosLength = rFolder.GetDetailsOf(rFiles, 27).Trim();
+                string videoSize = rFolder.GetDetailsOf(rFiles, 1).Trim();
+                string videoRate = rFolder.GetDetailsOf(rFiles, 28).Trim();
+                string videoWidth = rFolder.GetDetailsOf(rFiles, 285).Trim();
+                string videoHeight = rFolder.GetDetailsOf(rFiles, 283).Trim();
+                MessageBox.Show(String.Format("duration: {0}\nSize: {1}\nBit Rate: {2}\nLargeur: {3} pixels\nHauteur: {4} pixels", videosLength, videoSize, videoRate, videoWidth, videoHeight));
             }
         }
-        private Point MouseDownLocation;
         private void timeline_Click(object sender, MouseEventArgs e)
         {
             x = e.X;
             y = e.Y;
-            MouseDownLocation = e.Location;
             timeLine.Invalidate();
-
+            wmPlayer.Ctlcontrols.currentPosition = Convert.ToDouble(x);
         }
         private void timeLinePaintCursor(object sender, PaintEventArgs e)
         {
             Graphics g = timeLine.CreateGraphics();
             Pen p = new Pen(Color.Black);
-            TextureBrush tb = new TextureBrush(Properties.Resources.Timeline_Front);
+            TextureBrush tb = new TextureBrush(Properties.Resources.Timeline_Progress);
             TextureBrush tb2 = new TextureBrush(Properties.Resources.Timeline_Back);
             g.FillRectangle(tb, 0, 0, x, 26);
             g.FillRectangle(tb2, x, 0, 900 - x, 26);
@@ -1679,6 +1777,8 @@ namespace DS2_Easy_Viewer
             {
                 x = e.X;
                 timeLine.Invalidate();
+                wmPlayer.Ctlcontrols.currentPosition = Convert.ToDouble(x);
+                currentTimelineTime.Text = wmPlayer.Ctlcontrols.currentPosition.ToString();
             }
         }
         private void setInitialParameterValues()
@@ -1746,7 +1846,7 @@ namespace DS2_Easy_Viewer
         }
         public void loadImage(string filename)
         {
-            bool DEBUG = Form1.DEBUG;
+            bool DEBUG = video.DEBUG;
             string drivePrefix = filename.Substring(0, 1);
             if (DEBUG == true)
             {
@@ -2026,7 +2126,7 @@ namespace DS2_Easy_Viewer
         }
         private void eteindreReste()
         {
-            foreach (videoBox boite in Form1.videoBoxList)
+            foreach (videoBox boite in video.videoBoxList)
             {
                 boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
                 boite.surDome = false;
