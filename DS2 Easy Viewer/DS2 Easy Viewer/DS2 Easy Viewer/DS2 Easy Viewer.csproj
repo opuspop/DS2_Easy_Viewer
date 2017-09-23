@@ -209,6 +209,12 @@
     <None Include="Resources\LoadNew_1.png" />
     <None Include="Resources\LoadNew_2.png" />
     <None Include="Resources\LoadNew_3.png" />
+    <None Include="Resources\GoToEnd.png" />
+    <None Include="Resources\GotoStart.png" />
+    <None Include="Resources\Marqueur.png" />
+    <None Include="Resources\Marqueur_2.png" />
+    <None Include="Resources\Marqueur_3.png" />
+    <None Include="Resources\Marqueur_4.png" />
     <Content Include="Resources\Remove-icon.png" />
     <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />

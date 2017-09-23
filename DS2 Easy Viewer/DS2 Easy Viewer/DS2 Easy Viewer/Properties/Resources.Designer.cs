@@ -163,6 +163,26 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap GoToEnd {
+            get {
+                object obj = ResourceManager.GetObject("GoToEnd", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GotoStart {
+            get {
+                object obj = ResourceManager.GetObject("GotoStart", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_btn {
             get {
                 object obj = ResourceManager.GetObject("Image_btn", resourceCulture);
@@ -246,6 +266,46 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap LoadNew_3 {
             get {
                 object obj = ResourceManager.GetObject("LoadNew_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Marqueur {
+            get {
+                object obj = ResourceManager.GetObject("Marqueur", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Marqueur_2 {
+            get {
+                object obj = ResourceManager.GetObject("Marqueur_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Marqueur_3 {
+            get {
+                object obj = ResourceManager.GetObject("Marqueur_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Marqueur_4 {
+            get {
+                object obj = ResourceManager.GetObject("Marqueur_4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
