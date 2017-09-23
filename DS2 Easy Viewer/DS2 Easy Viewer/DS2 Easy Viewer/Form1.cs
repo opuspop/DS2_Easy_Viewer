@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using WMPLib;
 using Shell32;
 using System.Text.RegularExpressions;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace DS2_Easy_Viewer
 {
@@ -729,9 +730,13 @@ namespace DS2_Easy_Viewer
             try
             {
                 chemin.Text = Path.GetFileName(filename);
-                box.Image = Image.FromFile(imageRenommee);
+                //box.Image = Image.FromFile(imageRenommee);
+                ShellFile shellFile = ShellFile.FromFilePath(filename);
+                Bitmap shellThumb = shellFile.Thumbnail.Bitmap;
+                box.Image = shellThumb;
                 box.SizeMode = PictureBoxSizeMode.Zoom;
-                imgSelect.Image = Image.FromFile(imageRenommee);
+                //imgSelect.Image = Image.FromFile(imageRenommee);
+                imgSelect.Image = shellThumb;
                 imgSelect.SizeMode = PictureBoxSizeMode.Zoom;
                 imgSelectLbl.Text = Path.GetFileName(filename);
                 setScript();
@@ -1802,6 +1807,10 @@ namespace DS2_Easy_Viewer
         }
         void wmPlayer_Click (object sender, AxWMPLib._WMPOCXEvents_ClickEvent e)
         {
+            boxSelection();
+        }
+        void boxSelection()
+        {
             if (imageRenommee != null)
             {
                 foreach (videoBox boite in DS2_Easy_Viewer.Form1.videoBoxList)
@@ -1869,48 +1878,11 @@ namespace DS2_Easy_Viewer
         }
         public void videoBox_Click(object sender, EventArgs e)
         {
-           /* if (imageRenommee != null)
-            {
-                foreach (videoBox boite in DS2_Easy_Viewer.Form1.videoBoxList)
-                {
-                    boite.panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
-                }
-                panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_On_2;
-                DS2_Easy_Viewer.Form1.boiteSelectionnee = boxIndex;
-
-                foreach (videoBox boite in Form1.videoBoxList)
-                {
-                    boite.panneauParametres.Visible = false;
-                }
-                panneauParametres.Visible = true;
-                try
-                {
-                    foreach (imageBox boite in Form1.imageBoxList)
-                    {
-                        boite.panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
-                    }
-
-                    Form1.boiteSelectionnee = 16;
-
-                    Form1.videoBoxList[0].panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_On_2;
-                    Form1.videoBoxList[0].panneauParametres.Visible = true;
-                
-                }
-                catch { }
-
-                    foreach (imageBox boite in Form1.imageBoxList)
-                    {
-                        boite.panneauParametres.Visible = false;
-                    }
-                    panneauParametres.Visible = true;
-               
-               
-            }
-            nomImage = nomImage_txtBox.Text;
-            */
+            boxSelection();
         }
         private void videoBox_DoubleClick(object sender, EventArgs e)
         {
+            boxSelection();
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Filter = "Video File|*.mp4;*.mov;*.avi;*.wmv;*.m4v;";
             DialogResult result = openFileDialog1.ShowDialog();
@@ -1930,6 +1902,7 @@ namespace DS2_Easy_Viewer
                 wmPlayer.MaximumSize = new Size(140, 140);
                 wmPlayer.BringToFront();
                 wmPlayer.Ctlenabled = false;
+                loadImage(videoPath);
                 Shell shell = new Shell();
                 Folder rFolder = shell.NameSpace(Path.GetDirectoryName(videoPath));
                 FolderItem rFiles = rFolder.ParseName(System.IO.Path.GetFileName(Path.GetFileName(videoPath)));
@@ -1955,7 +1928,7 @@ namespace DS2_Easy_Viewer
                 if (string.Compare("50", tempString) == 0) frameRate = 50.0;
                 if (string.Compare("59", tempString) == 0) frameRate = 59.94;
                 if (string.Compare("60", tempString) == 0) frameRate = 60.0;
-                else { MessageBox.Show("le frame rate du vidéo sélectionné n'est pas valide"); }
+                //else { MessageBox.Show("le frame rate du vidéo sélectionné n'est pas valide\ntempString: " + tempString + "\nframeRate: " + frameRate); }
 
                 frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
                 timelineMaxinSeconds = TimeSpan.Parse(videoLength).TotalSeconds;
@@ -2114,10 +2087,14 @@ namespace DS2_Easy_Viewer
             }
             try
             {
-                chemin.Text = Path.GetFileName(filename);
-                box.Image = Image.FromFile(imageRenommee);
-                box.SizeMode = PictureBoxSizeMode.Zoom;
-                imgSelect.Image = Image.FromFile(imageRenommee);
+                //chemin.Text = "ben gadon";
+                //chemin.Text = Path.GetFileName(filename);
+                //MessageBox.Show(filename);   /// a eneleever a
+                //box.Image = Image.FromFile(imageRenommee);
+                //box.SizeMode = PictureBoxSizeMode.Zoom;
+                ShellFile shellFile = ShellFile.FromFilePath(filename);
+                Bitmap shellThumb = shellFile.Thumbnail.ExtraLargeBitmap;
+                imgSelect.Image = shellThumb;
                 imgSelect.SizeMode = PictureBoxSizeMode.Zoom;
                 imgSelectLbl.Text = Path.GetFileName(filename);
                 setScript();
