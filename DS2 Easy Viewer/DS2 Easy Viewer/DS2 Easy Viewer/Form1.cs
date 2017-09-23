@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 using WMPLib;
 using Shell32;
+using System.Text.RegularExpressions;
 
 namespace DS2_Easy_Viewer
 {
@@ -1193,7 +1194,7 @@ namespace DS2_Easy_Viewer
         Label videoSize_lbl = new Label(); Label videoLength_lbl = new Label(); Label videoWidth_lbl = new Label(); Label videoHeight_lbl = new Label(); Label videoBitRate_lbl = new Label();
         Label timelineStart = new Label(); Label info_lbl = new Label(); Label videoName_lbl = new Label(); Label frameRate_lbl = new Label();
         public double timelineMaxinSeconds; public double facteurConversionTimeline; public double frameRate;
-
+        public bool play = false; Button loadNew_btn = new Button();
         
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -1610,15 +1611,6 @@ namespace DS2_Easy_Viewer
             envoyer_btn.Text = "";
             envoyer_btn.FlatStyle = FlatStyle.Popup;
             envoyer_btn.Click += new EventHandler(envoyer_Click);
-            chemin.Text = "";
-            chemin.Size = new Size(110, 40);
-            chemin.BackColor = Color.FromArgb(40, 40, 40);
-            chemin.ForeColor = Color.White;
-            chemin.BorderStyle = BorderStyle.None;
-            chemin.Location = new Point(40, 10);
-            chemin.RightToLeft = RightToLeft.Yes;
-            chemin.Font = new Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            panneau.Controls.Add(chemin);
             panneau.Controls.Add(envoyer_btn);
             remove.Size = new Size(12, 12);
             remove.Location = new Point(13, 12);
@@ -1628,13 +1620,23 @@ namespace DS2_Easy_Viewer
             remove.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             remove.FlatAppearance.BorderSize = 0;
             remove.Click += new EventHandler(remove_Click);
+            panneau.Controls.Add(remove);
+            loadNew_btn.Size = new Size(105,14);
+            loadNew_btn.Location = new Point(40, 11);
+            loadNew_btn.BackgroundImage = Properties.Resources.LoadNew_3;
+            loadNew_btn.Text = "";
+            loadNew_btn.FlatStyle = FlatStyle.Flat;
+            loadNew_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            loadNew_btn.FlatAppearance.BorderSize = 0;
+            panneau.Controls.Add(loadNew_btn);
+            loadNew_btn.Click += new EventHandler(videoBox_DoubleClick);
             ToolTip toolTipRemove = new ToolTip();
             toolTipRemove.ShowAlways = true;
             toolTipRemove.SetToolTip(remove, "Text Remove ...");
             ToolTip toolTipView = new ToolTip();
             toolTipView.ShowAlways = true;
             toolTipView.SetToolTip(envoyer_btn, "Text View ...");
-            panneau.Controls.Add(remove);
+            
             videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
             videoPlay_btn.Size = new Size(37, 26);
             videoPlay_btn.FlatStyle = FlatStyle.Flat;
@@ -1642,6 +1644,13 @@ namespace DS2_Easy_Viewer
             videoPlay_btn.Location = new Point(727, 839);
             videoPlay_btn.Click += new EventHandler(videoPlay_btn_Click);
             Form1.Controls.Add(videoPlay_btn);
+            videoPause.BackgroundImage = Properties.Resources.Pause_1;
+            videoPause.Size = new Size(37, 26);
+            videoPause.FlatStyle = FlatStyle.Flat;
+            videoPause.FlatAppearance.BorderSize = 0;
+            videoPause.Location = new Point(727, 879);
+            //videoPause.Click += new EventHandler(videoPause_btn_Click);
+            //Form1.Controls.Add(videoPause);
             timeLine.BackgroundImage = Properties.Resources.Timeline_Progress;
             timeLine.Size = new Size(800, 24);
             timeLine.Location = new Point(343, 763);
@@ -1664,6 +1673,7 @@ namespace DS2_Easy_Viewer
             wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(wmp_PlayStateChange);
             wmPlayer.OpenStateChange += new AxWMPLib._WMPOCXEvents_OpenStateChangeEventHandler(wmPlayer_OpenStateChange);
             wmPlayer.ClickEvent += new AxWMPLib._WMPOCXEvents_ClickEventHandler(wmPlayer_Click);
+            wmPlayer.DoubleClickEvent += new AxWMPLib._WMPOCXEvents_DoubleClickEventHandler(wmPlayer_DoubleClick);
             // After initialization you can customize the Media Player
             wmPlayer.Size = new Size(140, 140);
             wmPlayer.Location = new Point(13, 40);
@@ -1814,11 +1824,30 @@ namespace DS2_Easy_Viewer
             }
             nomImage = nomImage_txtBox.Text;
         }
+        void wmPlayer_DoubleClick (object sender, AxWMPLib._WMPOCXEvents_DoubleClickEvent e)
+        {
+            MessageBox.Show("on se rend ici");
+            
+            videoBox_DoubleClick(this, EventArgs.Empty);
+            return;
+        }
         private void videoPlay_btn_Click(object sender, EventArgs e)
         {
             if (videoPath != "")
             {
-                wmPlayer.Ctlcontrols.play();
+                if (play == false)
+                {
+                    wmPlayer.Ctlcontrols.play();
+                    videoPlay_btn.BackgroundImage = Properties.Resources.Pause_2;
+                    play = true;
+                }
+                else
+                {
+                    wmPlayer.Ctlcontrols.pause();
+                    videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
+                    play = false;
+                }
+                
                 
             }
         }
@@ -1871,11 +1900,18 @@ namespace DS2_Easy_Viewer
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
+                wmPlayer.Ctlcontrols.stop();
+                videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
+                play = false;
+                x = 0;
+                timeLine.Invalidate();
                 wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
                 this.wmPlayer.URL = videoPath;
                 wmPlayer.uiMode = "none";
+                wmPlayer.MaximumSize = new Size(140, 140);
                 wmPlayer.BringToFront();
+                wmPlayer.Ctlenabled = false;
                 Shell shell = new Shell();
                 Folder rFolder = shell.NameSpace(Path.GetDirectoryName(videoPath));
                 FolderItem rFiles = rFolder.ParseName(System.IO.Path.GetFileName(Path.GetFileName(videoPath)));
@@ -1919,7 +1955,9 @@ namespace DS2_Easy_Viewer
         private void UpdateLabel()
         {
             //currentTimelineTime.Text = "00:" + wmPlayer.Ctlcontrols.currentPositionString;
-            currentTimelineTime.Text = wmPlayer.Ctlcontrols.currentPosition.ToString();
+            //currentTimelineTime.Text = wmPlayer.Ctlcontrols.currentPosition.ToString();
+            WMPLib.IWMPControls3 controls = (WMPLib.IWMPControls3)wmPlayer.Ctlcontrols;
+            currentTimelineTime.Text = controls.currentPositionTimecode.ToString();
         }
         private void timeline_Click(object sender, MouseEventArgs e)
         {
@@ -2465,4 +2503,5 @@ namespace DS2_Easy_Viewer
         }
     }
 
+    
 }

@@ -153,6 +153,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FastForward_1 {
+            get {
+                object obj = ResourceManager.GetObject("FastForward_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image_btn {
             get {
                 object obj = ResourceManager.GetObject("Image_btn", resourceCulture);
@@ -213,6 +223,36 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LoadNew_1 {
+            get {
+                object obj = ResourceManager.GetObject("LoadNew_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LoadNew_2 {
+            get {
+                object obj = ResourceManager.GetObject("LoadNew_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LoadNew_3 {
+            get {
+                object obj = ResourceManager.GetObject("LoadNew_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Multiple_Select_1 {
             get {
                 object obj = ResourceManager.GetObject("Multiple Select_1", resourceCulture);
@@ -236,6 +276,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Multiple_Select_21 {
             get {
                 object obj = ResourceManager.GetObject("Multiple Select_21", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NextFrame_1 {
+            get {
+                object obj = ResourceManager.GetObject("NextFrame_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -333,6 +383,26 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Pause_1 {
+            get {
+                object obj = ResourceManager.GetObject("Pause_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pause_2 {
+            get {
+                object obj = ResourceManager.GetObject("Pause_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Photo_tab_btn {
             get {
                 object obj = ResourceManager.GetObject("Photo_tab_btn", resourceCulture);
@@ -356,6 +426,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Play_1 {
             get {
                 object obj = ResourceManager.GetObject("Play_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PreviousFrame_1 {
+            get {
+                object obj = ResourceManager.GetObject("PreviousFrame_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -476,6 +556,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Reset_Reset_All_3 {
             get {
                 object obj = ResourceManager.GetObject("Reset_Reset_All_3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Rewind_1 {
+            get {
+                object obj = ResourceManager.GetObject("Rewind_1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

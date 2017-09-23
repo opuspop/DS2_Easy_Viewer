@@ -177,6 +177,7 @@
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Rewind_1.png" />
     <None Include="Resources\Timeline_Progress.png" />
     <None Include="Resources\Timeline_OverLay_2.png" />
     <None Include="Resources\Timeline_OverLay.png" />
@@ -191,6 +192,14 @@
     <None Include="Resources\ClearResetAll.png" />
     <None Include="Resources\CopieClipboard.png" />
     <None Include="Resources\Play_1.png" />
+    <None Include="Resources\FastForward_1.png" />
+    <None Include="Resources\NextFrame_1.png" />
+    <None Include="Resources\Pause_1.png" />
+    <None Include="Resources\PreviousFrame_1.png" />
+    <None Include="Resources\Pause_2.png" />
+    <None Include="Resources\LoadNew_1.png" />
+    <None Include="Resources\LoadNew_2.png" />
+    <None Include="Resources\LoadNew_3.png" />
     <Content Include="Resources\Remove-icon.png" />
     <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />
