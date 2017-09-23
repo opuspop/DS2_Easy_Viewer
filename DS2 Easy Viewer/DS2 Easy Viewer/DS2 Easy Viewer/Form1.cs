@@ -20,7 +20,15 @@ namespace DS2_Easy_Viewer
         public static List<videoBox> videoBoxList = new List<videoBox>();
         public static int boiteSelectionnee;
         public static bool DEBUG = true;
-
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x02000000;  // Turn on WS_EX_COMPOSITED
+                return cp;
+            }
+        }
         public Form1()
         {
             InitializeComponent();
@@ -1173,10 +1181,10 @@ namespace DS2_Easy_Viewer
         public TextBox slider_Rotation_txt = new TextBox(); TextBox slider_Azimuth_txt = new TextBox(); TextBox slider_Elevation_txt = new TextBox(); TextBox slider_Width_txt = new TextBox(); TextBox slider_Height_txt = new TextBox();
         Button resetRotation_btn = new Button(); Button resetAzimuth_btn = new Button(); Button resetElevation_btn = new Button(); Button resetWidth_btn = new Button(); Button resetHeight_btn = new Button();
         TextBox nomImage_txtBox = new TextBox(); ListBox scriptOutput_txtBox = new ListBox();
-        private static int boxIndex;
+        private static int boxIndex; PictureBox curseur = new PictureBox();
         TextBox currentTimelineTime = new TextBox();
         Button videoPlay_btn = new Button(); Button videoPause = new Button(); Button videoNextMarker = new Button(); Button vieoPreviousMarker = new Button(); Button Marqueur = new Button();
-        Panel timeLine = new Panel();
+        Panel timeLine = new Panel(); 
         public List<int> textAddParameters = new List<int> { 0, 0, 0, 90, 0, 0, 1, 1 };  // crée une liste de listes des paramètres de text add 
         public List<int> textLocateParameters = new List<int> { 0, 0, 90, 0, 180, 180 };     // crée une liste de listes des paramètres de text locate /// le dernier paramètre est l'opacite de textview
         // [0] RateTime     [1] Azimuth     [2] Elevation   [3] Rotation  [4] Width    [5] height
@@ -1538,7 +1546,7 @@ namespace DS2_Easy_Viewer
             nomImage_txtBox.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             nomImage_txtBox.ForeColor = System.Drawing.Color.White;
             nomImage_txtBox.BorderStyle = BorderStyle.FixedSingle;
-            nomImage = "MonImage_" + (index + 1); // set la variable nomImage 
+            nomImage = "MonVideo_" + (index + 1); // set la variable nomImage 
             setScript();
             nomImage_txtBox.KeyDown += new KeyEventHandler(changeNameVariable);
             nomImage_txtBox.Text = nomImage;
@@ -1628,7 +1636,7 @@ namespace DS2_Easy_Viewer
             loadNew_btn.FlatStyle = FlatStyle.Flat;
             loadNew_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             loadNew_btn.FlatAppearance.BorderSize = 0;
-            panneau.Controls.Add(loadNew_btn);
+            //panneau.Controls.Add(loadNew_btn);
             loadNew_btn.Click += new EventHandler(videoBox_DoubleClick);
             ToolTip toolTipRemove = new ToolTip();
             toolTipRemove.ShowAlways = true;
@@ -1657,6 +1665,12 @@ namespace DS2_Easy_Viewer
             timeLine.MouseClick += new MouseEventHandler(timeline_Click);
             timeLine.Paint += new PaintEventHandler(timeLinePaintCursor);
             timeLine.MouseMove += new MouseEventHandler(timeline_Move);
+
+            Form1.Controls.Add(currentTimelineTime);
+            //curseur.Size = new Size(1, 26);
+            //curseur.Location = new Point(342, 762);
+            //curseur.BackColor = Color.White;
+            //Form1.Controls.Add(curseur);
             currentTimelineTime.Location = new Point(343, 848);
             currentTimelineTime.Text = "00:00:00";
             currentTimelineTime.AutoSize = true;
@@ -1664,7 +1678,6 @@ namespace DS2_Easy_Viewer
             currentTimelineTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             currentTimelineTime.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             currentTimelineTime.ForeColor = System.Drawing.Color.White;
-            Form1.Controls.Add(currentTimelineTime);
             Form1.Controls.Add(timeLine);
             ((System.ComponentModel.ISupportInitialize)(wmPlayer)).BeginInit();
             wmPlayer.Name = "wmPlayer";
@@ -1750,7 +1763,9 @@ namespace DS2_Easy_Viewer
 
             Form1.Controls.Add(info_lbl);
             Form1.Controls.Add(panneau);
+            curseur.BringToFront();
         }
+        
         public videoBox(Form Form1, int index)
         {
 
@@ -1761,6 +1776,7 @@ namespace DS2_Easy_Viewer
             listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
             listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
+      
         }
         public void videoInfoUpdate()
         {
@@ -1826,7 +1842,7 @@ namespace DS2_Easy_Viewer
         }
         void wmPlayer_DoubleClick (object sender, AxWMPLib._WMPOCXEvents_DoubleClickEvent e)
         {
-            MessageBox.Show("on se rend ici");
+            //MessageBox.Show("on se rend ici");
             
             videoBox_DoubleClick(this, EventArgs.Empty);
             return;
@@ -1905,6 +1921,8 @@ namespace DS2_Easy_Viewer
                 play = false;
                 x = 0;
                 timeLine.Invalidate();
+                timeLine.BringToFront();
+                wmPlayer.Show();
                 wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
                 this.wmPlayer.URL = videoPath;
@@ -1920,12 +1938,28 @@ namespace DS2_Easy_Viewer
                 videoLength_lbl.Text = "Durée: " + videoLength;
                 videoSize_lbl.Text = "Taille: " + rFolder.GetDetailsOf(rFiles, 1).Trim();
                 videoBitRate_lbl.Text = "Bitrate: " + rFolder.GetDetailsOf(rFiles, 28).Trim();
-                videoWidth_lbl.Text = "Largeur: " +  rFolder.GetDetailsOf(rFiles, 285).Trim();
+                videoWidth_lbl.Text = "Largeur: " + rFolder.GetDetailsOf(rFiles, 285).Trim();
                 videoHeight_lbl.Text = "Hauteur: " + rFolder.GetDetailsOf(rFiles, 283).Trim();
                 videoDureeTotale.Text = videoLength;
-                frameRate_lbl.Text = "Framerate: " + rFolder.GetDetailsOf(rFiles, 284).Trim();
+                string rate = rFolder.GetDetailsOf(rFiles, 284).Trim();
+                string tempString = rate.Remove(rate.Length - 14);
+
+
+                if (string.Compare("12", tempString) == 0) frameRate = 12.0;
+                if (string.Compare("15", tempString) == 0) frameRate = 15.0;
+                if (string.Compare("23", tempString) == 0) frameRate = 23.976;
+                if (string.Compare("24", tempString) == 0) frameRate = 24.0;
+                if (string.Compare("25", tempString) == 0) frameRate = 25.0;
+                if (string.Compare("29", tempString) == 0) frameRate = 29.97;   // Parce que j'ai tout essayé pour convertir une string en double masi que c# est trop con!!!
+                if (string.Compare("30", tempString) == 0) frameRate = 30.0;
+                if (string.Compare("50", tempString) == 0) frameRate = 50.0;
+                if (string.Compare("59", tempString) == 0) frameRate = 59.94;
+                if (string.Compare("60", tempString) == 0) frameRate = 60.0;
+                else { MessageBox.Show("le frame rate du vidéo sélectionné n'est pas valide"); }
+
+                frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
                 timelineMaxinSeconds = TimeSpan.Parse(videoLength).TotalSeconds;
-                facteurConversionTimeline = timelineMaxinSeconds/800.0;
+                facteurConversionTimeline = timelineMaxinSeconds/798.0;
                 Thread t = new Thread(new ThreadStart(UpdateLabelThreadProc));
                 t.Start();
             }
@@ -1943,7 +1977,7 @@ namespace DS2_Easy_Viewer
                     timeLine.Invalidate();
                     x = Convert.ToInt16(wmPlayer.Ctlcontrols.currentPosition * 800.0 / timelineMaxinSeconds);
                     currentTimelineTime.Invoke(new MethodInvoker(UpdateLabel));
-                    System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(50);
                   
                 }
                 catch
@@ -1954,19 +1988,14 @@ namespace DS2_Easy_Viewer
         }
         private void UpdateLabel()
         {
-            //currentTimelineTime.Text = "00:" + wmPlayer.Ctlcontrols.currentPositionString;
-            //currentTimelineTime.Text = wmPlayer.Ctlcontrols.currentPosition.ToString();
-            WMPLib.IWMPControls3 controls = (WMPLib.IWMPControls3)wmPlayer.Ctlcontrols;
-            currentTimelineTime.Text = controls.currentPositionTimecode.ToString();
-        }
-        private void timeline_Click(object sender, MouseEventArgs e)
-        {
-
-            x = e.X;
-            timeLine.Invalidate();
-            double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
-            wmPlayer.Ctlcontrols.currentPosition = dbl;
-            currentTimelineTime.Text = "00:" +  wmPlayer.Ctlcontrols.currentPosition.ToString();
+           
+            TimeSpan t = TimeSpan.FromMilliseconds(wmPlayer.Ctlcontrols.currentPosition * 1000);
+            string answer = string.Format("{1:D2}:{2:D2}:{3:D2}fr",
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+            currentTimelineTime.Text = answer;
         }
         private void timeLinePaintCursor(object sender, PaintEventArgs e)
         {
@@ -1977,16 +2006,34 @@ namespace DS2_Easy_Viewer
             g.FillRectangle(tb, 0, 0, x, 26);
             g.FillRectangle(tb2, x, 0, 800 - x, 26);
             g.DrawRectangle(p, x, 0, 1, 26);
+            
+        }
+        private void timeline_Click(object sender, MouseEventArgs e)
+        {
+            if (e.X > 0-1 & e.X < 799)
+            {
+                x = e.X;
+                //curseur.Location = new Point(x, 0);
+                timeLine.Invalidate();
+                double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
+                wmPlayer.Ctlcontrols.currentPosition = dbl;
+                UpdateLabel();
+            }
         }
         private void timeline_Move(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                x = e.X;
-                timeLine.Invalidate();
-                double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
-                wmPlayer.Ctlcontrols.currentPosition = Convert.ToDouble(x) * facteurConversionTimeline;
-                currentTimelineTime.Text = "00:" + wmPlayer.Ctlcontrols.currentPosition.ToString();
+                if (e.X > -1 & e.X < 799)
+                {
+                    x = e.X;
+                    //curseur.Location = new Point(x, 0);
+                    timeLine.Invalidate();
+                    double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
+                    wmPlayer.Ctlcontrols.currentPosition = Convert.ToDouble(x) * facteurConversionTimeline;
+                    UpdateLabel();
+                }
+               
             }
         }
         private void setInitialParameterValues()
@@ -2485,6 +2532,8 @@ namespace DS2_Easy_Viewer
         public void remove_Click(object sender, EventArgs e)
         {
             envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
+            wmPlayer.currentPlaylist.clear();
+            wmPlayer.Hide();
             Byte[] commande;
             commande = Ds2Command("Text Remove \"" + nomImage + " \"");
             envoyerCommande(commande);
