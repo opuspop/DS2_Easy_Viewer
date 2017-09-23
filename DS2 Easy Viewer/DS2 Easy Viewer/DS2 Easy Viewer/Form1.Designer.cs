@@ -1,6 +1,6 @@
 ﻿namespace DS2_Easy_Viewer
 {
-    partial class video
+    partial class Form1
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(video));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.GoToVideoTab_btn = new System.Windows.Forms.Button();
             this.ClearAll_btn = new System.Windows.Forms.Button();
@@ -74,7 +74,7 @@
             this.Select_Multi_btn.UseVisualStyleBackColor = true;
             this.Select_Multi_btn.Click += new System.EventHandler(this.Select_Multi_btn_Click);
             // 
-            // video
+            // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,7 +85,7 @@
             this.Controls.Add(this.Select_Multi_btn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "video";
+            this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DS2 Easy Viewer";
             this.ResumeLayout(false);
