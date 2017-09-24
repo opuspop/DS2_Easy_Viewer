@@ -1188,7 +1188,7 @@ namespace DS2_Easy_Viewer
     {
         public string image_Path; public string imageRenommee = "";
         TextBox chemin = new TextBox();
-        PictureBox box = new PictureBox();
+        PictureBox box = new PictureBox(); TrackBar Volume_Slider = new TrackBar(); Panel Volume_Panneau = new Panel(); Label Volume_txt = new Label(); Label Volume_lvl = new Label(); public int VolumeLevel = 80;
         PictureBox imgSelect = new PictureBox();
         Label imgSelectLbl = new Label(); Label videoDureeTotale = new Label();
         public Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
@@ -1600,12 +1600,56 @@ namespace DS2_Easy_Viewer
             copieScript_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             panneauParametres.Controls.Add(copieScript_btn);
 
+            // AJOUT PANNEAU VOLUME
 
+            Volume_Panneau.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Volume_Panel_2;
+            Volume_Panneau.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            Volume_Panneau.Location = new System.Drawing.Point(559, 880);
+            Volume_Panneau.Size = new System.Drawing.Size(331, 56);
+            Volume_Panneau.TabIndex = 0;
+            Form1.Controls.Add(Volume_Panneau);
+
+            // AJOUT SLIDER VOLUME
+            Volume_Slider.Size = new Size(323, 10);
+            Volume_Slider.Location = new Point(4, 4);
+            Volume_Slider.Maximum = 100;
+            Volume_Slider.Minimum = 0;
+            Volume_Slider.Value = 80;
+            Volume_Slider.TabIndex = 0;
+            Volume_Slider.TickFrequency = 0;
+            Volume_Slider.TickStyle = System.Windows.Forms.TickStyle.None;
+            Volume_Slider.Scroll += new System.EventHandler(Volume_Slider_Scroll);
+            Volume_Panneau.Controls.Add(Volume_Slider);
+
+            // AJOUT LABEL VOLUME
+
+            Volume_txt.AutoSize = true;
+            Volume_txt.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            Volume_txt.ForeColor = System.Drawing.Color.White;
+            Volume_txt.Location = new System.Drawing.Point(14, 35);
+            Volume_txt.Size = new System.Drawing.Size(46, 13);
+            Volume_txt.TabIndex = 3;
+            Volume_txt.Text = "Volume";
+            Volume_Panneau.Controls.Add(Volume_txt);
+
+            // AJOUT TEXTBOX VOLUME
+
+            Volume_lvl.AutoSize = true;
+            Volume_lvl.Font = new System.Drawing.Font("Calibri", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            Volume_lvl.ForeColor = System.Drawing.Color.White;
+            Volume_lvl.Location = new System.Drawing.Point(301, 34);
+            Volume_lvl.Size = new System.Drawing.Size(20, 14);
+            Volume_lvl.TabIndex = 2;
+            Volume_lvl.Text = "100";
+            Volume_Panneau.Controls.Add(Volume_lvl);
+            
+            Form1.Controls.Add(Volume_Panneau);
             panneauParametres.Controls.Add(panneauHeight);
             panneauParametres.Controls.Add(panneauWidth);
             panneauParametres.Controls.Add(panneauElevation);
             panneauParametres.Controls.Add(panneauRotation);
             panneauParametres.Controls.Add(panneauAzimuth);
+            Volume_Slider.SendToBack();
             Slider_Azimuth.SendToBack();
             Slider_Rotation.SendToBack();
             Slider_Elevation.SendToBack();
@@ -1613,6 +1657,9 @@ namespace DS2_Easy_Viewer
             Slider_Height.SendToBack();
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
+
+
+
         }
         private void initializationvideoBox(Form Form1, int index)
         {
@@ -1856,6 +1903,22 @@ namespace DS2_Easy_Viewer
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
       
         }
+        public void Volume_Slider_Scroll(object sender, EventArgs e)
+        {
+            VolumeLevel = Volume_Slider.Value;
+            Volume_lvl.Text = Volume_Slider.Value.ToString();
+            if (videoPath != "")
+            {
+                try
+                {
+                    Byte[] commande;
+                    commande = Ds2Command("Text Volume \"" + nomImage + "\"  1 " + VolumeLevel);
+                    envoyerCommande(commande);
+                }
+                catch (Exception) { MessageBox.Show("No video loaded DUDE! ;)"); }
+            }
+           
+        }
         public void videoGoToPreviousMarker_btn_Click(object sender, EventArgs e) { }
         public void videoBackOneFrame_btn_Click(object sender, EventArgs e) { }
         public void videoGoToStart_btn_Click(object sender, EventArgs e) { }
@@ -1984,7 +2047,6 @@ namespace DS2_Easy_Viewer
             videoBox_DoubleClick(this, EventArgs.Empty);
             return;
         }
-       
         public void videoBox_Click(object sender, EventArgs e)
         {
             boxSelection();
@@ -2057,6 +2119,7 @@ namespace DS2_Easy_Viewer
                 wmPlayer.MaximumSize = new Size(140, 140);
                 wmPlayer.BringToFront();
                 wmPlayer.Ctlenabled = false;
+                wmPlayer.settings.volume = 0;
                 loadImage(videoPath);
                 videoName_lbl.Text = Path.GetFileName(videoPath);
                 ShellObject obj = ShellObject.FromParsingName(videoPath);
@@ -2165,6 +2228,19 @@ namespace DS2_Easy_Viewer
                 double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
                 wmPlayer.Ctlcontrols.currentPosition = dbl;
                 UpdateLabel();
+                if (play == true)
+                {
+                    try
+                    {
+
+                        Byte[] commande;
+                        commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + wmPlayer.Ctlcontrols.currentPosition);
+                        envoyerCommande(commande);
+                        commande = Ds2Command("Text Play \"" + nomImage + "\"");
+                        envoyerCommande(commande);
+                    }
+                    catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                }
             }
         }
         private void timeline_Move(object sender, MouseEventArgs e)
@@ -2179,6 +2255,19 @@ namespace DS2_Easy_Viewer
                     double dbl = Convert.ToDouble(x) * facteurConversionTimeline;
                     wmPlayer.Ctlcontrols.currentPosition = Convert.ToDouble(x) * facteurConversionTimeline;
                     UpdateLabel();
+                    if (play == true)
+                    {
+                        try
+                        {
+
+                            Byte[] commande;
+                            commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + wmPlayer.Ctlcontrols.currentPosition);
+                            envoyerCommande(commande);
+                            commande = Ds2Command("Text Play \"" + nomImage + "\"");
+                            envoyerCommande(commande);
+                        }
+                        catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                    }
                 }
                
             }
@@ -2201,7 +2290,6 @@ namespace DS2_Easy_Viewer
             }
 
         }
-     
         private void changeModeImageSliderUpdate(int mode)
         {
             if (imageRenommee != "")
@@ -2252,7 +2340,6 @@ namespace DS2_Easy_Viewer
 
 
         }
-     
         public void loadImage(string filename)
         {
             bool DEBUG = Form1.DEBUG;
@@ -2493,10 +2580,15 @@ namespace DS2_Easy_Viewer
         {
             scriptOutput_txtBox.Items.Clear();
             scriptOutput_txtBox.Items.Add("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
-            scriptOutput_txtBox.Items.Add("+ .1");
+            scriptOutput_txtBox.Items.Add("+ .5");
             scriptOutput_txtBox.Items.Add("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
             scriptOutput_txtBox.Items.Add("+ .1");
             scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\"  1 100 100 100 100");
+            scriptOutput_txtBox.Items.Add("+ .1");
+            scriptOutput_txtBox.Items.Add("Text Volume \"" + nomImage + "\"  1 " + VolumeLevel);
+            scriptOutput_txtBox.Items.Add("+ .1");
+            scriptOutput_txtBox.Items.Add("Text Play \"" + nomImage + "\"");
+            
         }
         private void scriptOutput_DoubleClick(object sender, EventArgs e)
         {

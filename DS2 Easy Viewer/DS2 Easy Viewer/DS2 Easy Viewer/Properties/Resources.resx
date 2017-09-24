@@ -145,11 +145,8 @@
   <data name="Pano_btn_Off" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pano_btn_Off.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Pause_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pause_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Ratio_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Ratio_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Params_Outline_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Params_Outline_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Remove_btn_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Remove_btn_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,9 +202,6 @@
   <data name="Image_btn" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Params_Outline_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Params_Outline_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Pano_btn_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pano_btn_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -232,8 +226,11 @@
   <data name="Image_btn_On" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Image_btn_On.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Double Click" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Double Click.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Marqueur_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Marqueur_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Ratio_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Ratio_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Marqueur_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Marqueur_3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -286,11 +283,20 @@
   <data name="Marqueur_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Marqueur_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Pause_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pause_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Pano_btn_On" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pano_btn_On.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ClearResetAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ClearResetAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Double Click" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Double Click.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume_Panel_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume_Panel_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ratio_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ratio_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -313,7 +319,7 @@
   <data name="Multiple Select_21" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Multiple Select_21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Marqueur_5" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Marqueur_5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Volume_Panel_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume_Panel_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

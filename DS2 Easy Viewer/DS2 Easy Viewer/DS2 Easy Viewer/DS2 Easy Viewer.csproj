@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release\DS2 Easy View v2.5\</OutputPath>
+    <OutputPath>bin\Release\DS2 Easy View v2.6\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -186,6 +186,8 @@
     <None Include="Resources\Reset_btn_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Volume_Panel_2.png" />
+    <None Include="Resources\Volume_Panel_1.png" />
     <None Include="Resources\Rewind_1.png" />
     <None Include="Resources\Timeline_Progress.png" />
     <None Include="Resources\Timeline_OverLay_2.png" />
