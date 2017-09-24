@@ -45,8 +45,6 @@ namespace DS2_Easy_Viewer
             videoBox videoB = new videoBox(this, 0);
             videoBoxList.Add(videoB);
             videoBoxList[0].wmPlayer.PlayStateChange += new AxWMPLib._WMPOCXEvents_PlayStateChangeEventHandler(playChange_event);
-
-
         }
         void playChange_event(object sender, AxWMPLib._WMPOCXEvents_PlayStateChangeEvent e)
         {
@@ -104,7 +102,7 @@ namespace DS2_Easy_Viewer
         PictureBox box = new PictureBox();
         PictureBox imgSelect = new PictureBox();
         Label imgSelectLbl = new Label();
-        Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
+        public Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
         Button ratio_btn = new Button();
         public Panel panneau = new Panel(); // Panneau de l'image
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
@@ -1013,6 +1011,14 @@ namespace DS2_Easy_Viewer
                 commandeBoites = Ds2Command("Text View \"" + boite.nomImage + "\"  0 0 100 100 100");  // Fermer éteindre les images des autres renderers
                 envoyerCommande(commandeBoites);
             }
+            foreach (videoBox boite in Form1.videoBoxList)
+            {
+                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
+                boite.surDome = false;
+                Byte[] commandeBoites;
+                commandeBoites = Ds2Command("Text View \"" + boite.nomImage + "\"  0 0 100 100 100");  // Fermer éteindre les images des autres renderers
+                envoyerCommande(commandeBoites);
+            }
             envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
         }
         private void textAddLocate()
@@ -1180,7 +1186,7 @@ namespace DS2_Easy_Viewer
         PictureBox box = new PictureBox();
         PictureBox imgSelect = new PictureBox();
         Label imgSelectLbl = new Label(); Label videoDureeTotale = new Label();
-        Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
+        public Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
         Button ratio_btn = new Button();
         public Panel panneau = new Panel(); // Panneau de l'image
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
@@ -1216,7 +1222,9 @@ namespace DS2_Easy_Viewer
         public bool play = false; Button loadNew_btn = new Button();
         Button videoGoToEnd_btn = new Button(); Button videoGoToStart_btn = new Button(); Button videoForwardOneFrame_btn = new Button(); Button videoBackOneFrame_btn = new Button(); Button marqueur_btn = new Button();
         Button videoGoToNextMarker_btn = new Button(); Button videoGoToPreviousMarker_btn = new Button();
-        
+        List<Marqueur> Marqueurs_liste = new List<Marqueur>();
+        int mkrIndex = 0;
+
         private void initializationLayoutParameters(Form Form1, int index)
         {
 
@@ -1658,7 +1666,7 @@ namespace DS2_Easy_Viewer
             toolTipView.ShowAlways = true;
             toolTipView.SetToolTip(envoyer_btn, "Text View ...");
 
-            marqueur_btn.BackgroundImage = Properties.Resources.Marqueur_4;
+            marqueur_btn.BackgroundImage = Properties.Resources.Marqueur_5;
             marqueur_btn.BackgroundImageLayout = ImageLayout.Stretch;
             marqueur_btn.Size = new Size(37, 26);
             marqueur_btn.FlatStyle = FlatStyle.Flat;
@@ -1846,12 +1854,52 @@ namespace DS2_Easy_Viewer
         public void videoGoToPreviousMarker_btn_Click(object sender, EventArgs e) { }
         public void videoBackOneFrame_btn_Click(object sender, EventArgs e) { }
         public void videoGoToStart_btn_Click(object sender, EventArgs e) { }
+        private void videoPlay_btn_Click(object sender, EventArgs e)
+        {
+            if (videoPath != "")
+            {
+                if (play == false)
+                {
+                    wmPlayer.Ctlcontrols.play();
+                    videoPlay_btn.BackgroundImage = Properties.Resources.Pause_2;
+                    play = true;
+                    try
+                    {
+                        Byte[] commande;
+                        commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + wmPlayer.Ctlcontrols.currentPosition);
+                        envoyerCommande(commande);
+                        commande = Ds2Command("Text Play \"" + nomImage + "\"");
+                        envoyerCommande(commande);
+                    }
+                    catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                }
+                else
+                {
+                    wmPlayer.Ctlcontrols.pause();
+                    videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
+                    play = false;
+                    try
+                    {
+                        Byte[] commande;
+                        commande = Ds2Command("Text Pause \"" + nomImage + "\"");
+                        envoyerCommande(commande);
+                    }
+                    catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                }
+
+
+            }
+        }
         public void videoForwardOneFrame_btn_Click(object sender, EventArgs e) { }
         public void videoGoToNextMarker_btn_Click(object sender, EventArgs e) { }
         public void videoGoToEnd_btn_Click(object sender, EventArgs e) { }
-        public void marqueur_btn_Click(object sender, EventArgs e) { }
-
-
+        public void marqueur_btn_Click(object sender, EventArgs e)
+        {
+            
+            Marqueur mark = new Marqueur(mkrIndex, wmPlayer.Ctlcontrols.currentPosition);
+            Marqueurs_liste.Add(mark);
+            mkrIndex += 1;
+        }
         public void videoInfoUpdate()
         {
             {
@@ -1931,26 +1979,7 @@ namespace DS2_Easy_Viewer
             videoBox_DoubleClick(this, EventArgs.Empty);
             return;
         }
-        private void videoPlay_btn_Click(object sender, EventArgs e)
-        {
-            if (videoPath != "")
-            {
-                if (play == false)
-                {
-                    wmPlayer.Ctlcontrols.play();
-                    videoPlay_btn.BackgroundImage = Properties.Resources.Pause_2;
-                    play = true;
-                }
-                else
-                {
-                    wmPlayer.Ctlcontrols.pause();
-                    videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
-                    play = false;
-                }
-                
-                
-            }
-        }
+       
         public void videoBox_Click(object sender, EventArgs e)
         {
             boxSelection();
@@ -2188,13 +2217,7 @@ namespace DS2_Easy_Viewer
         {
             if (surDome == false)
             {
-                /*
-                foreach (videoBox boite in Form1.videoBoxList)
-                {
-                    boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
-                    boite.surDome = false;
-                }
-                */
+               
                 eteindreReste();
                 envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
                 Byte[] commande;
@@ -2450,6 +2473,15 @@ namespace DS2_Easy_Viewer
                 envoyerCommande(commandeBoites);
             }
             envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
+            foreach (imageBox boite in Form1.imageBoxList)
+            {
+                boite.envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_btn;
+                boite.surDome = false;
+                Byte[] commandeBoites;
+                commandeBoites = Ds2Command("Text View \"" + boite.nomImage + "\"  0 0 100 100 100");  // Fermer éteindre les images des autres renderers
+                envoyerCommande(commandeBoites);
+            }
+            envoyer_btn.BackgroundImage = Properties.Resources.Envoyer_on;
         }
         private void textAddLocate()
         {
@@ -2612,11 +2644,27 @@ namespace DS2_Easy_Viewer
         }
     }
 
-    public class Marqueur
+    public class Marqueur : Form1
     {
-        public  Marqueur()
-        {
+        int posX;
+        double time;
+        PictureBox marque = new PictureBox();
+        public Form Form1 { get; set; }
 
+        public  Marqueur( int _posX, double _time)
+        {
+            posX = _posX;
+            time = _time;
+            marque.Size = new Size(20, 20);
+            marque.Location = new Point(posX, 745);
+            marque.BackgroundImage = Properties.Resources.Marqueur;
+            marque.MouseClick += new MouseEventHandler(marque_bouge);
+            //Form1.Controls.Add(marque);
+
+        }
+        public void marque_bouge(object sender, MouseEventArgs e)
+        {
+            posX = e.X;
         }
     }
     
