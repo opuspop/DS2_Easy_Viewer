@@ -9,18 +9,19 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using WMPLib;
-using Shell32;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
 namespace DS2_Easy_Viewer
 {
+   
     public partial class Form1 : Form
     {
         public static List<imageBox> imageBoxList = new List<imageBox>();
         public static List<videoBox> videoBoxList = new List<videoBox>();
         public static int boiteSelectionnee;
-        public static bool DEBUG = true;
+        public static bool DEBUG = false;
         protected override CreateParams CreateParams
         {
             get
@@ -93,6 +94,8 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
+
+        
     }
     public partial class imageBox
     {
@@ -126,7 +129,6 @@ namespace DS2_Easy_Viewer
         public string nomImage = "";
         public static bool ratioOn = true; public bool surDome = false;
         public BackgroundWorker bw_loadImage = new BackgroundWorker();
-
         public imageBox(Form Form1, int index)
         {
             count += 1;
@@ -640,6 +642,7 @@ namespace DS2_Easy_Viewer
             }
 
         }
+ 
         private void changeModeImageSliderUpdate(int mode)
         {
             if (imageRenommee != "")
@@ -717,6 +720,7 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
+  
         public void loadImage(string filename)
         {
             string drivePrefix = filename.Substring(0, 1);
@@ -941,6 +945,7 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
+   
         private void resetHeight_Click(object sender, EventArgs e)
         {
             try
@@ -1214,7 +1219,7 @@ namespace DS2_Easy_Viewer
         public static bool ratioOn = true; public bool surDome = false;
         public string videoPath = "";
         public AxWindowsMediaPlayer wmPlayer = new AxWindowsMediaPlayer();
-        public int x; int y; public string videoLength;
+        public int x; int y; public UInt64 videoLength;
         public int videoState = 0; 
         Label videoSize_lbl = new Label(); Label videoLength_lbl = new Label(); Label videoWidth_lbl = new Label(); Label videoHeight_lbl = new Label(); Label videoBitRate_lbl = new Label();
         Label timelineStart = new Label(); Label info_lbl = new Label(); Label videoName_lbl = new Label(); Label frameRate_lbl = new Label();
@@ -1984,6 +1989,52 @@ namespace DS2_Easy_Viewer
         {
             boxSelection();
         }
+        public string GetBytesReadable(long i)
+        {
+            // Get absolute value
+            long absolute_i = (i < 0 ? -i : i);
+            // Determine the suffix and readable value
+            string suffix;
+            double readable;
+            if (absolute_i >= 0x1000000000000000) // Exabyte
+            {
+                suffix = "EB";
+                readable = (i >> 50);
+            }
+            else if (absolute_i >= 0x4000000000000) // Petabyte
+            {
+                suffix = "PB";
+                readable = (i >> 40);
+            }
+            else if (absolute_i >= 0x10000000000) // Terabyte
+            {
+                suffix = "TB";
+                readable = (i >> 30);
+            }
+            else if (absolute_i >= 0x40000000) // Gigabyte
+            {
+                suffix = "GB";
+                readable = (i >> 20);
+            }
+            else if (absolute_i >= 0x100000) // Megabyte
+            {
+                suffix = "MB";
+                readable = (i >> 10);
+            }
+            else if (absolute_i >= 0x400) // Kilobyte
+            {
+                suffix = "KB";
+                readable = i;
+            }
+            else
+            {
+                return i.ToString("0 B"); // Byte
+            }
+            // Divide by 1024 to get fractional value
+            readable = (readable / 1024);
+            // Return formatted number with suffix
+            return readable.ToString("0.## ") + suffix;
+        }
         private void videoBox_DoubleClick(object sender, EventArgs e)
         {
             boxSelection();
@@ -2007,20 +2058,30 @@ namespace DS2_Easy_Viewer
                 wmPlayer.BringToFront();
                 wmPlayer.Ctlenabled = false;
                 loadImage(videoPath);
-                Shell shell = new Shell();
-                Folder rFolder = shell.NameSpace(Path.GetDirectoryName(videoPath));
-                FolderItem rFiles = rFolder.ParseName(System.IO.Path.GetFileName(Path.GetFileName(videoPath)));
-                videoLength = rFolder.GetDetailsOf(rFiles, 27).Trim();
                 videoName_lbl.Text = Path.GetFileName(videoPath);
-                videoLength_lbl.Text = "Durée: " + videoLength;
-                videoSize_lbl.Text = "Taille: " + rFolder.GetDetailsOf(rFiles, 1).Trim();
-                videoBitRate_lbl.Text = "Bitrate: " + rFolder.GetDetailsOf(rFiles, 28).Trim();
-                videoWidth_lbl.Text = "Largeur: " + rFolder.GetDetailsOf(rFiles, 285).Trim();
-                videoHeight_lbl.Text = "Hauteur: " + rFolder.GetDetailsOf(rFiles, 283).Trim();
-                videoDureeTotale.Text = videoLength;
-                string rate = rFolder.GetDetailsOf(rFiles, 284).Trim();
-                string tempString = rate.Remove(rate.Length - 14);
+                ShellObject obj = ShellObject.FromParsingName(videoPath);
+                ShellProperty<UInt64?> duration = obj.Properties.GetProperty<UInt64?>("System.Media.Duration");
+                videoLength = Convert.ToUInt64(duration.Value / 10000000.00);
+                TimeSpan tm = TimeSpan.FromSeconds(videoLength);
+                double frTemp = Convert.ToDouble(tm.Milliseconds);
+                string answer = string.Format("{1:D2}:{2:D2}:{3:D2}fr",
+                                        tm.Hours,
+                                        tm.Minutes,
+                                        tm.Seconds,
+                                        Convert.ToInt32(frTemp));
 
+                videoLength_lbl.Text = "Durée: " + answer;
+                FileInfo fInfo = new FileInfo(videoPath);
+                videoSize_lbl.Text = "Taille: " + GetBytesReadable(fInfo.Length);
+                ShellProperty<UInt32?> bitrate = obj.Properties.GetProperty<UInt32?>("System.Video.TotalBitrate");
+                videoBitRate_lbl.Text = "Bitrate: " + GetBytesReadable(Convert.ToInt64(bitrate.Value)) + "/s";
+                ShellProperty<UInt32?> width = obj.Properties.GetProperty<UInt32?>("System.Video.FrameWidth");
+                videoWidth_lbl.Text = "Largeur: " + width.Value.ToString();
+                ShellProperty<UInt32?> height = obj.Properties.GetProperty<UInt32?>("System.Video.FrameHeight");
+                videoHeight_lbl.Text = "Hauteur: "+ height.Value.ToString();
+                videoDureeTotale.Text = videoLength.ToString();
+                ShellProperty<UInt32?> fps = obj.Properties.GetProperty<UInt32?>("System.Video.FrameRate");
+                string tempString = fps.Value.ToString();
 
                 if (string.Compare("12", tempString) == 0) frameRate = 12.0;
                 if (string.Compare("15", tempString) == 0) frameRate = 15.0;
@@ -2035,7 +2096,7 @@ namespace DS2_Easy_Viewer
                 //else { MessageBox.Show("le frame rate du vidéo sélectionné n'est pas valide\ntempString: " + tempString + "\nframeRate: " + frameRate); }
 
                 frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
-                timelineMaxinSeconds = TimeSpan.Parse(videoLength).TotalSeconds;
+                timelineMaxinSeconds = TimeSpan.Parse(videoLength.ToString()).TotalSeconds;
                 facteurConversionTimeline = timelineMaxinSeconds/798.0;
                 Thread t = new Thread(new ThreadStart(UpdateLabelThreadProc));
                 t.Start();
@@ -2052,7 +2113,7 @@ namespace DS2_Easy_Viewer
                 try
                 {
                     timeLine.Invalidate();
-                    x = Convert.ToInt16(wmPlayer.Ctlcontrols.currentPosition * 800.0 / timelineMaxinSeconds);
+                    x = Convert.ToInt32(wmPlayer.Ctlcontrols.currentPosition * 800.0 / timelineMaxinSeconds);
                     currentTimelineTime.Invoke(new MethodInvoker(UpdateLabel));
                     System.Threading.Thread.Sleep(50);
                   
@@ -2072,7 +2133,7 @@ namespace DS2_Easy_Viewer
                                     t.Hours,
                                     t.Minutes,
                                     t.Seconds,
-                                    Convert.ToInt16(frTemp));
+                                    Convert.ToInt32(frTemp));
             currentTimelineTime.Text = answer;
         }
         private void timeLinePaintCursor(object sender, PaintEventArgs e)
@@ -2132,6 +2193,7 @@ namespace DS2_Easy_Viewer
             }
 
         }
+     
         private void changeModeImageSliderUpdate(int mode)
         {
             if (imageRenommee != "")
@@ -2181,6 +2243,7 @@ namespace DS2_Easy_Viewer
 
 
         }
+     
         public void loadImage(string filename)
         {
             bool DEBUG = Form1.DEBUG;
@@ -2402,6 +2465,7 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
+      
         private void resetHeight_Click(object sender, EventArgs e)
         {
             try
