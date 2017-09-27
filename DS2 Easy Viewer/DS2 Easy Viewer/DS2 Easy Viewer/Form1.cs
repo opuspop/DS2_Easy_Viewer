@@ -1224,6 +1224,7 @@ namespace DS2_Easy_Viewer
         Button videoGoToNextMarker_btn = new Button(); Button videoGoToPreviousMarker_btn = new Button();
         List<Marqueur> Marqueurs_liste = new List<Marqueur>();
         int mkrIndex = 0; double videoLengthMilli; int frames; public int videoWidth; public int videoHeight;
+        Label tCode = new Label(); IWMPControls3 controlsTC;
 
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -1827,6 +1828,17 @@ namespace DS2_Easy_Viewer
             currentTimelineTime.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             currentTimelineTime.ForeColor = System.Drawing.Color.White;
             Form1.Controls.Add(timeLine);
+
+            tCode.Location = new Point(343, 872);
+            tCode.Text = "00:00:00";
+            tCode.AutoSize = true;
+            tCode.BorderStyle = BorderStyle.None;
+            tCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
+            tCode.Font = new System.Drawing.Font("Calibri", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            tCode.ForeColor = System.Drawing.Color.White;
+            Form1.Controls.Add(tCode);
+
+
             ((System.ComponentModel.ISupportInitialize)(wmPlayer)).BeginInit();
             wmPlayer.Name = "wmPlayer";
             wmPlayer.Enabled = true;
@@ -1924,7 +1936,8 @@ namespace DS2_Easy_Viewer
             listDeSliders.Add(Slider_Azimuth); listDeSliders.Add(Slider_Elevation); listDeSliders.Add(Slider_Rotation); listDeSliders.Add(Slider_Width); listDeSliders.Add(Slider_Height);
             listDeTextBox.Add(slider_Azimuth_txt); listDeTextBox.Add(slider_Elevation_txt); listDeTextBox.Add(slider_Rotation_txt); listDeTextBox.Add(slider_Width_txt); listDeTextBox.Add(slider_Height_txt);
             setInitialParameterValues();  // set les textbox avec les valeurs par défaut de ListeValeurDefautTex
-      
+            
+
         }
         public void Volume_Slider_Scroll(object sender, EventArgs e)
         {
@@ -1945,7 +1958,10 @@ namespace DS2_Easy_Viewer
         }
         public void videoGoToPreviousMarker_btn_Click(object sender, EventArgs e) { }
         public void videoBackOneFrame_btn_Click(object sender, EventArgs e) { }
-        public void videoGoToStart_btn_Click(object sender, EventArgs e) { }
+        public void videoGoToStart_btn_Click(object sender, EventArgs e)
+        {
+            wmPlayer.Ctlcontrols.currentPosition = 0;
+        }
         private void videoPlay_btn_Click(object sender, EventArgs e)
         {
             if (videoPath != "")
@@ -1968,6 +1984,9 @@ namespace DS2_Easy_Viewer
                         envoyerCommande(commande);
                     }
                     catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                    
+
+
                 }
                 else
                 {
@@ -2006,6 +2025,13 @@ namespace DS2_Easy_Viewer
             videoState = e.newState;
             if (e.newState == 3)
             {
+                setFPS(wmPlayer.network.encodedFrameRate.ToString());
+                tCode.Text = frameRate.ToString();
+                videoWidth_lbl.Text = "Largeur: " +  wmPlayer.currentMedia.imageSourceWidth.ToString();
+                videoHeight_lbl.Text = "Hauteur: " + wmPlayer.currentMedia.imageSourceHeight.ToString();
+                frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
+                videoBitRate_lbl.Text = "Bitrate: " + GetBytesReadable(wmPlayer.network.bitRate);
+
                 Thread t = new Thread(new ThreadStart(UpdateLabelThreadProc));
                 t.Start();
             }
@@ -2141,10 +2167,10 @@ namespace DS2_Easy_Viewer
                 wmPlayer.BringToFront();
                 wmPlayer.Ctlenabled = false;
                 wmPlayer.settings.volume = 0;
+                
                 loadImage(videoPath);
                 videoName_lbl.Text = Path.GetFileName(videoPath);
                 ShellObject obj = ShellObject.FromParsingName(videoPath);
-                
                 FileInfo fInfo = new FileInfo(videoPath);
                 videoSize_lbl.Text = "Taille: " + GetBytesReadable(fInfo.Length);
                 ShellProperty<UInt32?> bitrate = obj.Properties.GetProperty<UInt32?>("System.Video.TotalBitrate");
@@ -2156,17 +2182,9 @@ namespace DS2_Easy_Viewer
                 videoHeight_lbl.Text = "Hauteur: "+ height.Value.ToString();
                 videoHeight = Convert.ToInt16(height.Value);
                 ShellProperty<UInt32?> fps = obj.Properties.GetProperty<UInt32?>("System.Video.FrameRate");
-                string tempString = (fps.Value/1000).ToString();
-                if (string.Compare("12", tempString) == 0) frameRate = 12.0;
-                if (string.Compare("15", tempString) == 0) frameRate = 15.0;
-                if (string.Compare("23", tempString) == 0) frameRate = 23.976;
-                if (string.Compare("24", tempString) == 0) frameRate = 24.0;
-                if (string.Compare("25", tempString) == 0) frameRate = 25.0;
-                if (string.Compare("29", tempString) == 0) frameRate = 29.97;   // Parce que j'ai tout essayé pour convertir une string en double masi que c# est trop con!!!
-                if (string.Compare("30", tempString) == 0) frameRate = 30.0;
-                if (string.Compare("50", tempString) == 0) frameRate = 50.0;
-                if (string.Compare("59", tempString) == 0) frameRate = 59.94;
-                if (string.Compare("60", tempString) == 0) frameRate = 60.0;
+
+                setFPS((fps.Value / 1000).ToString());
+
                 frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
 
                 ShellProperty<UInt64?> duration = obj.Properties.GetProperty<UInt64?>("System.Media.Duration");
@@ -2195,6 +2213,21 @@ namespace DS2_Easy_Viewer
                 setInitialParameterValues();
             }
         }
+        public void setFPS(string tempString)
+        {
+            
+            if (string.Compare("12", tempString) == 0) frameRate = 12.0;
+            if (string.Compare("15", tempString) == 0) frameRate = 15.0;
+            if (string.Compare("23", tempString) == 0) frameRate = 23.976;
+            if (string.Compare("24", tempString) == 0) frameRate = 24.0;
+            if (string.Compare("25", tempString) == 0) frameRate = 25.0;
+            if (string.Compare("29", tempString) == 0) frameRate = 29.97;   // Parce que j'ai tout essayé pour convertir une string en double masi que c# est trop con!!!
+            if (string.Compare("30", tempString) == 0) frameRate = 30.0;
+            if (string.Compare("50", tempString) == 0) frameRate = 50.0;
+            if (string.Compare("59", tempString) == 0) frameRate = 59.94;
+            if (string.Compare("60", tempString) == 0) frameRate = 60.0;
+
+        }
         public void UpdateLabelThreadProc()
         {
             if (!currentTimelineTime.IsHandleCreated)
@@ -2208,6 +2241,9 @@ namespace DS2_Easy_Viewer
                     timeLine.Invalidate();
                     x = Convert.ToInt16(wmPlayer.Ctlcontrols.currentPosition * 800.0 / timelineMaxinSeconds);
                     currentTimelineTime.Invoke(new MethodInvoker(UpdateLabel));
+                    //tCode.Invoke(new MethodInvoker(UpdateLabel));  // timecode qui vient directement de Windows Media Player
+                   
+
                     System.Threading.Thread.Sleep(50);
                   
                 }
@@ -2228,6 +2264,8 @@ namespace DS2_Easy_Viewer
                                     t.Seconds,
                                     Convert.ToInt16(frTemp));
             currentTimelineTime.Text = answer;
+            
+
         }
         private void timeLinePaintCursor(object sender, PaintEventArgs e)
         {
