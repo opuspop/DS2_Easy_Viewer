@@ -527,7 +527,6 @@ namespace DS2_Easy_Viewer
             Form1.Controls.Add(panneauParametres);
             panneauParametres.Visible = false;
         }
-       
         private void initializationImageBox(Form Form1, int index)
         {
             panneau.BackgroundImage = DS2_Easy_Viewer.Properties.Resources.Panel_Off_2;
@@ -642,7 +641,6 @@ namespace DS2_Easy_Viewer
             }
 
         }
- 
         private void changeModeImageSliderUpdate(int mode)
         {
             if (imageRenommee != "")
@@ -691,7 +689,6 @@ namespace DS2_Easy_Viewer
             
 
         }
-
         private void backgroundWorker_loadImage(object sender, DoWorkEventArgs e)
         {
             string nomImage = (string)e.Argument;
@@ -720,7 +717,6 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
-  
         public void loadImage(string filename)
         {
             string drivePrefix = filename.Substring(0, 1);
@@ -945,7 +941,6 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { MessageBox.Show("la connexion avec Ds-master est impossible"); }
         }
-   
         private void resetHeight_Click(object sender, EventArgs e)
         {
             try
@@ -1187,12 +1182,12 @@ namespace DS2_Easy_Viewer
     public partial class videoBox
     {
         public string image_Path; public string imageRenommee = "";
-        TextBox chemin = new TextBox();
+        TextBox chemin = new TextBox(); Panel marqueurs_Panel = new Panel();
         PictureBox box = new PictureBox(); TrackBar Volume_Slider = new TrackBar(); Panel Volume_Panneau = new Panel(); Label Volume_txt = new Label(); Label Volume_lvl = new Label(); public int VolumeLevel = 80;
         PictureBox imgSelect = new PictureBox();
         Label imgSelectLbl = new Label(); Label videoDureeTotale = new Label();
         public Button envoyer_btn = new Button(); Button Allsky_btn = new Button(); Button Panorama_btn = new Button(); Button Image_btn = new Button();
-        Button ratio_btn = new Button();
+        Button ratio_btn = new Button(); Panel ControlesVideo_Panneau = new Panel();
         public Panel panneau = new Panel(); // Panneau de l'image
         public Panel panneauParametres = new System.Windows.Forms.Panel(); Panel panneauRotation = new System.Windows.Forms.Panel(); Panel panneauAzimuth = new System.Windows.Forms.Panel();
         Panel panneauElevation = new System.Windows.Forms.Panel(); Panel panneauWidth = new System.Windows.Forms.Panel(); Panel panneauHeight = new System.Windows.Forms.Panel();
@@ -1599,22 +1594,33 @@ namespace DS2_Easy_Viewer
             copieScript_btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             copieScript_btn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             panneauParametres.Controls.Add(copieScript_btn);
+            
+
+            // AJOUT PANNEAU CONTROLES VIDEO
+
+            ControlesVideo_Panneau.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.VideoControl_2;
+            ControlesVideo_Panneau.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            ControlesVideo_Panneau.Location = new System.Drawing.Point(546, 831);
+            ControlesVideo_Panneau.Size = new System.Drawing.Size(347, 104);
+            ControlesVideo_Panneau.TabIndex = 0;
+            Form1.Controls.Add(ControlesVideo_Panneau);
+
 
             // AJOUT PANNEAU VOLUME
 
             Volume_Panneau.BackgroundImage = global::DS2_Easy_Viewer.Properties.Resources.Volume_Panel_2;
             Volume_Panneau.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            Volume_Panneau.Location = new System.Drawing.Point(559, 880);
+            Volume_Panneau.Location = new System.Drawing.Point(8, 40);
             Volume_Panneau.Size = new System.Drawing.Size(331, 56);
             Volume_Panneau.TabIndex = 0;
-            Form1.Controls.Add(Volume_Panneau);
+            ControlesVideo_Panneau.Controls.Add(Volume_Panneau);
 
             // AJOUT SLIDER VOLUME
             Volume_Slider.Size = new Size(323, 10);
             Volume_Slider.Location = new Point(4, 4);
             Volume_Slider.Maximum = 100;
             Volume_Slider.Minimum = 0;
-            Volume_Slider.Value = 80;
+            Volume_Slider.Value = 100;
             Volume_Slider.TabIndex = 0;
             Volume_Slider.TickFrequency = 0;
             Volume_Slider.TickStyle = System.Windows.Forms.TickStyle.None;
@@ -1642,8 +1648,77 @@ namespace DS2_Easy_Viewer
             Volume_lvl.TabIndex = 2;
             Volume_lvl.Text = "100";
             Volume_Panneau.Controls.Add(Volume_lvl);
-            
-            Form1.Controls.Add(Volume_Panneau);
+
+
+            marqueur_btn.BackgroundImage = Properties.Resources.Marqueur_5;
+            marqueur_btn.BackgroundImageLayout = ImageLayout.Stretch;
+            marqueur_btn.Size = new Size(37, 26);
+            marqueur_btn.FlatStyle = FlatStyle.Flat;
+            marqueur_btn.FlatAppearance.BorderSize = 0;
+            marqueur_btn.Location = new Point(8, 8);
+            marqueur_btn.Click += new EventHandler(marqueur_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(marqueur_btn);
+
+            videoGoToStart_btn.BackgroundImage = Properties.Resources.GotoStart;
+            videoGoToStart_btn.Size = new Size(37, 26);
+            videoGoToStart_btn.FlatStyle = FlatStyle.Flat;
+            videoGoToStart_btn.FlatAppearance.BorderSize = 0;
+            videoGoToStart_btn.Location = new Point(50, 8);
+            videoGoToStart_btn.Click += new EventHandler(videoGoToStart_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoGoToStart_btn);
+
+            videoGoToPreviousMarker_btn.BackgroundImage = Properties.Resources.PreviousFrame_1;
+            videoGoToPreviousMarker_btn.Size = new Size(37, 26);
+            videoGoToPreviousMarker_btn.FlatStyle = FlatStyle.Flat;
+            videoGoToPreviousMarker_btn.FlatAppearance.BorderSize = 0;
+            videoGoToPreviousMarker_btn.Location = new Point(92, 8);
+            videoGoToPreviousMarker_btn.Click += new EventHandler(videoGoToPreviousMarker_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoGoToPreviousMarker_btn);
+
+            videoBackOneFrame_btn.BackgroundImage = Properties.Resources.Rewind_1;
+            videoBackOneFrame_btn.Size = new Size(37, 26);
+            videoBackOneFrame_btn.FlatStyle = FlatStyle.Flat;
+            videoBackOneFrame_btn.FlatAppearance.BorderSize = 0;
+            videoBackOneFrame_btn.Location = new Point(134, 8);
+            videoBackOneFrame_btn.Click += new EventHandler(videoBackOneFrame_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoBackOneFrame_btn);
+
+            videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
+            videoPlay_btn.Size = new Size(37, 26);
+            videoPlay_btn.FlatStyle = FlatStyle.Flat;
+            videoPlay_btn.FlatAppearance.BorderSize = 0;
+            videoPlay_btn.Location = new Point(176, 8);
+            videoPlay_btn.Click += new EventHandler(videoPlay_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoPlay_btn);
+
+            videoForwardOneFrame_btn.BackgroundImage = Properties.Resources.FastForward_1;
+            videoForwardOneFrame_btn.Size = new Size(37, 26);
+            videoForwardOneFrame_btn.FlatStyle = FlatStyle.Flat;
+            videoForwardOneFrame_btn.FlatAppearance.BorderSize = 0;
+            videoForwardOneFrame_btn.Location = new Point(218, 8);
+            videoForwardOneFrame_btn.Click += new EventHandler(videoForwardOneFrame_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoForwardOneFrame_btn);
+
+            videoGoToNextMarker_btn.BackgroundImage = Properties.Resources.NextFrame_1;
+            videoGoToNextMarker_btn.Size = new Size(37, 26);
+            videoGoToNextMarker_btn.FlatStyle = FlatStyle.Flat;
+            videoGoToNextMarker_btn.FlatAppearance.BorderSize = 0;
+            videoGoToNextMarker_btn.Location = new Point(260, 8);
+            videoGoToNextMarker_btn.Click += new EventHandler(videoGoToNextMarker_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoGoToNextMarker_btn);
+
+            videoGoToEnd_btn.BackgroundImage = Properties.Resources.GoToEnd;
+            videoGoToEnd_btn.Size = new Size(37, 26);
+            videoGoToEnd_btn.FlatStyle = FlatStyle.Flat;
+            videoGoToEnd_btn.FlatAppearance.BorderSize = 0;
+            videoGoToEnd_btn.Location = new Point(302, 8);
+            videoGoToEnd_btn.Click += new EventHandler(videoGoToEnd_btn_Click);
+            ControlesVideo_Panneau.Controls.Add(videoGoToEnd_btn);
+
+
+
+
+
             panneauParametres.Controls.Add(panneauHeight);
             panneauParametres.Controls.Add(panneauWidth);
             panneauParametres.Controls.Add(panneauElevation);
@@ -1656,6 +1731,7 @@ namespace DS2_Easy_Viewer
             Slider_Width.SendToBack();
             Slider_Height.SendToBack();
             Form1.Controls.Add(panneauParametres);
+
             panneauParametres.Visible = false;
 
 
@@ -1717,65 +1793,6 @@ namespace DS2_Easy_Viewer
             ToolTip toolTipView = new ToolTip();
             toolTipView.ShowAlways = true;
             toolTipView.SetToolTip(envoyer_btn, "Text View ...");
-
-            marqueur_btn.BackgroundImage = Properties.Resources.Marqueur_5;
-            marqueur_btn.BackgroundImageLayout = ImageLayout.Stretch;
-            marqueur_btn.Size = new Size(37, 26);
-            marqueur_btn.FlatStyle = FlatStyle.Flat;
-            marqueur_btn.FlatAppearance.BorderSize = 0;
-            marqueur_btn.Location = new Point(559, 839);
-            marqueur_btn.Click += new EventHandler(marqueur_btn_Click);
-            Form1.Controls.Add(marqueur_btn);
-
-            videoGoToStart_btn.BackgroundImage = Properties.Resources.GotoStart;
-            videoGoToStart_btn.Size = new Size(37, 26);
-            videoGoToStart_btn.FlatStyle = FlatStyle.Flat;
-            videoGoToStart_btn.FlatAppearance.BorderSize = 0;
-            videoGoToStart_btn.Location = new Point(601, 839);
-            videoGoToStart_btn.Click += new EventHandler(videoGoToStart_btn_Click);
-            Form1.Controls.Add(videoGoToStart_btn);
-            videoGoToPreviousMarker_btn.BackgroundImage = Properties.Resources.PreviousFrame_1;
-            videoGoToPreviousMarker_btn.Size = new Size(37, 26);
-            videoGoToPreviousMarker_btn.FlatStyle = FlatStyle.Flat;
-            videoGoToPreviousMarker_btn.FlatAppearance.BorderSize = 0;
-            videoGoToPreviousMarker_btn.Location = new Point(643, 839);
-            videoGoToPreviousMarker_btn.Click += new EventHandler(videoGoToPreviousMarker_btn_Click);
-            Form1.Controls.Add(videoGoToPreviousMarker_btn);
-            videoBackOneFrame_btn.BackgroundImage = Properties.Resources.Rewind_1;
-            videoBackOneFrame_btn.Size = new Size(37, 26);
-            videoBackOneFrame_btn.FlatStyle = FlatStyle.Flat;
-            videoBackOneFrame_btn.FlatAppearance.BorderSize = 0;
-            videoBackOneFrame_btn.Location = new Point(685, 839);
-            videoBackOneFrame_btn.Click += new EventHandler(videoBackOneFrame_btn_Click);
-            Form1.Controls.Add(videoBackOneFrame_btn);
-            videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
-            videoPlay_btn.Size = new Size(37, 26);
-            videoPlay_btn.FlatStyle = FlatStyle.Flat;
-            videoPlay_btn.FlatAppearance.BorderSize = 0;
-            videoPlay_btn.Location = new Point(727, 839);
-            videoPlay_btn.Click += new EventHandler(videoPlay_btn_Click);
-            Form1.Controls.Add(videoPlay_btn);
-            videoForwardOneFrame_btn.BackgroundImage = Properties.Resources.FastForward_1;
-            videoForwardOneFrame_btn.Size = new Size(37, 26);
-            videoForwardOneFrame_btn.FlatStyle = FlatStyle.Flat;
-            videoForwardOneFrame_btn.FlatAppearance.BorderSize = 0;
-            videoForwardOneFrame_btn.Location = new Point(769, 839);
-            videoForwardOneFrame_btn.Click += new EventHandler(videoForwardOneFrame_btn_Click);
-            Form1.Controls.Add(videoForwardOneFrame_btn);
-            videoGoToNextMarker_btn.BackgroundImage = Properties.Resources.NextFrame_1;
-            videoGoToNextMarker_btn.Size = new Size(37, 26);
-            videoGoToNextMarker_btn.FlatStyle = FlatStyle.Flat;
-            videoGoToNextMarker_btn.FlatAppearance.BorderSize = 0;
-            videoGoToNextMarker_btn.Location = new Point(811, 839);
-            videoGoToNextMarker_btn.Click += new EventHandler(videoGoToNextMarker_btn_Click);
-            Form1.Controls.Add(videoGoToNextMarker_btn);
-            videoGoToEnd_btn.BackgroundImage = Properties.Resources.GoToEnd;
-            videoGoToEnd_btn.Size = new Size(37, 26);
-            videoGoToEnd_btn.FlatStyle = FlatStyle.Flat;
-            videoGoToEnd_btn.FlatAppearance.BorderSize = 0;
-            videoGoToEnd_btn.Location = new Point(853, 839);
-            videoGoToEnd_btn.Click += new EventHandler(videoGoToEnd_btn_Click);
-            Form1.Controls.Add(videoGoToEnd_btn);
             
             videoPause.BackgroundImage = Properties.Resources.Pause_1;
             videoPause.Size = new Size(37, 26);
@@ -1784,6 +1801,12 @@ namespace DS2_Easy_Viewer
             videoPause.Location = new Point(727, 879);
             //videoPause.Click += new EventHandler(videoPause_btn_Click);
             //Form1.Controls.Add(videoPause);
+
+            marqueurs_Panel.Size = new Size(800, 24);
+            marqueurs_Panel.Location = new Point(343, 739);
+            Form1.Controls.Add(marqueurs_Panel);
+
+
             timeLine.BackgroundImage = Properties.Resources.Timeline_Progress;
             timeLine.Size = new Size(800, 24);
             timeLine.Location = new Point(343, 763);
@@ -1907,6 +1930,7 @@ namespace DS2_Easy_Viewer
         {
             VolumeLevel = Volume_Slider.Value;
             Volume_lvl.Text = Volume_Slider.Value.ToString();
+            setScript();
             if (videoPath != "")
             {
                 try
@@ -1930,6 +1954,10 @@ namespace DS2_Easy_Viewer
                 {
                     wmPlayer.Ctlcontrols.play();
                     videoPlay_btn.BackgroundImage = Properties.Resources.Pause_2;
+                    //string widthDimensionWMP = wmPlayer.currentMedia.imageSourceHeight.ToString();
+                    //string heightDimensionWMP = wmPlayer.currentMedia.imageSourceWidth.ToString();
+                    //string frameRate = wmPlayer.currentMedia.getItemInfo("FrameRate");
+                    //MessageBox.Show(string.Format("{0:s} :{1:s} :{2:s}" , widthDimensionWMP , heightDimensionWMP, frameRate));
                     play = true;
                     try
                     {
@@ -1961,13 +1989,6 @@ namespace DS2_Easy_Viewer
         public void videoForwardOneFrame_btn_Click(object sender, EventArgs e) { }
         public void videoGoToNextMarker_btn_Click(object sender, EventArgs e) { }
         public void videoGoToEnd_btn_Click(object sender, EventArgs e) { }
-        public void marqueur_btn_Click(object sender, EventArgs e)
-        {
-            
-            Marqueur mark = new Marqueur(mkrIndex, wmPlayer.Ctlcontrols.currentPosition);
-            Marqueurs_liste.Add(mark);
-            mkrIndex += 1;
-        }
         public void videoInfoUpdate()
         {
             {
@@ -2171,6 +2192,7 @@ namespace DS2_Easy_Viewer
                 facteurConversionTimeline = timelineMaxinSeconds/798.0;
                 Thread t = new Thread(new ThreadStart(UpdateLabelThreadProc));
                 t.Start();
+                setInitialParameterValues();
             }
         }
         public void UpdateLabelThreadProc()
@@ -2245,7 +2267,7 @@ namespace DS2_Easy_Viewer
         }
         private void timeline_Move(object sender, MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
                 if (e.X > -1 & e.X < 799)
                 {
@@ -2288,6 +2310,10 @@ namespace DS2_Easy_Viewer
                 text.Text = textLocateParameters[b].ToString();
                 b += 1;
             }
+            VolumeLevel = 100;
+            Volume_Slider.Value = VolumeLevel;
+            Volume_lvl.Text = "100";
+            setScript();
 
         }
         private void changeModeImageSliderUpdate(int mode)
@@ -2585,7 +2611,7 @@ namespace DS2_Easy_Viewer
             scriptOutput_txtBox.Items.Add("+ .1");
             scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\"  1 100 100 100 100");
             scriptOutput_txtBox.Items.Add("+ .1");
-            scriptOutput_txtBox.Items.Add("Text Volume \"" + nomImage + "\"  1 " + VolumeLevel);
+            scriptOutput_txtBox.Items.Add("Text Volume \"" + nomImage + "\"  1  " + VolumeLevel);
             scriptOutput_txtBox.Items.Add("+ .1");
             scriptOutput_txtBox.Items.Add("Text Play \"" + nomImage + "\"");
             
@@ -2771,12 +2797,19 @@ namespace DS2_Easy_Viewer
                 commande = Ds2Command("Text View \"" + nomImage + "\"  0 100 100 100 100");
                 envoyerCommande(commande);
                 Thread.Sleep(50);
+                commande = Ds2Command("Text Volume \"" + nomImage + "\"  1  " + VolumeLevel);
+                envoyerCommande(commande);
+                Thread.Sleep(50);
                 scriptOutput_txtBox.Items.Clear();
                 scriptOutput_txtBox.Items.Add("Text Add \"" + nomImage + "\"  \"" + imageRenommee + "\"  " + string.Join(" ", textAddParameters.ToArray()));
                 scriptOutput_txtBox.Items.Add("+ .1");
                 scriptOutput_txtBox.Items.Add("Text Locate \"" + nomImage + "\"  " + string.Join(" ", textLocateParameters.ToArray()));
                 scriptOutput_txtBox.Items.Add("+ .1");
                 scriptOutput_txtBox.Items.Add("Text View \"" + nomImage + "\"  1 100 100 100 100");
+                scriptOutput_txtBox.Items.Add("+ .1");
+                scriptOutput_txtBox.Items.Add("Text Volume \"" + nomImage + "\"  1  " + VolumeLevel);
+                scriptOutput_txtBox.Items.Add("+ .1");
+                scriptOutput_txtBox.Items.Add("Text Play \"" + nomImage + "\"");
             }
 
         }
@@ -2801,29 +2834,61 @@ namespace DS2_Easy_Viewer
             commande = Ds2Command("Show Reset");
             envoyerCommande(commande);
         }
+        public void marqueur_btn_Click(object sender, EventArgs e)
+        {
+           // Marqueur mark = new Marqueur(mkrIndex, wmPlayer.Ctlcontrols.currentPosition);
+            //Marqueurs_liste.Add(mark);
+            //Control ctrMarqueur = Marqueurs_liste[mkrIndex].Mark();
+            //ctrMarqueur.MouseMove += new MouseEventHandler(mark.update);
+           // marqueurs_Panel.Controls.Add(ctrMarqueur);
+            //mkrIndex += 1;
+        }
     }
 
-    public class Marqueur : Form1
+    public class Marqueur
     {
-        int posX;
+        int index; int posX;
         double time;
-        PictureBox marque = new PictureBox();
-        public Form Form1 { get; set; }
-
-        public  Marqueur( int _posX, double _time)
+        public PictureBox marque = new PictureBox();
+        public ToolTip tip = new ToolTip();
+        Point mousePos;
+        public  Marqueur( int _index, double _time)
         {
-            posX = _posX;
+            index = _index;
             time = _time;
-            marque.Size = new Size(20, 20);
-            marque.Location = new Point(posX, 745);
-            marque.BackgroundImage = Properties.Resources.Marqueur;
-            marque.MouseClick += new MouseEventHandler(marque_bouge);
-            //Form1.Controls.Add(marque);
-
         }
-        public void marque_bouge(object sender, MouseEventArgs e)
+       
+
+        public Control Mark()
         {
-            posX = e.X;
+            posX = (int)time;
+            marque.Size = new Size(20, 20);
+            marque.Location = new Point(posX, 0);
+            marque.BackgroundImage = Properties.Resources.Marqueur;
+            marque.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            //marque.MouseClick += new MouseEventHandler(marque_bouge);
+            tip.ShowAlways = true;
+            tip.SetToolTip(this.marque, posX.ToString() + "   "  + index);
+            return marque;
+        }
+        public void update(object sender, MouseEventArgs e)
+        {
+            mousePos = e.Location;
+            if (e.Button == MouseButtons.Left)
+            {
+                if (e.X > -1 & e.X < 799)
+                {
+                    //MessageBox.Show("on m'a cliqué dessus");
+                    posX = e.X;
+
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        int dx = e.X - mousePos.X;
+                        marque.Location = new Point(marque.Left, 0);
+                        tip.SetToolTip(this.marque, posX.ToString());
+                    }
+                }
+            }
         }
     }
     

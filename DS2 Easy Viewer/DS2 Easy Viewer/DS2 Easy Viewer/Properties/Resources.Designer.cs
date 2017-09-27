@@ -83,6 +83,26 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BG_Form {
+            get {
+                object obj = ResourceManager.GetObject("BG_Form", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap BG_Form_2 {
+            get {
+                object obj = ResourceManager.GetObject("BG_Form_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Clear_All {
             get {
                 object obj = ResourceManager.GetObject("Clear All", resourceCulture);
@@ -716,6 +736,26 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Video_tab_btn_2 {
             get {
                 object obj = ResourceManager.GetObject("Video_tab_btn_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VideoControl_1 {
+            get {
+                object obj = ResourceManager.GetObject("VideoControl_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap VideoControl_2 {
+            get {
+                object obj = ResourceManager.GetObject("VideoControl_2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
