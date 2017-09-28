@@ -222,6 +222,13 @@
     <None Include="Resources\Marqueur_5.png" />
     <None Include="Resources\BG_Form.png" />
     <None Include="Resources\BG_Form_2.png" />
+    <None Include="Resources\lessOneFrame.png" />
+    <None Include="Resources\plusOneFrame.png" />
+    <None Include="Resources\In.png" />
+    <None Include="Resources\out.png" />
+    <None Include="Resources\OutPoint.png" />
+    <None Include="Resources\In_2.png" />
+    <None Include="Resources\Out_2.png" />
     <Content Include="Resources\Remove-icon.png" />
     <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />
