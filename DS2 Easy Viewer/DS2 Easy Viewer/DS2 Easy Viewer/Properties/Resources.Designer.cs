@@ -293,6 +293,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap inLoopDebut {
+            get {
+                object obj = ResourceManager.GetObject("inLoopDebut", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap lessOneFrame {
             get {
                 object obj = ResourceManager.GetObject("lessOneFrame", resourceCulture);
@@ -346,6 +356,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Loop_on {
             get {
                 object obj = ResourceManager.GetObject("Loop_on", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap loopReset {
+            get {
+                object obj = ResourceManager.GetObject("loopReset", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

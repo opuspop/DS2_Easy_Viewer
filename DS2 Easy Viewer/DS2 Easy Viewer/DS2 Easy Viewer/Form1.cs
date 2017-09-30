@@ -1223,7 +1223,7 @@ namespace DS2_Easy_Viewer
         Button videoGoToNextMarker_btn = new Button(); Button videoGoToPreviousMarker_btn = new Button(); Button loop_btn = new Button();
         List<Marqueur> Marqueurs_liste = new List<Marqueur>();
         int frames; public int videoWidth; public int videoHeight; public int actualFrame;
-        Label tCode = new Label();
+        TextBox tCode = new TextBox();
         Panel inOutRange_panel = new Panel();  int inX = 0; int outX = 800; Button in_btn = new Button(); Button out_btn = new Button();  double inLoop_timeDecimal; double outLoop_timeDecimal; int inFrame; int outFrame;
         int longueurVideoControlPannel = 800; // LONGUEUR DE LA TIMELINE
         bool loop = true; string dureeTotaleDuVideo; ToolTip outLoop_tooltip = new ToolTip(); ToolTip inLoop_toolTip = new ToolTip(); ShellProperty<UInt64?> duration; double durationVideoSecondes; double durationVideoMillis;
@@ -1841,6 +1841,14 @@ namespace DS2_Easy_Viewer
             inLoop_toolTip.ShowAlways = true;
             inLoop_toolTip.SetToolTip(in_btn, "00:00:00");
 
+            Button resetInLoop = new Button();
+            resetInLoop.Size = new Size(7, 7);
+            resetInLoop.Location = new Point(inOutRange_panel.Left - 9, inOutRange_panel.Top + 2);
+            resetInLoop.BackgroundImage = Properties.Resources.loopReset;
+            resetInLoop.FlatStyle = FlatStyle.Flat;
+            resetInLoop.FlatAppearance.BorderSize = 0;
+            resetInLoop.MouseClick += new MouseEventHandler(inResetLoop);
+            Form1.Controls.Add(resetInLoop);
 
             out_btn.Size = new Size(7, 11);
             out_btn.Location = new Point(longueurVideoControlPannel-7, 0);
@@ -1849,17 +1857,25 @@ namespace DS2_Easy_Viewer
             out_btn.MouseUp += new MouseEventHandler(out_btn_Up);
             out_btn.FlatStyle = FlatStyle.Flat;
             out_btn.FlatAppearance.BorderSize = 0;
-            inOutRange_panel.Controls.Add(out_btn);
-
-            
+            inOutRange_panel.Controls.Add(out_btn);                   
+           
             outLoop_tooltip.ShowAlways = true;
             outLoop_tooltip.SetToolTip(out_btn, "00:00:00");
+
+            Button resetOutLoop = new Button();
+            resetOutLoop.Size = new Size(7, 7);
+            resetOutLoop.Location = new Point(inOutRange_panel.Right + 2, inOutRange_panel.Top + 2);
+            resetOutLoop.BackgroundImage = Properties.Resources.loopReset;
+            resetOutLoop.FlatStyle = FlatStyle.Flat;
+            resetOutLoop.FlatAppearance.BorderSize = 0;
+            resetOutLoop.MouseClick += new MouseEventHandler(outResetLoop);
+            Form1.Controls.Add(resetOutLoop);
 
             //curseur.Size = new Size(1, 26);
             //curseur.Location = new Point(342, 762);
             //curseur.BackColor = Color.White;
             //Form1.Controls.Add(curseur);
-            currentTimelineTime.Location = new Point(343, 842);
+            currentTimelineTime.Location = new Point(343, 858);
             currentTimelineTime.Text = "00:00:00";
             currentTimelineTime.AutoSize = true;
             currentTimelineTime.BorderStyle = BorderStyle.None;
@@ -1868,13 +1884,14 @@ namespace DS2_Easy_Viewer
             currentTimelineTime.ForeColor = System.Drawing.Color.White;
             Form1.Controls.Add(timeLine);
 
-            tCode.Location = new Point(340, 872);
+            tCode.Location = new Point(343, 888);
             tCode.Text = "00000";
             tCode.AutoSize = true;
             tCode.BorderStyle = BorderStyle.None;
             tCode.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            tCode.Font = new System.Drawing.Font("Calibri", 13.7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            tCode.Font = new System.Drawing.Font("Calibri", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             tCode.ForeColor = System.Drawing.Color.White;
+            tCode.KeyDown += new KeyEventHandler(enterTimeCodeValue);
             Form1.Controls.Add(tCode);
 
 
@@ -2013,15 +2030,9 @@ namespace DS2_Easy_Viewer
                 double goTo = (actualFrame / frameRate) - (1 / frameRate);   // --->       frame suivant
                 wmPlayer.Ctlcontrols.currentPosition = goTo;  // envoie le vidéo au nouveau frame
                 UpdateLabel();
-                try
-                {
-
-                    Byte[] commande;
-                    commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + wmPlayer.Ctlcontrols.currentPosition);
-                    envoyerCommande(commande);
-                    
-                }
-                catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                Byte[] commande;
+                commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + goTo);
+                envoyerCommande(commande);
             }
            
         }
@@ -2032,6 +2043,15 @@ namespace DS2_Easy_Viewer
             timeLine.Invalidate();
             currentTimelineTime.Text = "00:00:00";
             tCode.Text = "0000";
+            Byte[] commande;
+            commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + 0.0);
+            envoyerCommande(commande);
+            if (play)
+            {
+                commande = Ds2Command("Text Play \"" + nomImage + "\"  ");
+                envoyerCommande(commande);
+            }
+           
         }
         private void videoPlay_btn_Click(object sender, EventArgs e)
         {
@@ -2081,14 +2101,9 @@ namespace DS2_Easy_Viewer
                 double goTo = (actualFrame / frameRate) + (1 / frameRate);   // --->       frame suivant
                 wmPlayer.Ctlcontrols.currentPosition = goTo;  // envoie le vidéo au nouveau frame
                 UpdateLabel();
-                //MessageBox.Show(string.Format("{0:0.00}", goTo));
-                try
-                {
-                    Byte[] commande;
-                    commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + wmPlayer.Ctlcontrols.currentPosition);
-                    envoyerCommande(commande);
-                }
-                catch (Exception) { MessageBox.Show("Oups ça ben l'air que ça marche pas!!"); }
+                Byte[] commande;
+                commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + goTo);
+                envoyerCommande(commande);
             }
            
         }
@@ -2099,6 +2114,9 @@ namespace DS2_Easy_Viewer
             wmPlayer.Ctlcontrols.stop();
             x = (int)durationVideoMillis;
             timeLine.Invalidate();
+            Byte[] commande;
+            commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + durationVideoSecondes);
+            envoyerCommande(commande);
         }
         public void loop_click(object sender, EventArgs e)
         {
@@ -2229,7 +2247,6 @@ namespace DS2_Easy_Viewer
                 timeLine.Invalidate();
                 timeLine.BringToFront();
                 inOutRange_panel.Invalidate();
-
                 wmPlayer.Show();
                 wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
@@ -2263,6 +2280,7 @@ namespace DS2_Easy_Viewer
                 string end = formatTimeCode(durationVideoSecondes);
                 videoLength_lbl.Text = "Durée: " + end + "  (" + frames + ")";
                 videoDureeTotale.Text = end;
+                outFrame = (int)(Math.Ceiling(durationVideoSecondes * frameRate));
                 inX = 0;
                 outX = longueurVideoControlPannel;
                 outLoop_tooltip.SetToolTip(out_btn, end);
@@ -2271,7 +2289,7 @@ namespace DS2_Easy_Viewer
                 Thread t = new Thread(new ThreadStart(UpdateLabelThreadProc));
                 t.Start();
                 setInitialParameterValues();
-               
+                tCode.Text = "00000";
                
             }
         }
@@ -2570,6 +2588,24 @@ namespace DS2_Easy_Viewer
             outLoop_timeDecimal = timeSec;
             outLoop_tooltip.SetToolTip(out_btn, outLooping);
             outFrame = (int)(Math.Ceiling(outLoop_timeDecimal * frameRate));
+        }
+        public void inResetLoop(object sender, MouseEventArgs e)
+        {
+            inX = 0;
+            in_btn.Left = 0;
+            inOutRange_panel.Invalidate();
+            inLoop_timeDecimal = inFrame = 0;
+            inLoop_toolTip.SetToolTip(in_btn, "00:00:00");
+
+        }
+        public void outResetLoop(object sender, MouseEventArgs e)
+        {
+            outX = longueurVideoControlPannel;
+            out_btn.Left = longueurVideoControlPannel - 7;
+            inOutRange_panel.Invalidate();
+            outLoop_timeDecimal = durationVideoSecondes;
+            outLoop_tooltip.SetToolTip(out_btn, formatTimeCode(durationVideoSecondes));
+            outFrame = outFrame = (int)(Math.Ceiling(durationVideoSecondes * frameRate));
         }
         private void setInitialParameterValues()
         {
@@ -2990,6 +3026,23 @@ namespace DS2_Easy_Viewer
             eteindreReste();
             textAddLocate();
             textView();
+        }
+        private void enterTimeCodeValue(object sender, KeyEventArgs e)
+        {
+            //MessageBox.Show("ici");
+            double dbl; double goTo;
+            bool resultat = double.TryParse(tCode.Text, out dbl);
+            if (e.KeyCode == Keys.Enter & tCode.Text != "" & resultat)
+            {
+                    
+                    goTo = dbl / frameRate;
+                    wmPlayer.Ctlcontrols.currentPosition = goTo;
+                    Byte[] commande;
+                    commande = Ds2Command("Text GoTo \"" + nomImage + "\"  " + goTo);
+                    envoyerCommande(commande);
+                    UpdateLabel(); 
+            }
+           
         }
         private void enterRotationValue(object sender, KeyEventArgs e)
         {
