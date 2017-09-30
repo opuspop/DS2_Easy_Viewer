@@ -229,6 +229,8 @@
     <None Include="Resources\OutPoint.png" />
     <None Include="Resources\In_2.png" />
     <None Include="Resources\Out_2.png" />
+    <None Include="Resources\Loop.png" />
+    <None Include="Resources\Loop_on.png" />
     <Content Include="Resources\Remove-icon.png" />
     <None Include="Resources\Reset_Reset_All_3.png" />
     <None Include="Resources\Reset_Reset_All_2.png" />
