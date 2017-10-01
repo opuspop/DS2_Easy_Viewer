@@ -2265,12 +2265,14 @@ namespace DS2_Easy_Viewer
                 //wmPlayer.Show();
                 // wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
-                videoSource = new VideoFileSource(videoPath);
-                videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
-                box.BringToFront();
-                Thread p = new Thread(new ThreadStart(FFMPEG_playFrames));
-                videoSource.Start();
-                p.Start();
+                //videoSource = new VideoFileSource(videoPath);
+                //videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+                //box.BringToFront();
+                //videoSource.Start();
+                //Thread p = new Thread(new ThreadStart(video_NewFrame));
+                //p.Start();
+                VideoPlayback playback = new VideoPlayback(videoPath);
+                playback.Play();
                 //this.wmPlayer.URL = videoPath;
                 //wmPlayer.uiMode = "none";
                 //wmPlayer.MaximumSize = new Size(140, 140);
@@ -2315,19 +2317,15 @@ namespace DS2_Easy_Viewer
                
             }
         }
-
         private void FFMPEG_playFrames()
         {
-
         }
-
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             Bitmap bitmap = eventArgs.Frame;
             Bitmap resized = new Bitmap(bitmap, new Size(bitmap.Width / 4, bitmap.Height / 4));
             box.Image = resized;
         }
-
         public string formatTimeCode(double duration)
         {
             frames = (int)Math.Ceiling(duration * frameRate);
@@ -3255,5 +3253,26 @@ namespace DS2_Easy_Viewer
             }
         }
     }
-    
+    public class VideoPlayback 
+    {
+        VideoFileSource videoSource;
+        string videoPath;
+        public VideoPlayback(string _videoPath)
+        {
+            videoPath = _videoPath;
+        }
+
+        public void Play()
+        {
+            videoSource = new VideoFileSource(videoPath);
+            videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+            //box.BringToFront();
+            videoSource.Start();
+            Thread p = new Thread(new ThreadStart(video_NewFrame));
+            p.Start();
+        }
+        
+
+        
+    }
 }
