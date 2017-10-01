@@ -113,6 +113,16 @@ namespace DS2_Easy_Viewer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap capture {
+            get {
+                object obj = ResourceManager.GetObject("capture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Clear_All {
             get {
                 object obj = ResourceManager.GetObject("Clear All", resourceCulture);
@@ -766,6 +776,16 @@ namespace DS2_Easy_Viewer.Properties {
         internal static System.Drawing.Bitmap Rewind_1 {
             get {
                 object obj = ResourceManager.GetObject("Rewind_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sauvegarde {
+            get {
+                object obj = ResourceManager.GetObject("sauvegarde", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -12,6 +12,8 @@ using WMPLib;
 using System.Text.RegularExpressions;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using Accord.Video.FFMPEG;
+using Accord.Video;
 
 namespace DS2_Easy_Viewer
 {
@@ -21,7 +23,7 @@ namespace DS2_Easy_Viewer
         public static List<imageBox> imageBoxList = new List<imageBox>();
         public static List<videoBox> videoBoxList = new List<videoBox>();
         public static int boiteSelectionnee;
-        public static bool DEBUG = true;
+        public static bool DEBUG = false;
         protected override CreateParams CreateParams
         {
             get
@@ -94,7 +96,16 @@ namespace DS2_Easy_Viewer
             }
             catch (Exception) { }
         }
-        
+
+        private void capture_btn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Fonction de capture d'images à venir");
+        }
+
+        private void sauvegarde_btn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Ça aussi ça s'en vient, patience!\nY'a pas assez d'heures dans une journée");
+        }
     }
     public partial class imageBox
     {
@@ -1227,7 +1238,7 @@ namespace DS2_Easy_Viewer
         Panel inOutRange_panel = new Panel();  int inX = 0; int outX = 800; Button in_btn = new Button(); Button out_btn = new Button();  double inLoop_timeDecimal; double outLoop_timeDecimal; int inFrame; int outFrame;
         int longueurVideoControlPannel = 800; // LONGUEUR DE LA TIMELINE
         bool loop = true; string dureeTotaleDuVideo; ToolTip outLoop_tooltip = new ToolTip(); ToolTip inLoop_toolTip = new ToolTip(); ShellProperty<UInt64?> duration; double durationVideoSecondes; double durationVideoMillis;
-
+        VideoFileSource videoSource;
 
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -1906,7 +1917,11 @@ namespace DS2_Easy_Viewer
             // After initialization you can customize the Media Player
             wmPlayer.Size = new Size(140, 140);
             wmPlayer.Location = new Point(13, 40);
-            panneau.Controls.Add(wmPlayer);
+            //panneau.Controls.Add(wmPlayer);
+
+
+
+
 
             videoDureeTotale.Location = new Point(1090,747);
             videoDureeTotale.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
@@ -2240,43 +2255,50 @@ namespace DS2_Easy_Viewer
             DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK) // Test result.
             {
-                wmPlayer.Ctlcontrols.stop();
+                //wmPlayer.Ctlcontrols.stop();
                 videoPlay_btn.BackgroundImage = Properties.Resources.Play_1;
                 play = false;
                 x = 0;
                 timeLine.Invalidate();
                 timeLine.BringToFront();
                 inOutRange_panel.Invalidate();
-                wmPlayer.Show();
-                wmPlayer.settings.autoStart = false;
+                //wmPlayer.Show();
+                // wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
-                this.wmPlayer.URL = videoPath;
-                wmPlayer.uiMode = "none";
-                wmPlayer.MaximumSize = new Size(140, 140);
-                wmPlayer.BringToFront();
-                wmPlayer.Ctlenabled = false;
-                wmPlayer.settings.volume = 0;
-                loadImage(videoPath);
-                videoName_lbl.Text = Path.GetFileName(videoPath);
-                ShellObject obj = ShellObject.FromParsingName(videoPath);
-                FileInfo fInfo = new FileInfo(videoPath);
-                videoSize_lbl.Text = "Taille: " + GetBytesReadable(fInfo.Length);
-                ShellProperty<UInt32?> bitrate = obj.Properties.GetProperty<UInt32?>("System.Video.TotalBitrate");
-                videoBitRate_lbl.Text = "Bitrate: " + GetBytesReadable(Convert.ToInt64(bitrate.Value)) + "/s";
-                ShellProperty<UInt32?> width = obj.Properties.GetProperty<UInt32?>("System.Video.FrameWidth");
-                videoWidth_lbl.Text = "Largeur: " + width.Value.ToString();
-                videoWidth = Convert.ToInt16(width.Value);
-                ShellProperty<UInt32?> height = obj.Properties.GetProperty<UInt32?>("System.Video.FrameHeight");
-                videoHeight_lbl.Text = "Hauteur: "+ height.Value.ToString();
-                videoHeight = Convert.ToInt16(height.Value);
-                ShellProperty<UInt32?> fps = obj.Properties.GetProperty<UInt32?>("System.Video.FrameRate");
-                setFPS((fps.Value / 1000).ToString());
-                frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
+                videoSource = new VideoFileSource(videoPath);
+                videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+                box.BringToFront();
+                Thread p = new Thread(new ThreadStart(FFMPEG_playFrames));
+                videoSource.Start();
+                p.Start();
+                //this.wmPlayer.URL = videoPath;
+                //wmPlayer.uiMode = "none";
+                //wmPlayer.MaximumSize = new Size(140, 140);
+                //wmPlayer.BringToFront();
+                //wmPlayer.Ctlenabled = false;
+                //wmPlayer.settings.volume = 0;
+                //loadImage(videoPath);
+                //videoName_lbl.Text = Path.GetFileName(videoPath);
+                //ShellObject obj = ShellObject.FromParsingName(videoPath);
+                //FileInfo fInfo = new FileInfo(videoPath);
+                //videoSize_lbl.Text = "Taille: " + GetBytesReadable(fInfo.Length);
+                //ShellProperty<UInt32?> bitrate = obj.Properties.GetProperty<UInt32?>("System.Video.TotalBitrate");
+                //videoBitRate_lbl.Text = "Bitrate: " + GetBytesReadable(Convert.ToInt64(bitrate.Value)) + "/s";
+                //ShellProperty<UInt32?> width = obj.Properties.GetProperty<UInt32?>("System.Video.FrameWidth");
+                //videoWidth_lbl.Text = "Largeur: " + width.Value.ToString();
+                //videoWidth = Convert.ToInt16(width.Value);
+                //ShellProperty<UInt32?> height = obj.Properties.GetProperty<UInt32?>("System.Video.FrameHeight");
+                //videoHeight_lbl.Text = "Hauteur: "+ height.Value.ToString();
+                //videoHeight = Convert.ToInt16(height.Value);
+                //ShellProperty<UInt32?> fps = obj.Properties.GetProperty<UInt32?>("System.Video.FrameRate");
+                //setFPS((fps.Value / 1000).ToString());
+                //frameRate_lbl.Text = "FrameRate: " + frameRate + " fps";
 
-                duration = obj.Properties.GetProperty<UInt64?>("System.Media.Duration");
-                durationVideoMillis = (double)duration.Value / 10000.0; // Ex: 134840    
-                durationVideoSecondes = (double)duration.Value/10000000.0; // Ex: 134,84     86,8(0)   125,41  14,9(0)
-                //MessageBox.Show(durationVideoSecondes.ToString());
+                //duration = obj.Properties.GetProperty<UInt64?>("System.Media.Duration");
+                //durationVideoMillis = (double)duration.Value / 10000.0; // Ex: 134840    
+                //durationVideoSecondes = (double)duration.Value/10000000.0; // Ex: 134,84     86,8(0)   125,41  14,9(0)
+                ////MessageBox.Show(durationVideoSecondes.ToString());
+
                 string end = formatTimeCode(durationVideoSecondes);
                 videoLength_lbl.Text = "Durée: " + end + "  (" + frames + ")";
                 videoDureeTotale.Text = end;
@@ -2293,6 +2315,19 @@ namespace DS2_Easy_Viewer
                
             }
         }
+
+        private void FFMPEG_playFrames()
+        {
+
+        }
+
+        private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap bitmap = eventArgs.Frame;
+            Bitmap resized = new Bitmap(bitmap, new Size(bitmap.Width / 4, bitmap.Height / 4));
+            box.Image = resized;
+        }
+
         public string formatTimeCode(double duration)
         {
             frames = (int)Math.Ceiling(duration * frameRate);
@@ -2369,7 +2404,6 @@ namespace DS2_Easy_Viewer
         }
         public void UpdateLabelThreadProc()
         {
-            
             if (!currentTimelineTime.IsHandleCreated)
             {
                 try
@@ -2389,7 +2423,6 @@ namespace DS2_Easy_Viewer
             }
             while (videoState == 3)
             {
-                
                 try
                 {
                     timeLine.Invalidate();
@@ -3166,12 +3199,13 @@ namespace DS2_Easy_Viewer
         }
         public void marqueur_btn_Click(object sender, EventArgs e)
         {
-           // Marqueur mark = new Marqueur(mkrIndex, wmPlayer.Ctlcontrols.currentPosition);
+            // Marqueur mark = new Marqueur(mkrIndex, wmPlayer.Ctlcontrols.currentPosition);
             //Marqueurs_liste.Add(mark);
             //Control ctrMarqueur = Marqueurs_liste[mkrIndex].Mark();
             //ctrMarqueur.MouseMove += new MouseEventHandler(mark.update);
-           // marqueurs_Panel.Controls.Add(ctrMarqueur);
+            // marqueurs_Panel.Controls.Add(ctrMarqueur);
             //mkrIndex += 1;
+            MessageBox.Show("Fonction de marqueurs à venir");
         }
     }
 
