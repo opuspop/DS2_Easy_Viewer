@@ -1238,7 +1238,7 @@ namespace DS2_Easy_Viewer
         Panel inOutRange_panel = new Panel();  int inX = 0; int outX = 800; Button in_btn = new Button(); Button out_btn = new Button();  double inLoop_timeDecimal; double outLoop_timeDecimal; int inFrame; int outFrame;
         int longueurVideoControlPannel = 800; // LONGUEUR DE LA TIMELINE
         bool loop = true; string dureeTotaleDuVideo; ToolTip outLoop_tooltip = new ToolTip(); ToolTip inLoop_toolTip = new ToolTip(); ShellProperty<UInt64?> duration; double durationVideoSecondes; double durationVideoMillis;
-        VideoFileSource videoSource;
+        VideoFileSource videoSource; public BackgroundWorker BgWorker_playVideo;
 
         private void initializationLayoutParameters(Form Form1, int index)
         {
@@ -2265,14 +2265,13 @@ namespace DS2_Easy_Viewer
                 //wmPlayer.Show();
                 // wmPlayer.settings.autoStart = false;
                 videoPath = openFileDialog1.FileName;
-                //videoSource = new VideoFileSource(videoPath);
-                //videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
-                //box.BringToFront();
-                //videoSource.Start();
+                BgWorker_PlayVideo += new DoWorkEventHandler(playVideo);
+                videoSource = new VideoFileSource(videoPath);
+                
+                box.BringToFront();
+                
                 //Thread p = new Thread(new ThreadStart(video_NewFrame));
                 //p.Start();
-                VideoPlayback playback = new VideoPlayback(videoPath);
-                playback.Play();
                 //this.wmPlayer.URL = videoPath;
                 //wmPlayer.uiMode = "none";
                 //wmPlayer.MaximumSize = new Size(140, 140);
@@ -2317,11 +2316,19 @@ namespace DS2_Easy_Viewer
                
             }
         }
+        private void playVideo (object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            videoSource.Start();
+            videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
+
+        }
         private void FFMPEG_playFrames()
         {
         }
         private void video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
+
             Bitmap bitmap = eventArgs.Frame;
             Bitmap resized = new Bitmap(bitmap, new Size(bitmap.Width / 4, bitmap.Height / 4));
             box.Image = resized;
@@ -3253,26 +3260,5 @@ namespace DS2_Easy_Viewer
             }
         }
     }
-    public class VideoPlayback 
-    {
-        VideoFileSource videoSource;
-        string videoPath;
-        public VideoPlayback(string _videoPath)
-        {
-            videoPath = _videoPath;
-        }
-
-        public void Play()
-        {
-            videoSource = new VideoFileSource(videoPath);
-            videoSource.NewFrame += new NewFrameEventHandler(video_NewFrame);
-            //box.BringToFront();
-            videoSource.Start();
-            Thread p = new Thread(new ThreadStart(video_NewFrame));
-            p.Start();
-        }
-        
-
-        
-    }
+   
 }
